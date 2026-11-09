@@ -24,13 +24,12 @@ The dev server runs at [http://127.0.0.1:3847](http://127.0.0.1:3847).
 
 ## Consultation requests
 
-The contact form validates in the browser and again on the server. A successful submission is written to `data/inquiries/<id>.json`. That directory is gitignored because the files can contain personal information.
+The contact form validates in the browser and again on the server. On Netlify, `INQUIRY_STORAGE=netlify-blobs` stores each inquiry as a private JSON document in Netlify Blobs. Production uses `vonte-inquiries-production`; preview deploys use `vonte-inquiries-preview`. The store namespace is fixed at build time from the Netlify deploy context. Locally, the default remains `data/inquiries/<id>.json`, which is gitignored because records can contain personal information.
 
-This file store is the working destination. The success message is shown only after the file is written. A failed save does not show a confirmation.
+Success is shown only after the selected storage provider confirms a write. A failed save never shows a confirmation. Records are create-only, so retries reuse the original reference. Netlify records survive redeploys and can be browsed by the site owner under **Data & Storage → Blobs**; no public inquiry-read API is exposed.
 
-Before a public launch, set one of these so a person actually sees new requests:
+Assign an operator to review the Netlify inquiry store (or local records on a persistent Node host). Optional notifications can also be configured:
 
-- Read `data/inquiries` on a server with persistent disk, or
 - Set `INQUIRY_WEBHOOK_URL` (and optional `INQUIRY_WEBHOOK_SECRET`) to receive the JSON record, or
 - Set `RESEND_API_KEY`, `INQUIRY_FROM_EMAIL`, and `INQUIRY_NOTIFY_EMAIL` together. `INQUIRY_FROM_EMAIL` must be a sender Resend has verified.
 
@@ -95,3 +94,22 @@ Set the real `NEXT_PUBLIC_SITE_URL` before the production build. With no configu
 origin, the sitemap is intentionally empty rather than publishing localhost URLs.
 Optional scheduling/contact/phone details remain hidden until configured. Voice,
 chat, booking and follow-up examples remain scripted illustrations, not live APIs.
+
+## Netlify hosting
+
+The existing project is `vonte-ai` (site ID `32c06496-b748-47d9-9f99-eac0fca21737`).
+`netlify.toml` selects the Next.js build and `.next` output; Netlify's automatically
+updated OpenNext adapter prepares SSR and Server Actions. `.netlify/` is gitignored
+and must never be uploaded as source or committed; CLI link state and generated
+build artifacts live there.
+
+Set `NEXT_PUBLIC_SITE_URL=https://vonte-ai.netlify.app` and
+`INQUIRY_STORAGE=netlify-blobs` in Netlify environment variables with runtime access.
+Use `deploy-preview` and `production` build contexts explicitly when uploading, so
+preview inquiry tests stay isolated from production documents. Do not replace the
+adapter routing with an SPA catch-all. Do not upload raw `.next` files as a static
+site: the inquiry action requires the adapter's generated server function.
+
+Netlify inquiry storage needs no personal API token in frontend code. Runtime Blobs
+credentials are injected by Netlify. No email/SMS notification provider is enabled
+until the owner supplies verified configuration and authorizes a delivery test.

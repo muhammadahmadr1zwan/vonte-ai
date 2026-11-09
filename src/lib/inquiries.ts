@@ -4,6 +4,7 @@ import path from "node:path"
 
 import type { InquiryInput } from "@/lib/inquiry-schema"
 import { getPackage } from "@/lib/pricing"
+import { saveBlobInquiry } from "@/lib/inquiry-blob-store"
 
 export type StoredInquiry = InquiryInput & {
   id: string
@@ -56,6 +57,14 @@ export function createInquiryRecord(input: InquiryInput, id: string = randomUUID
 /** An atomic hard link publishes only a complete record; retries reuse the original. */
 export async function saveInquiry(record: StoredInquiry) {
   if (!/^[0-9a-f-]{36}$/i.test(record.id)) throw new Error("Invalid inquiry ID.")
+  if (process.env.INQUIRY_STORAGE === "netlify-blobs") {
+    const { getStore } = await import("@netlify/blobs")
+    const store = getStore({
+      name: process.env.VONTE_INQUIRY_STORE || "vonte-inquiries-local",
+      consistency: "strong",
+    })
+    return saveBlobInquiry(record, store)
+  }
   const dir = inquiryDirectory()
   await mkdir(dir, { recursive: true, mode: 0o700 })
   const file = path.join(dir, `${record.id}.json`)
@@ -65,7 +74,7 @@ export async function saveInquiry(record: StoredInquiry) {
   })
   try {
     await link(temporary, file)
-    return { record, created: true }
+    return { record, created: true, conflict: false }
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error
     const existing = JSON.parse(await readFile(file, "utf8")) as StoredInquiry

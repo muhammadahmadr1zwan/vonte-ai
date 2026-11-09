@@ -13,7 +13,7 @@ function form(overrides: Record<string, string> = {}) {
   Object.entries({ ...valid, submissionId: randomUUID(), ...overrides }).forEach(([key, value]) => data.set(key, value))
   return data
 }
-const envNames = ["INQUIRY_DATA_DIR", "INQUIRY_WEBHOOK_URL", "INQUIRY_WEBHOOK_SECRET", "RESEND_API_KEY", "INQUIRY_FROM_EMAIL", "INQUIRY_NOTIFY_EMAIL"]
+const envNames = ["INQUIRY_STORAGE", "INQUIRY_DATA_DIR", "INQUIRY_WEBHOOK_URL", "INQUIRY_WEBHOOK_SECRET", "RESEND_API_KEY", "INQUIRY_FROM_EMAIL", "INQUIRY_NOTIFY_EMAIL"]
 let dir: string
 let savedEnv: Record<string, string | undefined>
 beforeEach(async () => {

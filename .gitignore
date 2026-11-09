@@ -48,3 +48,6 @@ next-env.d.ts
 # Browser test output (may include synthetic inquiry data)
 /test-results/
 /playwright-report/
+
+# Netlify local site link, platform cache and generated functions
+/.netlify/
