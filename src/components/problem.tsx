@@ -10,15 +10,14 @@ export function Problem() {
               The missed moment
             </p>
             <h2 className="display mt-5 text-[2.7rem] sm:text-6xl lg:text-[4.1rem]">
-              Your Business Is Busy.
+              Your business is busy.
               <span className="serif-em mt-2 block text-[0.92em]">
-                Your Opportunities Shouldn&apos;t Wait.
+                Your opportunities shouldn&apos;t wait.
               </span>
             </h2>
           </div>
           <p className="max-w-md text-base leading-7 text-quiet lg:col-span-5 lg:col-start-8">
-            These are ordinary days for an appointment-driven business. They are
-            illustrations, not analytics from a client account.
+            When your team is focused on the customer in front of them, the next inquiry still needs somewhere to go.
           </p>
         </div>
 

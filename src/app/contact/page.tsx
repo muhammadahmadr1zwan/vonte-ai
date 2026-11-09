@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
+import { randomUUID } from "node:crypto"
+import { connection } from "next/server"
 import { Suspense } from "react"
 
-import { ContactAside, ContactForm } from "@/components/contact-form"
+import { ContactInquiry } from "@/components/contact-form"
 import { Container } from "@/components/container"
 import { PageHero } from "@/components/page-hero"
 
@@ -19,13 +21,11 @@ async function ContactBody({
 }: {
   searchParams: Promise<{ package?: string | string[] }>
 }) {
+  await connection()
   const params = await searchParams
   const raw = Array.isArray(params.package) ? params.package[0] : params.package
   return (
-    <div className="grid items-start gap-8 lg:grid-cols-[1.25fr_0.75fr]">
-      <ContactForm key={raw ?? "none"} initialPackage={raw} />
-      <ContactAside initialPackage={raw} />
-    </div>
+    <ContactInquiry key={raw ?? "none"} initialPackage={raw} submissionId={randomUUID()} />
   )
 }
 
@@ -38,8 +38,8 @@ export default function ContactPage({
     <>
       <PageHero
         eyebrow="Contact"
-        title="Tell us what you're looking to automate."
-        lede="Share the business, the package you want to discuss, and where inquiries stall. The form is the request. It does not reserve a meeting."
+        title="Make room for your next opportunity."
+        lede="Tell us where inquiries stall. We’ll review your business and the package you’re considering, then follow up to discuss the fit. This request does not reserve a meeting."
       />
       <section className="bg-ivory py-16 sm:py-20">
         <Container>

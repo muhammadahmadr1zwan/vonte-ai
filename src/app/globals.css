@@ -1,16 +1,15 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist), "Geist", "Inter", sans-serif;
+  --font-sans: var(--font-instrument), "Instrument Sans", sans-serif;
   --font-heading: var(--font-instrument), "Instrument Sans", sans-serif;
   --font-serif: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-mono: ui-monospace, monospace;
   --color-navy: #091629;
   --color-navy-deep: #07111f;
   --color-slate: #14243c;
@@ -152,10 +151,6 @@
   animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.ops-card {
-  animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
 .signal-track {
   stroke: rgba(204, 166, 41, 0.35);
   stroke-width: 1.25;
@@ -177,39 +172,27 @@
 
 .roi-range {
   appearance: none;
-  height: 2px;
+  height: 44px;
   width: 100%;
-  background: rgba(9, 22, 41, 0.2);
+  background: linear-gradient(rgba(9,22,41,.25), rgba(9,22,41,.25)) center / 100% 2px no-repeat;
   cursor: pointer;
 }
 
 .roi-range::-webkit-slider-thumb {
   appearance: none;
-  width: 14px;
-  height: 14px;
+  width: 24px;
+  height: 24px;
   background: #091629;
-  border: 2px solid #cca629;
+  border: 3px solid #cca629;
+  border-radius: 50%;
 }
 
 .roi-range::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
+  width: 24px;
+  height: 24px;
   background: #091629;
-  border: 2px solid #cca629;
-  border-radius: 0;
-}
-
-.js .reveal {
-  opacity: 0;
-  transform: translateY(14px);
-}
-
-.js .reveal.is-visible {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 3px solid #cca629;
+  border-radius: 50%;
 }
 
 @keyframes rise {
@@ -245,9 +228,6 @@
   }
 
   .rise,
-  .ops-card,
-  .js .reveal,
-  .js .reveal.is-visible,
   .signal-flow,
   .wave-bar {
     animation: none !important;
@@ -257,4 +237,58 @@
     stroke-dashoffset: 0 !important;
     stroke-dasharray: none !important;
   }
+}
+
+/* Native top-layer modal: never trapped inside the sticky header's backdrop filter. */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #091629;
+  color: #f5f3ed;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.mobile-menu::backdrop { background: #091629; }
+.hero-title { font-size: clamp(3.15rem, 6.1vw, 5.75rem); line-height: 1.01; }
+.signal-console { border: 1px solid rgba(245,243,237,.16); background: #0c1b30; }
+.signal-field { background-image: radial-gradient(rgba(245,243,237,.12) .65px, transparent .65px); background-size: 16px 16px; }
+@media (max-width: 639px) {
+  .hero-title { font-size: clamp(2.8rem, 12vw, 4rem); }
+  .signal-field { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+  .signal-steps { grid-template-columns: 1fr; gap: 0; }
+  .signal-steps li { display: flex; align-items: baseline; gap: 1rem; padding-block: .3rem; }
+  .signal-steps li > span:last-child { margin-top: 0; font-size: .8125rem; }
+}
+
+.roi-output { font-size: clamp(2.5rem, 5.3vw, 4.75rem); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+input, textarea, select { scroll-margin-block: 7rem; }
+input[type="checkbox"], input[type="radio"] { flex-shrink: 0; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* Base UI supplies --accordion-panel-height; keep animation local to this component. */
+.vonte-accordion[data-open] { animation: vonte-accordion-down .2s ease-out; }
+.vonte-accordion[data-closed] { animation: vonte-accordion-up .2s ease-out; }
+@keyframes vonte-accordion-down { from { height: 0; } to { height: var(--accordion-panel-height); } }
+@keyframes vonte-accordion-up { from { height: var(--accordion-panel-height); } to { height: 0; } }
+
+@media (max-width: 639px) {
+  .signal-field { padding-block: 1.25rem; }
+  .signal-icon, .signal-wave, .signal-kicker { display: none; }
+  .signal-quote { margin-top: 0; font-size: 1.4rem; text-align: center; }
+}
+
+/* A two-color indicator stays visible on ivory, navy, and gold surfaces. */
+:focus-visible {
+  outline: 2px solid #cca629;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 4px #091629;
 }

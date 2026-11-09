@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto"
-import { mkdir, writeFile } from "node:fs/promises"
+import { link, mkdir, readFile, unlink, writeFile } from "node:fs/promises"
 import path from "node:path"
 
 import type { InquiryInput } from "@/lib/inquiry-schema"
@@ -27,6 +27,11 @@ export function resetRateLimit() {
 
 export function rateLimit(key: string, limit = 30, windowMs = 60 * 60 * 1000) {
   const now = Date.now()
+  // Bound memory even when a public endpoint receives many distinct client keys.
+  for (const [client, stamps] of hits) {
+    if (stamps.every((stamp) => now - stamp >= windowMs)) hits.delete(client)
+  }
+  if (!hits.has(key) && hits.size >= 10_000) return false
   const recent = (hits.get(key) ?? []).filter((stamp) => now - stamp < windowMs)
   if (recent.length >= limit) {
     hits.set(key, recent)
@@ -37,8 +42,7 @@ export function rateLimit(key: string, limit = 30, windowMs = 60 * 60 * 1000) {
   return true
 }
 
-export function createInquiryRecord(input: InquiryInput): StoredInquiry {
-  const id = randomUUID()
+export function createInquiryRecord(input: InquiryInput, id: string = randomUUID()): StoredInquiry {
   const selected = getPackage(input.packageId)
   return {
     ...input,
@@ -49,15 +53,29 @@ export function createInquiryRecord(input: InquiryInput): StoredInquiry {
   }
 }
 
+/** An atomic hard link publishes only a complete record; retries reuse the original. */
 export async function saveInquiry(record: StoredInquiry) {
+  if (!/^[0-9a-f-]{36}$/i.test(record.id)) throw new Error("Invalid inquiry ID.")
   const dir = inquiryDirectory()
-  await mkdir(dir, { recursive: true })
+  await mkdir(dir, { recursive: true, mode: 0o700 })
   const file = path.join(dir, `${record.id}.json`)
-  await writeFile(file, `${JSON.stringify(record, null, 2)}\n`, {
-    encoding: "utf8",
-    flag: "wx",
+  const temporary = path.join(dir, `.${record.id}-${randomUUID()}.tmp`)
+  await writeFile(temporary, `${JSON.stringify(record, null, 2)}\n`, {
+    encoding: "utf8", flag: "wx", mode: 0o600,
   })
-  return file
+  try {
+    await link(temporary, file)
+    return { record, created: true }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error
+    const existing = JSON.parse(await readFile(file, "utf8")) as StoredInquiry
+    const sameInput = Object.keys(record).every((key) =>
+      key === "createdAt" || existing[key as keyof StoredInquiry] === record[key as keyof StoredInquiry],
+    )
+    return { record: existing, created: false, conflict: !sameInput }
+  } finally {
+    await unlink(temporary)
+  }
 }
 
 type NotifyResult = { ok: true } | { ok: false; detail: string }
@@ -107,6 +125,7 @@ async function postWebhook(record: StoredInquiry): Promise<NotifyResult> {
     if (secret) headers.authorization = `Bearer ${secret}`
     const response = await fetch(url, {
       method: "POST",
+      redirect: "error",
       headers,
       body: JSON.stringify(record),
       signal: AbortSignal.timeout(8000),
@@ -133,6 +152,7 @@ async function sendResend(record: StoredInquiry): Promise<NotifyResult> {
   try {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
+      redirect: "error",
       headers: {
         authorization: `Bearer ${config.key}`,
         "content-type": "application/json",

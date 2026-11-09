@@ -28,12 +28,29 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   )
 }
 
-export function ContactForm({ initialPackage }: { initialPackage?: string }) {
+export function ContactInquiry({ initialPackage, submissionId }: { initialPackage?: string; submissionId: string }) {
+  const [selected, setSelected] = useState(getPackage(initialPackage)?.id ?? "unsure")
+  return <div className="grid items-start gap-8 lg:grid-cols-[1.25fr_0.75fr]">
+    <ContactForm initialPackage={initialPackage} onPackageChange={setSelected} submissionId={submissionId} />
+    <ContactAside initialPackage={selected} />
+  </div>
+}
+
+export function ContactForm({ initialPackage, onPackageChange, submissionId }: { initialPackage?: string; onPackageChange?: (value: string) => void; submissionId: string }) {
   const selected = getPackage(initialPackage)?.id ?? "unsure"
-  const [state, formAction, pending] = useActionState(
-    submitInquiry,
-    initialInquiryState,
-  )
+  const [edited, setEdited] = useState(false)
+  const submittingRef = useRef(false)
+  const [values, setValues] = useState({ fullName: "", businessName: "", email: "", phone: "", industry: "", website: "", packageId: selected as string, challenge: "", contactMethod: "email", consent: false })
+  const [state, formAction, pending] = useActionState(async (previous: typeof initialInquiryState, data: FormData) => {
+    try {
+      const result = await submitInquiry(previous, data)
+      setEdited(false)
+      return result
+    } catch {
+      setEdited(false)
+      return { ...initialInquiryState, status: "error" as const, message: "We couldn't confirm delivery. Your entries are still here. Check your connection and retry; the same request will not be saved twice." }
+    } finally { submittingRef.current = false }
+  }, initialInquiryState)
   const [clientErrors, setClientErrors] = useState<
     Partial<Record<InquiryField, string>>
   >({})
@@ -52,8 +69,17 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
     }
   }, [state.status])
 
-  const errors = { ...clientErrors, ...state.fieldErrors }
-  const chosen = getPackage(selected)
+  const errors = { ...(!edited ? state.fieldErrors : {}), ...clientErrors }
+  const chosen = getPackage(values.packageId)
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+    const field = event.target
+    const value = field instanceof HTMLInputElement && field.type === "checkbox" ? field.checked : field.value
+    setEdited(true)
+    setClientErrors((current) => ({ ...current, [field.name]: undefined }))
+    setValues((current) => ({ ...current, [field.name]: value }))
+    if (field.name === "packageId") onPackageChange?.(field.value)
+  }
 
   if (state.status === "success" || state.status === "saved-notify-failed") {
     return (
@@ -84,8 +110,12 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
     <form
       action={formAction}
       noValidate
+      onReset={(event) => event.preventDefault()}
+      aria-busy={pending}
+
       className="relative border border-navy/10 bg-paper p-6 sm:p-8"
       onSubmit={(event) => {
+        if (pending || submittingRef.current) { event.preventDefault(); return }
         const parsed = parseInquiry(new FormData(event.currentTarget))
         if (!parsed.success) {
           event.preventDefault()
@@ -96,6 +126,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           }
         } else {
           setClientErrors({})
+          submittingRef.current = true
         }
       }}
     >
@@ -105,6 +136,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <Input
             id="fullName"
             name="fullName"
+            value={values.fullName} onChange={handleChange}
             autoComplete="name"
             required
             aria-invalid={Boolean(errors.fullName)}
@@ -118,6 +150,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <Input
             id="businessName"
             name="businessName"
+            value={values.businessName} onChange={handleChange}
             autoComplete="organization"
             required
             aria-invalid={Boolean(errors.businessName)}
@@ -131,6 +164,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <Input
             id="email"
             name="email"
+            value={values.email} onChange={handleChange}
             type="email"
             autoComplete="email"
             required
@@ -145,6 +179,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <Input
             id="phone"
             name="phone"
+            value={values.phone} onChange={handleChange}
             type="tel"
             autoComplete="tel"
             required
@@ -159,8 +194,8 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <select
             id="industry"
             name="industry"
+            value={values.industry} onChange={handleChange}
             required
-            defaultValue=""
             aria-invalid={Boolean(errors.industry)}
             aria-describedby={errors.industry ? "industry-error" : undefined}
             className={cn(fieldClass, "mt-2 w-full bg-white")}
@@ -181,6 +216,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <Input
             id="website"
             name="website"
+            value={values.website} onChange={handleChange}
             type="text"
             autoComplete="url"
             placeholder="example.com"
@@ -195,7 +231,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <select
             id="packageId"
             name="packageId"
-            defaultValue={selected}
+            value={values.packageId} onChange={handleChange}
             aria-invalid={Boolean(errors.packageId)}
             aria-describedby={errors.packageId ? "packageId-error" : undefined}
             className={cn(fieldClass, "mt-2 w-full bg-white")}
@@ -210,7 +246,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <FieldError id="packageId-error" message={errors.packageId} />
           {chosen ? (
             <p className="mt-2 text-sm text-quiet">
-              {chosen.name} is selected from your previous choice. You can change it here.
+              {formatMoney(chosen.setup)} setup + {formatMoney(chosen.monthly)}/month. Your consultation will cover this package.
             </p>
           ) : null}
         </div>
@@ -219,6 +255,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <Textarea
             id="challenge"
             name="challenge"
+            value={values.challenge} onChange={handleChange}
             required
             rows={5}
             aria-invalid={Boolean(errors.challenge)}
@@ -231,12 +268,12 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <legend className="text-sm font-medium text-ink">Preferred contact method</legend>
           <div className="mt-3 flex flex-wrap gap-4">
             {contactMethods.map((method) => (
-              <label key={method.id} className="inline-flex items-center gap-2 text-sm text-ink">
+              <label key={method.id} className="inline-flex min-h-11 items-center gap-2 text-sm text-ink">
                 <input
                   type="radio"
                   name="contactMethod"
                   value={method.id}
-                  defaultChecked={method.id === "email"}
+                  checked={values.contactMethod === method.id} onChange={handleChange}
                   className="size-4 accent-[#091629]"
                 />
                 {method.label}
@@ -249,7 +286,9 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
           <label className="flex items-start gap-3 text-sm leading-6 text-ink">
             <input
               type="checkbox"
+              id="consent"
               name="consent"
+              checked={values.consent} onChange={handleChange}
               value="yes"
               required
               aria-invalid={Boolean(errors.consent)}
@@ -269,11 +308,12 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
         <label htmlFor="company_fax">Fax</label>
         <input id="company_fax" name="company_fax" tabIndex={-1} autoComplete="off" />
       </div>
+      <input type="hidden" name="submissionId" defaultValue={submissionId} />
       <input ref={startedRef} type="hidden" name="formStarted" defaultValue="" />
 
-      {state.status === "error" && state.message ? (
+      {(Object.values(clientErrors).some(Boolean) || (!edited && state.status === "error" && state.message)) ? (
         <p role="alert" className="mt-5 text-sm text-[#9f2d2d]">
-          {state.message}
+          {Object.values(clientErrors).some(Boolean) ? "Check the highlighted fields and send the request again." : state.message}
         </p>
       ) : null}
 
@@ -287,9 +327,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
         {pending ? "Sending request…" : "Request a consultation"}
       </Button>
       <p className="mt-4 text-xs leading-5 text-quiet">
-        We use this information to respond to your request and store it as a
-        private inquiry record. We do not sell these details. A full privacy
-        policy will be published when it is approved.
+        We use your details to respond to this inquiry and keep a private record of your request. We do not sell these details.
         {siteConfig.schedulingUrl
           ? " A scheduling link is also available if you would rather pick a time directly."
           : ""}

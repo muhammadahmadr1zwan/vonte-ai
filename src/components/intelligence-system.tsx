@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { navigateTabs } from "@/components/ui/tab-navigation"
 
 import { Container } from "@/components/container"
 
@@ -46,12 +47,6 @@ export function IntelligenceSystem() {
   const [active, setActive] = useState(0)
   const stage = stages[active]
 
-  function move(next: number) {
-    const count = stages.length
-    const index = (next + count) % count
-    setActive(index)
-    document.getElementById(`stage-tab-${stages[index].id}`)?.focus()
-  }
 
   return (
     <section id="system" className="bg-navy py-20 text-ivory sm:py-28">
@@ -62,9 +57,9 @@ export function IntelligenceSystem() {
               The system
             </p>
             <h2 className="display mt-5 text-[2.7rem] sm:text-6xl lg:text-[4.4rem]">
-              One Connected System.
+              One connected system.
               <span className="serif-em mt-2 block text-gold">
-                More Opportunities in Motion.
+                From inquiry to action.
               </span>
             </h2>
           </div>
@@ -80,16 +75,7 @@ export function IntelligenceSystem() {
             role="tablist"
             aria-orientation="vertical"
             aria-label="System stages"
-            onKeyDown={(event) => {
-              if (event.key === "ArrowDown") {
-                event.preventDefault()
-                move(active + 1)
-              }
-              if (event.key === "ArrowUp") {
-                event.preventDefault()
-                move(active - 1)
-              }
-            }}
+            onKeyDown={(event) => navigateTabs(event, active, stages.length, setActive)}
           >
             <div className="relative border-l border-white/15">
               {stages.map((item, index) => {
@@ -129,6 +115,7 @@ export function IntelligenceSystem() {
           <div
             id="stage-panel"
             role="tabpanel"
+            tabIndex={0}
             aria-labelledby={`stage-tab-${stage.id}`}
             className="border border-white/10 bg-[#0c1830] p-6 sm:p-8 lg:col-span-7"
           >

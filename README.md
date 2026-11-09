@@ -53,3 +53,45 @@ Do not invent a domain, inbox, phone number, office, or scheduling link. The for
 ## What this site does not include
 
 No live phone agent, no booking calendar, and no customer activity feed. Product visuals and the interactive demo are labeled as examples. The ROI calculator is an illustration, not a forecast.
+
+## Verification and delivery notes
+
+The audit and implementation report are in `docs/`. Browser regression tests use
+Playwright and axe-core against a production build:
+
+```bash
+npm ci
+npm test
+npm run lint
+npm run build
+npm run typecheck
+npx playwright install chromium
+npm run test:e2e
+```
+
+The browser suite runs a separate local server on port 3850, clears notification
+configuration, and saves synthetic inquiries under gitignored `test-results/`.
+It uses `/usr/bin/chromium` when available; otherwise it uses Playwright's browser.
+You can also set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` explicitly.
+
+Inquiry submissions carry a server-generated request token. Concurrent retries of
+the same rendered form atomically reuse the saved reference and do not notify twice.
+An altered request with an already-used token returns the original reference and
+explains that a previous version is saved. Reloading the form starts a new request.
+Files are created with owner-only permissions. Publishing a complete file uses an
+atomic hard link within the configured directory, so the storage volume must support
+hard links. Notifications are attempted after persistence; there is no background
+notification retry worker. Notification failures require operator follow-up.
+
+Before launch, use a Node server with persistent storage and an operator process to
+read inquiries, or configure and verify the webhook/email notifications together
+with that persistent storage. A read-only or ephemeral serverless filesystem is not
+a durable destination. Rate limiting is bounded but in memory per process; configure
+edge protection for a public or multi-instance deployment and ensure the trusted
+proxy strips client-supplied forwarding headers. Never put notification secrets in
+`NEXT_PUBLIC_` variables. Approve the privacy policy for the actual deployment.
+
+Set the real `NEXT_PUBLIC_SITE_URL` before the production build. With no configured
+origin, the sitemap is intentionally empty rather than publishing localhost URLs.
+Optional scheduling/contact/phone details remain hidden until configured. Voice,
+chat, booking and follow-up examples remain scripted illustrations, not live APIs.

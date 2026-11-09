@@ -30,21 +30,21 @@ export function Industries() {
         </div>
 
         <div className="mt-12 grid border border-navy/10 lg:grid-cols-12">
-          <div className="lg:col-span-5" role="listbox" aria-label="Industries">
+          <div className="grid grid-cols-2 lg:col-span-5 lg:block" role="group" aria-label="Industries">
             {industries.map((item, index) => {
               const selected = index === active
               return (
                 <button
                   key={item.id}
                   type="button"
-                  role="option"
-                  aria-selected={selected}
+                  aria-pressed={selected}
+                  aria-controls="industry-detail"
                   onClick={() => setActive(index)}
-                  className={`flex w-full items-baseline justify-between gap-4 border-b border-navy/10 px-5 py-4 text-left last:border-b-0 ${
+                  className={`flex w-full min-h-16 items-center justify-between gap-3 border-b border-navy/10 px-4 py-4 text-left last:border-b-0 ${
                     selected ? "bg-navy text-ivory" : "bg-paper hover:bg-ivory"
                   }`}
                 >
-                  <span className="font-heading text-xl tracking-[-0.03em] sm:text-2xl">
+                  <span className="font-heading text-base tracking-[-0.03em] sm:text-xl">
                     {item.name}
                   </span>
                   <span className={`text-[0.68rem] tracking-[0.16em] ${selected ? "text-gold" : "text-gold-ink"}`}>
@@ -54,7 +54,7 @@ export function Industries() {
               )
             })}
           </div>
-          <article className="flex flex-col justify-between bg-ivory px-6 py-8 sm:px-10 lg:col-span-7" aria-live="polite">
+          <article id="industry-detail" className="flex flex-col justify-between bg-ivory px-6 py-8 sm:px-10 lg:col-span-7" aria-live="polite">
             <div>
               <p className="font-serif text-6xl text-gold-ink italic">0{active + 1}</p>
               <h3 className="display mt-4 text-4xl sm:text-5xl">{industry.name}</h3>
@@ -68,7 +68,7 @@ export function Industries() {
                 </p>
               ) : null}
             </div>
-            <p className="mt-8 text-xs tracking-[0.16em] text-mist uppercase">
+            <p className="mt-8 text-xs tracking-[0.16em] text-quiet uppercase">
               Illustrative fit. Not a certification or a client result.
             </p>
           </article>

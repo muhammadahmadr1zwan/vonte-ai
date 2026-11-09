@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 
+import { CtaLink } from "@/components/cta-link"
 import { Container } from "@/components/container"
 import { formatCount, formatMoney } from "@/lib/format"
 import { getPackage } from "@/lib/pricing"
@@ -41,41 +42,12 @@ const fields: {
   },
 ]
 
-function useAnimatedNumber(value: number) {
-  const [display, setDisplay] = useState(value)
-  const current = useRef(value)
-
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    const from = current.current
-    if (reduce || from === value) {
-      current.current = value
-      setDisplay(value)
-      return
-    }
-    const started = performance.now()
-    let frame = 0
-    const tick = (now: number) => {
-      const progress = Math.min(1, (now - started) / 520)
-      const eased = 1 - (1 - progress) ** 3
-      const next = from + (value - from) * eased
-      current.current = next
-      setDisplay(next)
-      if (progress < 1) frame = requestAnimationFrame(tick)
-    }
-    frame = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frame)
-  }, [value])
-
-  return display
-}
-
 export function RoiCalculator() {
   const [input, setInput] = useState<RoiInput>({ ...roiDefaults })
   const result = calculateRoi(input)
-  const missed = useAnimatedNumber(result.missedCalls)
-  const bookings = useAnimatedNumber(result.potentialBookings)
-  const revenue = useAnimatedNumber(result.illustrativeRevenue)
+  const missed = result.missedCalls
+  const bookings = result.potentialBookings
+  const revenue = result.illustrativeRevenue
   const missedShare = Math.min(100, input.missedPercent)
 
   function update(key: keyof RoiInput, raw: string) {
@@ -91,8 +63,8 @@ export function RoiCalculator() {
             Illustrative model
           </p>
           <h2 className="display mt-5 text-[2.7rem] sm:text-6xl">
-            What Is an Unanswered
-            <span className="serif-em mt-2 block">Opportunity Worth?</span>
+            What is an unanswered
+            <span className="serif-em mt-2 block">opportunity worth?</span>
           </h2>
         </div>
 
@@ -108,7 +80,7 @@ export function RoiCalculator() {
                     <input
                       type="range"
                       min={0}
-                      max={field.sliderMax}
+                      max={Math.max(field.sliderMax, input[field.key])}
                       step={field.step}
                       value={Math.min(input[field.key], field.sliderMax)}
                       onChange={(event) => update(field.key, event.target.value)}
@@ -134,7 +106,7 @@ export function RoiCalculator() {
                         step={field.key === "averageJobValue" ? 1 : field.step}
                         value={input[field.key]}
                         onChange={(event) => update(field.key, event.target.value)}
-                        className="w-full bg-transparent text-right text-sm text-navy outline-none"
+                        className="min-w-0 w-full bg-transparent text-right text-base text-navy"
                       />
                       {field.suffix ? (
                         <span className="pl-1 text-sm text-quiet">{field.suffix}</span>
@@ -146,18 +118,18 @@ export function RoiCalculator() {
             </div>
             <button
               type="button"
-              className="mt-6 text-sm text-gold-ink underline decoration-gold underline-offset-4"
+              className="mt-4 min-h-11 text-sm text-gold-ink underline decoration-gold underline-offset-4"
               onClick={() => setInput({ ...roiDefaults })}
             >
               Reset to the sample figures
             </button>
           </div>
 
-          <div className="bg-navy p-6 text-ivory sm:p-8 lg:col-span-6" aria-live="polite">
+          <div className="bg-navy p-6 text-ivory sm:p-8 min-w-0 lg:col-span-6">
             <p className="text-[0.68rem] tracking-[0.18em] text-gold uppercase">
               Illustrative monthly opportunity
             </p>
-            <p className="display mt-4 text-6xl text-gold sm:text-7xl">
+            <p className="display roi-output mt-4 text-gold" aria-live="polite" aria-atomic="true" aria-label="Illustrative monthly revenue">
               {formatMoney(Math.round(revenue))}
             </p>
             <div className="mt-8" aria-hidden="true">
@@ -181,9 +153,9 @@ export function RoiCalculator() {
             <p className="mt-8 text-sm leading-6 text-silver">{roiDisclaimer}</p>
             <p className="mt-3 text-sm leading-6 text-mist">
               The AI Receptionist retainer is {formatMoney(receptionist.monthly)} per
-              month. Place that figure beside the scenario. The calculator does
-              not predict recovered revenue.
+              month, plus {formatMoney(receptionist.setup)} setup. This model does not predict recovered revenue.
             </p>
+            <CtaLink href="/contact?package=ai-receptionist" className="mt-7 w-full sm:w-auto">Discuss your assumptions</CtaLink>
           </div>
         </div>
       </Container>

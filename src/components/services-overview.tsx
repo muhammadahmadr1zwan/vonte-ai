@@ -39,17 +39,18 @@ function Receptionist({
             AI Receptionist
           </p>
           <h2 className="display mt-5 text-[2.7rem] sm:text-6xl">
-            Your Front Desk.
-            <span className="serif-em mt-2 block text-gold">Always Ready.</span>
+            Your front desk.
+            <span className="serif-em mt-2 block text-gold">Always ready.</span>
           </h2>
           <p className="mt-6 text-base leading-7 text-silver sm:text-lg">{service.lede}</p>
-          {detailed
-            ? service.paragraphs.map((paragraph) => (
-                <p key={paragraph} className="mt-4 text-base leading-7 text-silver">
-                  {paragraph}
-                </p>
-              ))
-            : null}
+          {detailed ? (
+            <details className="mt-6 border-y border-white/15 py-4">
+              <summary className="cursor-pointer py-2 text-sm text-gold">Service details and scope</summary>
+              <div className="space-y-4 pt-3">
+                {service.paragraphs.map((paragraph) => <p key={paragraph} className="text-sm leading-7 text-silver">{paragraph}</p>)}
+              </div>
+            </details>
+          ) : null}
           <CapabilityList items={pkg.included.slice(0, detailed ? pkg.included.length : 5)} light />
           {detailed ? <p className="mt-6 text-sm leading-6 text-mist">{service.note}</p> : null}
           <Actions
@@ -68,7 +69,7 @@ function Receptionist({
 
 function CallConsole() {
   return (
-    <figure className="border border-white/10 bg-[#0c1830] lg:col-span-7" aria-label="Illustrative receptionist conversation">
+    <figure className="border border-white/10 bg-[#0c1830] lg:sticky lg:top-28 lg:col-span-7" aria-label="Illustrative receptionist conversation">
       <figcaption className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-3 text-[0.68rem] tracking-[0.18em] text-mist uppercase">
         <span>Dedicated line</span>
         <span className="text-gold">Illustrative</span>
@@ -132,8 +133,8 @@ function FollowUp({
               Lead follow-up
             </p>
             <h2 className="display mt-5 text-[2.7rem] sm:text-6xl">
-              The Right Follow-Up.
-              <span className="serif-em mt-2 block">At the Right Time.</span>
+              The right <span className="whitespace-nowrap">follow-up.</span>
+              <span className="serif-em mt-2 block">At the right time.</span>
             </h2>
           </div>
           <p className="text-base leading-7 text-quiet lg:col-span-4 lg:col-start-9">
@@ -184,8 +185,8 @@ function Website({
             Website and chatbot
           </p>
           <h2 className="display mt-5 text-[2.7rem] sm:text-6xl">
-            An Online Presence
-            <span className="serif-em mt-2 block">That Works Harder.</span>
+            An online presence
+            <span className="serif-em mt-2 block">that works harder.</span>
           </h2>
           <p className="mt-6 text-base leading-7 text-quiet sm:text-lg">{service.lede}</p>
         </div>

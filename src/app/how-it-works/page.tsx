@@ -35,7 +35,7 @@ export default function HowItWorksPage() {
     <>
       <PageHero
         eyebrow="How it works"
-        title="From the way you work today to a system that can keep up."
+        title="Built around the way you work."
         lede="Four stages, with the decisions made in the open. VONTE learns the workflow, plans the automation, implements supported connections, and reviews what is live."
       />
       <Process detailed />

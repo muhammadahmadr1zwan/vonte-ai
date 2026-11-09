@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { CtaLink } from "@/components/cta-link"
+import { navigateTabs } from "@/components/ui/tab-navigation"
 
 import { Container } from "@/components/container"
 import { siteConfig } from "@/lib/site"
@@ -79,7 +81,10 @@ const scenarios = [
 
 export function ProductDemo() {
   const [active, setActive] = useState(0)
+  const [visible, setVisible] = useState(1)
   const scenario = scenarios[active]
+  const complete = visible === scenario.messages.length
+  function select(index: number) { setActive(index); setVisible(1) }
 
   return (
     <section id="experience" className="bg-navy py-20 text-ivory sm:py-28">
@@ -90,8 +95,8 @@ export function ProductDemo() {
               Interactive demo
             </p>
             <h2 className="display mt-5 text-[2.7rem] sm:text-6xl lg:text-[4.3rem]">
-              See Intelligence
-              <span className="serif-em mt-2 block text-gold">in Action.</span>
+              See intelligence
+              <span className="serif-em mt-2 block text-gold">in action.</span>
             </h2>
           </div>
           <p className="text-sm leading-6 text-silver lg:col-span-4 lg:col-start-9">
@@ -101,7 +106,8 @@ export function ProductDemo() {
         </div>
 
         <div className="mt-12 grid gap-6 lg:grid-cols-12">
-          <div className="flex flex-col gap-2 lg:col-span-4" role="tablist" aria-label="Demo scenarios">
+          <div className="lg:col-span-4">
+          <div className="flex flex-col gap-2" role="tablist" aria-label="Demo scenarios" aria-orientation="vertical" onKeyDown={(event) => navigateTabs(event, active, scenarios.length, select)}>
             {scenarios.map((item, index) => {
               const selected = index === active
               return (
@@ -111,13 +117,14 @@ export function ProductDemo() {
                   role="tab"
                   id={`demo-tab-${item.id}`}
                   aria-selected={selected}
+                  tabIndex={selected ? 0 : -1}
                   aria-controls="demo-panel"
-                  onClick={() => setActive(index)}
+                  onClick={() => select(index)}
                   className={`border px-4 py-4 text-left ${
                     selected ? "border-gold bg-gold text-navy" : "border-white/15 text-ivory hover:border-gold"
                   }`}
                 >
-                  <span className={`text-[0.68rem] tracking-[0.16em] uppercase ${selected ? "text-navy/70" : "text-gold"}`}>
+                  <span className={`text-[0.68rem] tracking-[0.16em] uppercase ${selected ? "text-navy" : "text-gold"}`}>
                     {item.kicker}
                   </span>
                   <span className="mt-1 block font-heading text-xl tracking-[-0.03em]">
@@ -127,10 +134,14 @@ export function ProductDemo() {
               )
             })}
           </div>
+            <p className="mt-3 text-sm leading-6 text-silver">Step through the exchange to see how an inquiry becomes a clear next action.</p>
+            <CtaLink href="/contact?package=ai-receptionist" variant="inverse" className="mt-3">Discuss AI Receptionist</CtaLink>
+          </div>
 
           <div
             id="demo-panel"
             role="tabpanel"
+            tabIndex={0}
             aria-labelledby={`demo-tab-${scenario.id}`}
             className="border border-white/10 bg-[#0c1830] lg:col-span-8"
           >
@@ -140,8 +151,8 @@ export function ProductDemo() {
               </p>
               <p className="text-[0.68rem] tracking-[0.18em] text-gold uppercase">Illustrative</p>
             </div>
-            <div className="space-y-3 px-5 py-5" aria-live="polite">
-              {scenario.messages.map((message, index) => (
+            <div className="space-y-3 px-5 py-5" aria-live="polite" aria-relevant="additions">
+              {scenario.messages.slice(0, visible).map((message, index) => (
                 <p
                   key={`${scenario.id}-${index}`}
                   className={`max-w-md px-3 py-2.5 text-sm leading-6 ${
@@ -157,7 +168,7 @@ export function ProductDemo() {
                 </p>
               ))}
             </div>
-            <div className="grid gap-px border-t border-white/10 bg-white/10 sm:grid-cols-3">
+            {complete ? <><div className="grid gap-px border-t border-white/10 bg-white/10 sm:grid-cols-3">
               {scenario.captured.map(([term, value]) => (
                 <div key={term} className="bg-[#0c1830] px-5 py-4">
                   <p className="text-[0.68rem] tracking-[0.14em] text-mist uppercase">{term}</p>
@@ -165,7 +176,14 @@ export function ProductDemo() {
                 </div>
               ))}
             </div>
-            <p className="px-5 py-4 text-sm leading-6 text-silver">{scenario.route}</p>
+            <p className="px-5 py-4 text-sm leading-6 text-silver">{scenario.route}</p></> : null}
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 px-5 py-4">
+              <p className="text-xs text-mist" role="status">Exchange {visible} of {scenario.messages.length}{complete ? " · Summary ready" : ""}</p>
+              <div className="flex flex-wrap gap-3">
+                {!complete ? <button type="button" onClick={() => setVisible(scenario.messages.length)} className="min-h-11 text-sm text-silver underline underline-offset-4">Show full exchange</button> : null}
+                <button type="button" onClick={() => setVisible(complete ? 1 : visible + 1)} className="min-h-11 border border-gold px-4 text-sm text-gold hover:bg-gold/10">{complete ? "Replay scenario" : "Next response →"}</button>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Geist, Instrument_Sans, Instrument_Serif } from "next/font/google"
+import { Instrument_Sans, Instrument_Serif } from "next/font/google"
 
 import { JsonLd } from "@/components/json-ld"
 import { SiteFooter } from "@/components/site-footer"
@@ -7,12 +7,6 @@ import { SiteHeader } from "@/components/site-header"
 import { siteConfig } from "@/lib/site"
 
 import "./globals.css"
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist",
-  display: "swap",
-})
 
 const instrument = Instrument_Sans({
   subsets: ["latin"],
@@ -59,7 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${instrument.variable} ${instrumentSerif.variable} h-full`}
+      className={`${instrument.variable} ${instrumentSerif.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">
         <a

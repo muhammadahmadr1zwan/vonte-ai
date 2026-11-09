@@ -41,8 +41,7 @@ export function SiteFooter() {
             </ul>
           ) : (
             <p className="mt-6 max-w-sm text-sm leading-6 text-mist">
-              Consultation requests are taken through the contact form. A public
-              email and phone number will be added here when they are confirmed.
+              <Link href="/contact" className="inline-flex min-h-11 items-center text-silver underline decoration-gold underline-offset-4">Start a conversation →</Link>
             </p>
           )}
         </div>
@@ -80,8 +79,7 @@ export function SiteFooter() {
           © {siteConfig.copyrightYear} {siteConfig.name}
         </p>
         <p className="max-w-xl sm:text-right">
-          Service terms are provided in a written agreement. Public legal pages
-          will be linked here when they are approved.
+          Calls. Conversations. Connections.
         </p>
       </Container>
     </footer>

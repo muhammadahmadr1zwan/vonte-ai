@@ -25,11 +25,10 @@ export function PricingGrid({ intro = true }: { intro?: boolean }) {
             </p>
             <h2 className="display mt-5 max-w-4xl text-[2.8rem] sm:text-6xl lg:text-7xl">
               Four packages.
-              <span className="serif-em mt-2 block text-gold">Setup and monthly, equally clear.</span>
+              <span className="serif-em mt-2 block text-gold">A clear place to start.</span>
             </h2>
             <p className="mt-6 max-w-xl text-base leading-7 text-silver sm:text-lg">
-              Choose one service or the combined system. Every button carries
-              the package into the consultation form.
+              Start with the workflow that needs attention. Or bring calls, follow-up, and your website together with Vonte Complete.
             </p>
           </Container>
         </div>
@@ -38,61 +37,47 @@ export function PricingGrid({ intro = true }: { intro?: boolean }) {
       )}
 
       <Container className={intro ? "py-16 sm:py-20" : "py-16 sm:py-20"}>
-        <div className="grid border border-navy/10 lg:grid-cols-4">
+        <div className="grid border border-navy/10 md:grid-cols-2 xl:grid-cols-4">
           {packages.map((item) => {
             const featured = item.featured
             return (
               <article
                 key={item.id}
                 id={item.id}
-                className={`flex flex-col border-b border-navy/10 p-6 last:border-b-0 lg:border-r lg:border-b-0 lg:p-7 lg:last:border-r-0 ${
+                className={`flex flex-col border-b border-navy/10 p-6 last:border-b-0 md:border-r xl:border-b-0 xl:last:border-r-0 ${
                   featured ? "bg-navy text-ivory" : "bg-paper"
                 }`}
               >
                 <p className={`text-[0.68rem] tracking-[0.18em] uppercase ${featured ? "text-gold" : "text-gold-ink"}`}>
                   {featured ? "Complete System" : "Package"}
                 </p>
-                <h3 className="mt-4 font-heading text-2xl leading-tight tracking-[-0.03em]">
+                <h3 className="mt-4 min-h-14 font-heading text-2xl leading-tight tracking-[-0.03em]">
                   {item.name}
                 </h3>
-                <p className={`mt-3 text-sm leading-6 ${featured ? "text-silver" : "text-quiet"}`}>
+                <p className={`mt-3 xl:min-h-24 text-sm leading-6 ${featured ? "text-silver" : "text-quiet"}`}>
                   {item.description}
                 </p>
-                <div className="mt-8 grid grid-cols-2 gap-4">
-                  <div>
-                    <p className={`font-heading text-3xl tracking-[-0.04em] ${featured ? "text-gold" : "text-navy"}`}>
-                      {formatMoney(item.setup)}
-                    </p>
-                    <p className={`mt-1 text-[0.68rem] tracking-[0.16em] uppercase ${featured ? "text-mist" : "text-quiet"}`}>
-                      Setup
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-heading text-3xl tracking-[-0.04em]">
-                      {formatMoney(item.monthly)}
-                    </p>
-                    <p className={`mt-1 text-[0.68rem] tracking-[0.16em] uppercase ${featured ? "text-mist" : "text-quiet"}`}>
-                      Per month
-                    </p>
-                  </div>
+                <div className="mt-8 border-y border-current/15 py-5">
+                  <p className="text-sm"><span className={`font-heading text-[2.5rem] leading-none tracking-[-0.05em] ${featured ? "text-gold" : "text-navy"}`}>{formatMoney(item.monthly)}</span><span className={featured ? "text-silver" : "text-quiet"}> /month</span></p>
+                  <p className={`mt-3 text-sm ${featured ? "text-silver" : "text-quiet"}`}>+ {formatMoney(item.setup)} one-time setup</p>
                 </div>
                 <p className={`mt-6 text-sm leading-6 ${featured ? "text-silver" : "text-ink"}`}>
                   {item.bestFor}
                 </p>
-                <ul className="mt-6 space-y-2 lg:hidden">
+                <ul className={`mt-6 space-y-3 ${intro ? "" : "xl:hidden"}`}>
                   {item.included.map((line) => (
                     <li key={line} className={`text-sm leading-6 ${featured ? "text-ivory" : "text-ink"}`}>
                       {line}
                     </li>
                   ))}
                 </ul>
-                <div className="mt-8">
+                <div className="mt-auto pt-8">
                   <CtaLink
                     href={`/contact?package=${item.id}`}
                     variant={featured ? "gold" : "navy"}
                     className="w-full"
                   >
-                    Discuss This Package
+                    Discuss package
                   </CtaLink>
                 </div>
               </article>
@@ -110,11 +95,11 @@ export function PricingGrid({ intro = true }: { intro?: boolean }) {
             setup and {formatMoney(separatePurchase.monthly)} per month. The
             bundle is {formatMoney(completeSavings.setup)} less upfront and{" "}
             {formatMoney(completeSavings.monthly)} less each month. Usage is still
-            capped by each included allowance. Nothing here is unlimited.
+            defined by each package’s included allowance.
           </p>
         </div>
 
-        <div className="mt-10 hidden lg:block">
+        {!intro ? <div className="mt-10 hidden xl:block">
           <h3 className="font-heading text-2xl tracking-[-0.03em]">What each package includes</h3>
           <div className="mt-5 overflow-hidden border border-navy/10">
             <table className="w-full border-collapse text-left text-sm">
@@ -147,7 +132,7 @@ export function PricingGrid({ intro = true }: { intro?: boolean }) {
                               <span className="sr-only"> in {item.name}</span>
                             </span>
                           ) : (
-                            <span className="text-mist">
+                            <span className="text-quiet">
                               —
                               <span className="sr-only"> Not included in {item.name}</span>
                             </span>
@@ -160,7 +145,7 @@ export function PricingGrid({ intro = true }: { intro?: boolean }) {
               </tbody>
             </table>
           </div>
-        </div>
+        </div> : null}
 
         <p className="mt-8 max-w-4xl text-sm leading-6 text-quiet">{scopeNote}</p>
       </Container>

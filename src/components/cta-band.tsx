@@ -7,12 +7,6 @@ import { strategyCallHref } from "@/lib/site"
 export function CtaBand() {
   return (
     <section className="relative overflow-hidden bg-navy py-24 text-ivory sm:py-32">
-      <p
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-8 left-0 font-heading text-[18vw] leading-none tracking-[-0.07em] text-white/[0.045] select-none"
-      >
-        VONTE
-      </p>
       <svg
         className="pointer-events-none absolute top-0 right-0 h-full w-1/2 opacity-80"
         viewBox="0 0 400 200"
@@ -24,8 +18,8 @@ export function CtaBand() {
       </svg>
       <Container className="relative">
         <h2 className="display max-w-5xl text-[2.8rem] sm:text-6xl lg:text-[5.4rem]">
-          Your Next Opportunity
-          <span className="serif-em mt-2 block text-gold">Is Already Calling.</span>
+          Your next opportunity
+          <span className="serif-em mt-2 block text-gold">is already calling.</span>
         </h2>
         <p className="mt-8 max-w-xl text-lg leading-8 text-silver">
           Let&apos;s build the systems that help your business answer.
