@@ -82,10 +82,10 @@ atomic hard link within the configured directory, so the storage volume must sup
 hard links. Notifications are attempted after persistence; there is no background
 notification retry worker. Notification failures require operator follow-up.
 
-Before launch, use a Node server with persistent storage and an operator process to
-read inquiries, or configure and verify the webhook/email notifications together
-with that persistent storage. A read-only or ephemeral serverless filesystem is not
-a durable destination. Rate limiting is bounded but in memory per process; configure
+On Netlify, use the configured private Blobs store and an operator process to review
+inquiries. On other Node hosts, provide persistent storage and an operator process
+or verified notifications. A read-only or ephemeral serverless filesystem is not
+a durable destination for the local-file backend. Rate limiting is bounded but in memory per process; configure
 edge protection for a public or multi-instance deployment and ensure the trusted
 proxy strips client-supplied forwarding headers. Never put notification secrets in
 `NEXT_PUBLIC_` variables. Approve the privacy policy for the actual deployment.
@@ -109,6 +109,11 @@ Use `deploy-preview` and `production` build contexts explicitly when uploading, 
 preview inquiry tests stay isolated from production documents. Do not replace the
 adapter routing with an SPA catch-all. Do not upload raw `.next` files as a static
 site: the inquiry action requires the adapter's generated server function.
+
+Use the complete CLI build-and-deploy flow (`netlify deploy --context deploy-preview`
+for a preview; `netlify deploy --prod --context production` for a release). The
+framework adapter's publishing hooks must run; do not use `--no-build` to upload a
+previously prepared `.next` directory. See `docs/NETLIFY-DEPLOYMENT.md` for operations.
 
 Netlify inquiry storage needs no personal API token in frontend code. Runtime Blobs
 credentials are injected by Netlify. No email/SMS notification provider is enabled
