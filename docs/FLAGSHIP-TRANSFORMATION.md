@@ -12,8 +12,8 @@
 - [x] Refine hero, connected workflow, service presentation and pricing.
 - [x] Render, critique, and complete a second refinement pass.
 - [x] Run regression, accessibility, build and release checks.
-- [ ] Finish performance measurements and verify hosted preview persistence.
-- [ ] Prepare a verified preview for production approval.
+- [x] Finish performance measurements and verify hosted preview persistence.
+- [x] Prepare a verified preview for production approval.
 
 The reported missing header was not reproduced on the current live release:
 screenshots show the sticky header at all five widths and the menu toggle below
@@ -122,6 +122,34 @@ LCP and CLS meet the requested good thresholds in this lab run. Total blocking t
 is not INP. Field INP remains unmeasured. The design adds no image download,
 animation library or third-party script; the existing locally served fonts and
 reduced-motion handling remain in place.
+
+The scripted touch-interaction sample on the pricing page recorded seven Event
+Timing entries, with a largest observed event duration of 48 ms. This unthrottled
+local sample covers calculator input/reset and menu controls; it is not field INP
+and does not establish performance for all interactions or devices.
+
+## Hosted preview and persistence
+
+Review URL: https://6af220c86ca3c50c970d0b82--vonte-ai.netlify.app.
+
+The full Netlify build and adapter pipeline completed successfully. Deploy
+`6af220c86ca3c50c970d0b82` is `ready`, has context `deploy-preview`, and has no
+publication timestamp. It serves the real stylesheets with HTTP 200 and sends
+`X-Robots-Tag: noindex`. Raw server/configuration paths return HTTP 404.
+
+Hosted browser verification passed the five routes at desktop/mobile sizes, direct
+System deep links and menu navigation at all five required widths, all six workflow
+stages, calculator changes, scripted demo, form validation and a real submission.
+There were no captured page errors. Synthetic inquiry `VN-F720BDC9` was read back
+through the authenticated Netlify CLI from `vonte-inquiries-preview`, confirming
+the same inquiry ID, reference and `vonte-complete` package shown in the browser.
+Project environment metadata contains only the storage selector and public site
+origin; no notification provider was enabled or email delivery attempted.
+
+Production remains on deploy `6af14b08b1015a4e744d7c54`. Existing production
+inquiries were neither modified nor deleted. No changes were pushed to GitHub.
+Source is committed on local branch `improve/vonte-flagship` (implementation commit
+`4933b00`); this report records the final verification results.
 
 ## Remaining limitations and release procedure
 
