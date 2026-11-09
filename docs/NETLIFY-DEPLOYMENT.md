@@ -54,5 +54,12 @@ calculator, demo, mobile menu, validation, package selection and successful
 inquiry confirmation passed. Reading the stored preview JSON through the
 authenticated CLI confirmed it matched the browser's inquiry ID.
 
+Production deploy `6af14b08b1015a4e744d7c54` was published successfully on
+2026-11-09 UTC. The production URL passed the same desktop/mobile browser smoke
+checks with zero captured browser errors. The synthetic inquiry `VN-E07BA71C`
+was confirmed in `vonte-inquiries-production` through the authenticated CLI.
+Stylesheets and the sitemap return HTTP 200; the canonical and sitemap origin
+use the production URL. Raw server-output/configuration paths return HTTP 404.
+
 The project uses the Free account's existing features. No paid provider was
 enabled. Phone/chat/booking product examples remain clearly labeled simulations.
