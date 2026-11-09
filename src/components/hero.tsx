@@ -9,22 +9,22 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden bg-navy text-ivory">
       <div className="hero-grid pointer-events-none absolute inset-0" />
-      <Container className="relative grid items-center gap-12 pt-12 pb-12 sm:pt-20 sm:pb-16 lg:min-h-[720px] lg:grid-cols-12 lg:gap-12 lg:py-20">
+      <Container className="relative grid items-center gap-10 pt-12 pb-12 sm:pt-16 sm:pb-16 lg:min-h-[690px] lg:grid-cols-12 lg:gap-10 lg:py-16">
         <div className="rise lg:col-span-7">
           <p className="flex items-center gap-3 text-[0.65rem] font-medium tracking-[0.2em] text-gold uppercase sm:text-xs">
             <span className="h-px w-6 shrink-0 bg-gold" aria-hidden="true" />Intelligence in motion
           </p>
           <h1 className="display hero-title mt-7 text-ivory">
-            Every opportunity.<span className="serif-em mt-2 block text-gold">Answered.</span>
+            Never let an<br />opportunity<span className="serif-em mt-2 block text-gold">go unanswered.</span>
           </h1>
           <p className="mt-7 max-w-lg text-base leading-7 text-silver sm:text-lg sm:leading-8">
-            AI-powered calls, lead follow-up, and websites designed to help service businesses turn more inquiries into appointments.
+            AI receptionists, intelligent follow-up, and websites that help service businesses turn inquiries into appointment requests.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <CtaLink href={strategyCallHref()}>Book a Strategy Call <ArrowUpRight aria-hidden="true" /></CtaLink>
             <CtaLink href="#system" variant="inverse">Explore the System <ArrowDown aria-hidden="true" /></CtaLink>
           </div>
-          <p className="mt-6 text-sm text-mist">For the work you do. And the calls you can&apos;t take.</p>
+          <p className="mt-6 flex items-center gap-2.5 text-sm text-mist"><span className="h-px w-5 shrink-0 bg-gold/60" aria-hidden="true" />Built around your business. Ready for the next inquiry.</p>
         </div>
         <div className="rise min-w-0 lg:col-span-5" style={{animationDelay:"100ms"}}><OperationsStage /></div>
       </Container>

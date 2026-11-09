@@ -1,10 +1,12 @@
 import Link from "next/link"
+import { ArrowUpRight, PhoneIncoming, MessageSquare, Globe, Check } from "lucide-react"
 
 import { Container } from "@/components/container"
 import { CtaLink } from "@/components/cta-link"
 import { FollowUpSequence } from "@/components/follow-up-sequence"
 import { services } from "@/lib/content"
 import { getPackage } from "@/lib/pricing"
+import { formatMoney } from "@/lib/format"
 
 export function ServicesOverview({ detailed = false }: { detailed?: boolean }) {
   const receptionist = services[0]
@@ -16,6 +18,7 @@ export function ServicesOverview({ detailed = false }: { detailed?: boolean }) {
       <Receptionist detailed={detailed} service={receptionist} />
       <FollowUp detailed={detailed} service={followUp} />
       <Website detailed={detailed} service={website} />
+      <CompleteSolution />
     </div>
   )
 }
@@ -43,6 +46,7 @@ function Receptionist({
             <span className="serif-em mt-2 block text-gold">Always ready.</span>
           </h2>
           <p className="mt-6 text-base leading-7 text-silver sm:text-lg">{service.lede}</p>
+          <PackageCost id={service.id} dark />
           {detailed ? (
             <details className="mt-6 border-y border-white/15 py-4">
               <summary className="cursor-pointer py-2 text-sm text-gold">Service details and scope</summary>
@@ -139,6 +143,7 @@ function FollowUp({
           </div>
           <p className="text-base leading-7 text-quiet lg:col-span-4 lg:col-start-9">
             {service.lede}
+            <PackageCost id={service.id} />
           </p>
         </div>
         {detailed ? (
@@ -189,6 +194,7 @@ function Website({
             <span className="serif-em mt-2 block">that works harder.</span>
           </h2>
           <p className="mt-6 text-base leading-7 text-quiet sm:text-lg">{service.lede}</p>
+          <PackageCost id={service.id} />
         </div>
         {detailed ? (
           <div className="mt-6 max-w-3xl space-y-4">
@@ -257,13 +263,52 @@ function Website({
         {detailed ? null : (
           <p className="mt-6 text-sm text-quiet">
             <Link href="/services" className="underline decoration-gold underline-offset-4">
-              Read all three services
+              Read the service details
             </Link>
           </p>
         )}
       </Container>
     </section>
   )
+}
+
+function PackageCost({id, dark = false}: {id: string; dark?: boolean}) {
+  const pkg = getPackage(id)!
+  return <span className={`mt-5 block text-sm ${dark ? "text-silver" : "text-quiet"}`}>
+    <span className={dark ? "text-gold" : "text-navy"}>{formatMoney(pkg.setup)} setup</span>
+    <span className="mx-2" aria-hidden="true">/</span>
+    {formatMoney(pkg.monthly)} per month
+  </span>
+}
+
+function CompleteSolution() {
+  const pkg = getPackage("vonte-complete")!
+  const connections = [
+    {label:"AI Receptionist", detail:"Answer the call", icon:PhoneIncoming},
+    {label:"Lead Follow-Up", detail:"Continue the conversation", icon:MessageSquare},
+    {label:"Website & Chatbot", detail:"Connect the next visitor", icon:Globe},
+  ]
+  return <section id="solution-vonte-complete" className="border-y border-navy/10 bg-paper py-20 text-navy sm:py-24">
+    <Container>
+      <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+        <div className="lg:col-span-5">
+          <p className="text-[0.7rem] font-medium tracking-[0.2em] text-gold-ink uppercase">Vonte Complete / Complete Solution</p>
+          <h2 className="display mt-5 text-[2.7rem] sm:text-6xl">Built together.<span className="serif-em mt-2 block">Better connected.</span></h2>
+          <p className="mt-6 text-base leading-7 text-quiet">One coordinated front office: the receptionist, follow-up, and website packages, with monthly reporting and strategy review, priority support, and quarterly optimization.</p>
+          <PackageCost id={pkg.id}/>
+          <div className="mt-7"><CtaLink href={`/contact?package=${pkg.id}`} variant="navy">Discuss Vonte Complete <ArrowUpRight aria-hidden="true"/></CtaLink></div>
+        </div>
+        <div className="border border-navy/15 bg-ivory p-5 sm:p-8 lg:col-span-7">
+          <p className="text-[0.65rem] tracking-[0.18em] text-gold-ink uppercase">Three services. One connected approach.</p>
+          <div className="relative mt-7 space-y-3">
+            <span className="absolute inset-y-5 left-[25px] w-px bg-navy/20" aria-hidden="true"/>
+            {connections.map(({label,detail,icon:Icon})=><div key={label} className="relative flex items-center gap-4 border border-navy/10 bg-paper p-3 sm:p-4"><span className="flex size-10 shrink-0 items-center justify-center border border-navy/15 bg-ivory"><Icon className="size-4" aria-hidden="true"/></span><div><p className="text-sm font-medium">{label}</p><p className="mt-1 text-xs text-quiet">{detail}</p></div><Check className="ml-auto size-4 shrink-0 text-gold-ink" aria-hidden="true"/></div>)}
+          </div>
+          <div className="mt-5 border-t border-navy/15 pt-5"><p className="font-heading text-xl tracking-[-0.03em]">Your team stays in control.</p><p className="mt-2 text-sm leading-6 text-quiet">Business-approved answers, agreed handoffs, and a clear scope before launch.</p></div>
+        </div>
+      </div>
+    </Container>
+  </section>
 }
 
 function Actions({

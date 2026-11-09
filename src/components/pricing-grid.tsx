@@ -49,7 +49,7 @@ export function PricingGrid({ intro = true }: { intro?: boolean }) {
                 }`}
               >
                 <p className={`text-[0.68rem] tracking-[0.18em] uppercase ${featured ? "text-gold" : "text-gold-ink"}`}>
-                  {featured ? "Complete System" : "Package"}
+                  {featured ? "Complete Solution" : "Package"}
                 </p>
                 <h3 className="mt-4 min-h-14 font-heading text-2xl leading-tight tracking-[-0.03em]">
                   {item.name}

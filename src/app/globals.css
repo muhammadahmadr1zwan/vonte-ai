@@ -12,7 +12,7 @@
   --font-mono: ui-monospace, monospace;
   --color-navy: #091629;
   --color-navy-deep: #07111f;
-  --color-slate: #14243c;
+  --color-slate: #15243d;
   --color-gold: #cca629;
   --color-gold-ink: #6f5410;
   --color-ivory: #f5f3ed;
@@ -256,15 +256,42 @@
   overscroll-behavior: contain;
 }
 .mobile-menu::backdrop { background: #091629; }
-.hero-title { font-size: clamp(3.15rem, 6.1vw, 5.75rem); line-height: 1.01; }
-.signal-console { border: 1px solid rgba(245,243,237,.16); background: #0c1b30; }
+.hero-title { font-size: clamp(3.15rem, 5.8vw, 5.35rem); line-height: 1.01; }
+.signal-console { border: 1px solid rgba(245,243,237,.16); background: #0c1b30; box-shadow: 0 24px 70px -40px #000; }
 .signal-field { background-image: radial-gradient(rgba(245,243,237,.12) .65px, transparent .65px); background-size: 16px 16px; }
+.signal-orbit { position: absolute; width: 220px; height: 220px; border: 1px solid rgba(204,166,41,.2); border-radius: 50%; right: -110px; top: -90px; box-shadow: 0 0 0 35px rgba(204,166,41,.035), 0 0 0 70px rgba(204,166,41,.02); }
+.workflow-steps { display: grid; grid-template-columns: 1fr; }
+.workflow-step { position: relative; display: flex; width: 100%; align-items: flex-start; gap: 1rem; padding: 1rem; text-align: left; border: 1px solid transparent; color: #d7dee8; transition: background-color .18s, border-color .18s; }
+.workflow-step::before { content: ""; position: absolute; left: 35px; top: 55px; bottom: -10px; width: 1px; background: rgba(204,166,41,.25); }
+.workflow-step:last-child::before { display: none; }
+.workflow-step:hover { background: rgba(255,255,255,.03); }
+.workflow-step.is-selected { border-color: rgba(204,166,41,.45); background: #15243d; color: #f5f3ed; }
+.workflow-node { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; flex-shrink: 0; border: 1px solid rgba(245,243,237,.2); border-radius: 50%; background: #091629; color: #cca629; }
+.is-selected .workflow-node { background: #cca629; color: #091629; border-color: #cca629; }
+.workflow-arrow { display: none; }
+.workflow-artifact { min-height: 290px; border: 1px solid rgba(245,243,237,.1); background: #091629; padding: 1.25rem; }
+.workflow-panel { margin-block: .75rem 1.25rem; }
+@media (min-width: 640px) {
+  .workflow-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+  .workflow-step-group { display: contents; }
+  .workflow-step-group:nth-child(-n+3) .workflow-step { grid-row: 1; }
+  .workflow-step-group:nth-child(n+4) .workflow-step { grid-row: 2; }
+  .workflow-panel { grid-column: 1 / -1; grid-row: 3; margin-block: 1.25rem 0; }
+  .workflow-step { flex-direction: column; gap: .75rem; padding: 1.25rem 1rem; }
+  .workflow-step::before { left: 55px; right: -1rem; top: 39px; bottom: auto; width: auto; height: 1px; }
+  .workflow-node { width: 38px; }
+}
+@media (min-width: 1024px) {
+  .workflow-steps { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .workflow-step-group:nth-child(n) .workflow-step { grid-row: 1; }
+  .workflow-panel { grid-row: 2; }
+  .workflow-step { padding-inline: .85rem; }
+  .workflow-step::before { left: 52px; }
+  .workflow-arrow { display: block; position: absolute; right: -.5rem; top: 33px; z-index: 2; color: #cca629; }
+  .workflow-step:last-child .workflow-arrow { display: none; }
+}
 @media (max-width: 639px) {
-  .hero-title { font-size: clamp(2.8rem, 12vw, 4rem); }
-  .signal-field { padding-top: 1.5rem; padding-bottom: 1.5rem; }
-  .signal-steps { grid-template-columns: 1fr; gap: 0; }
-  .signal-steps li { display: flex; align-items: baseline; gap: 1rem; padding-block: .3rem; }
-  .signal-steps li > span:last-child { margin-top: 0; font-size: .8125rem; }
+  .hero-title { font-size: clamp(2.8rem, 11.5vw, 4rem); }
 }
 
 .roi-output { font-size: clamp(2.5rem, 5.3vw, 4.75rem); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
@@ -279,12 +306,6 @@ input[type="checkbox"], input[type="radio"] { flex-shrink: 0; }
 .vonte-accordion[data-closed] { animation: vonte-accordion-up .2s ease-out; }
 @keyframes vonte-accordion-down { from { height: 0; } to { height: var(--accordion-panel-height); } }
 @keyframes vonte-accordion-up { from { height: var(--accordion-panel-height); } to { height: 0; } }
-
-@media (max-width: 639px) {
-  .signal-field { padding-block: 1.25rem; }
-  .signal-icon, .signal-wave, .signal-kicker { display: none; }
-  .signal-quote { margin-top: 0; font-size: 1.4rem; text-align: center; }
-}
 
 /* A two-color indicator stays visible on ivory, navy, and gold surfaces. */
 :focus-visible {
