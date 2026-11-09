@@ -24,7 +24,7 @@ export function Industries() {
               <span className="serif-em mt-2 block">that book time.</span>
             </h2>
           </div>
-          <CtaLink href={strategyCallHref()} variant="navy">
+          <CtaLink href={strategyCallHref()} variant="navy" primary>
             Book a Strategy Call
           </CtaLink>
         </div>

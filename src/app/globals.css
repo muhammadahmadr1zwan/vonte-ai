@@ -256,7 +256,7 @@
   overscroll-behavior: contain;
 }
 .mobile-menu::backdrop { background: #091629; }
-.hero-title { font-size: clamp(3.15rem, 5.8vw, 5.35rem); line-height: 1.01; }
+.hero-title { font-size: clamp(2.4rem, 4.4vw, 4.25rem); line-height: 1.06; text-wrap: balance; }
 .signal-console { border: 1px solid rgba(245,243,237,.16); background: #0c1b30; box-shadow: 0 24px 70px -40px #000; }
 .signal-field { background-image: radial-gradient(rgba(245,243,237,.12) .65px, transparent .65px); background-size: 16px 16px; }
 .signal-orbit { position: absolute; width: 220px; height: 220px; border: 1px solid rgba(204,166,41,.2); border-radius: 50%; right: -110px; top: -90px; box-shadow: 0 0 0 35px rgba(204,166,41,.035), 0 0 0 70px rgba(204,166,41,.02); }
@@ -282,16 +282,17 @@
   .workflow-node { width: 38px; }
 }
 @media (min-width: 1024px) {
-  .workflow-steps { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .workflow-steps { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .workflow-step-group:nth-child(n) .workflow-step { grid-row: 1; }
   .workflow-panel { grid-row: 2; }
   .workflow-step { padding-inline: .85rem; }
   .workflow-step::before { left: 52px; }
   .workflow-arrow { display: block; position: absolute; right: -.5rem; top: 33px; z-index: 2; color: #cca629; }
-  .workflow-step:last-child .workflow-arrow { display: none; }
+  .workflow-step-group:last-child .workflow-arrow { display: none; }
+  .workflow-step-group:last-child .workflow-step::before { display: none; }
 }
 @media (max-width: 639px) {
-  .hero-title { font-size: clamp(2.8rem, 11.5vw, 4rem); }
+  .hero-title { font-size: clamp(2.35rem, 9.6vw, 3.25rem); }
 }
 
 .roi-output { font-size: clamp(2.5rem, 5.3vw, 4.75rem); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }

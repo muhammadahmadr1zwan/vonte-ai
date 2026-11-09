@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { CtaLink } from "@/components/cta-link"
 import { navigateTabs } from "@/components/ui/tab-navigation"
 
 import { Container } from "@/components/container"
@@ -87,25 +86,23 @@ export function ProductDemo() {
   function select(index: number) { setActive(index); setVisible(1) }
 
   return (
-    <section id="experience" className="bg-navy py-20 text-ivory sm:py-28">
+    <section id="experience" className="bg-navy py-16 text-ivory sm:py-20">
       <Container>
         <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="text-[0.7rem] font-medium tracking-[0.22em] text-gold uppercase">
               Interactive demo
             </p>
-            <h2 className="display mt-5 text-[2.7rem] sm:text-6xl lg:text-[4.3rem]">
-              See intelligence
-              <span className="serif-em mt-2 block text-gold">in action.</span>
+            <h2 className="display mt-5 text-4xl sm:text-5xl">
+              See a sample<span className="serif-em mt-2 block text-gold">conversation.</span>
             </h2>
           </div>
           <p className="text-sm leading-6 text-silver lg:col-span-4 lg:col-start-9">
-            Choose a situation. The exchange is scripted. It is not a phone connection,
-            and it does not book a real appointment.
+            Choose a situation. This scripted demo creates no real calls, messages, or bookings.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-12">
+        <div className="mt-8 grid items-start gap-6 lg:grid-cols-12">
           <div className="lg:col-span-4">
           <div className="flex flex-col gap-2" role="tablist" aria-label="Demo scenarios" aria-orientation="vertical" onKeyDown={(event) => navigateTabs(event, active, scenarios.length, select)}>
             {scenarios.map((item, index) => {
@@ -134,8 +131,7 @@ export function ProductDemo() {
               )
             })}
           </div>
-            <p className="mt-3 text-sm leading-6 text-silver">Step through the exchange to see how an inquiry becomes a clear next action.</p>
-            <CtaLink href="/contact?package=ai-receptionist" variant="inverse" className="mt-3">Discuss AI Receptionist</CtaLink>
+            <p className="mt-3 text-xs leading-5 text-mist">Step through a reply, or show the full exchange. Requests still need the review described in the example.</p>
           </div>
 
           <div

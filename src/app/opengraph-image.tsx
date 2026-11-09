@@ -50,7 +50,7 @@ export default function OpenGraphImage() {
           />
         </div>
         <div style={{ fontSize: 36, maxWidth: 820, lineHeight: 1.25 }}>
-          Never let another opportunity go unanswered.
+          Answer calls. Follow up with leads. Help visitors book.
         </div>
       </div>
     ),

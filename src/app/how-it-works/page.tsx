@@ -1,19 +1,18 @@
-import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/page-metadata"
 
 import { Container } from "@/components/container"
 import { CtaBand } from "@/components/cta-band"
 import { Eyebrow } from "@/components/eyebrow"
 import { PageHero } from "@/components/page-hero"
 import { Process } from "@/components/process"
+import { FaqList } from "@/components/faq-list"
+import { IntelligenceSystem } from "@/components/intelligence-system"
 
-export const metadata: Metadata = {
-  title: "How It Works",
-  description:
-    "How a VONTE engagement runs: discover the workflow, design the automation, implement and test it, then refine it after launch.",
-  ...(process.env.NEXT_PUBLIC_SITE_URL
-    ? { alternates: { canonical: "/how-it-works" } }
-    : {}),
-}
+export const metadata = pageMetadata(
+  "How It Works",
+  "Explore the VONTE inquiry workflow and engagement process: discover, design, implement, test, and refine with your team.",
+  "/how-it-works",
+)
 
 const brings = [
   "How calls, forms, and past leads are handled today.",
@@ -39,6 +38,7 @@ export default function HowItWorksPage() {
         lede="Four stages, with the decisions made in the open. VONTE learns the workflow, plans the automation, implements supported connections, and reviews what is live."
       />
       <Process detailed />
+      <IntelligenceSystem />
       <section className="bg-ivory py-20 sm:py-28">
         <Container className="grid gap-6 lg:grid-cols-2">
           <article className="border border-navy/10 bg-paper p-7">
@@ -72,6 +72,7 @@ export default function HowItWorksPage() {
           </p>
         </Container>
       </section>
+      <FaqList />
       <CtaBand />
     </>
   )

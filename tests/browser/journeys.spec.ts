@@ -107,7 +107,7 @@ test("all illustrative scenarios complete and tabs support keyboard navigation",
   await stages.first().focus()
   await page.keyboard.press("End")
   await expect(stages.last()).toBeFocused()
-  await expect(page.locator("#stage-panel")).toContainText("Business Notification")
+  await expect(page.locator("#stage-panel")).toContainText("Team Notification")
 })
 
 test("network failure retains entries; slow retries disable duplicate clicks", async ({page}) => {
@@ -138,9 +138,10 @@ test("secondary routes, deep links, browser back, FAQ and industry selections", 
   await expect(page).toHaveURL("/pricing")
   await page.goBack()
   await expect(page).toHaveURL(/\/services#website-chatbot$/)
-  await page.goto("/")
+  await page.goto("/services")
   await page.getByRole("button",{name:"Dental",exact:false}).click()
   await expect(page.locator("#industry-detail")).toContainText("prospective patients")
+  await page.goto("/how-it-works")
   await page.locator("summary").filter({hasText:"What does VONTE actually do?"}).focus()
   await page.keyboard.press("Enter")
   await expect(page.getByText(/VONTE sets up automation for appointment-driven/)).toBeVisible()

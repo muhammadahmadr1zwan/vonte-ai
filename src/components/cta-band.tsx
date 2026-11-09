@@ -1,5 +1,3 @@
-import Link from "next/link"
-
 import { Container } from "@/components/container"
 import { CtaLink } from "@/components/cta-link"
 import { strategyCallHref } from "@/lib/site"
@@ -18,19 +16,17 @@ export function CtaBand() {
       </svg>
       <Container className="relative">
         <h2 className="display max-w-5xl text-[2.8rem] sm:text-6xl lg:text-[5.4rem]">
-          Your next opportunity
-          <span className="serif-em mt-2 block text-gold">is already calling.</span>
+          Spend less time chasing inquiries.
+          <span className="serif-em mt-2 block text-gold">Start with a conversation.</span>
         </h2>
         <p className="mt-8 max-w-xl text-lg leading-8 text-silver">
-          Let&apos;s build the systems that help your business answer.
+          Tell us where calls or follow-up get stuck. We&apos;ll discuss which service fits your business.
         </p>
         <div className="mt-10">
-          <CtaLink href={strategyCallHref()}>Book a Strategy Call</CtaLink>
+          <CtaLink href={strategyCallHref()} primary>Book a Strategy Call</CtaLink>
         </div>
         <p className="mt-6 text-sm text-mist">
-          <Link href="/contact" className="underline decoration-gold underline-offset-4 hover:text-ivory">
-            Tell us what you&apos;re looking to automate.
-          </Link>
+          A consultation request does not reserve a meeting or create a service agreement.
         </p>
       </Container>
     </section>

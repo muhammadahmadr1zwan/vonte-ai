@@ -6,14 +6,14 @@ export function OperationsStage() {
   return (
     <figure className="signal-console" aria-label="Illustrative call-to-booking sequence">
       <figcaption className="flex items-center justify-between gap-3 border-b border-white/15 px-5 py-4 text-[0.65rem] tracking-[0.17em] uppercase sm:px-6">
-        <span className="text-silver">VONTE / Opportunity flow</span>
+        <span className="text-silver">VONTE / Inquiry</span>
         <span className="flex items-center gap-2 text-gold"><span className="size-1.5 rounded-full bg-gold" aria-hidden="true" />Illustrative</span>
       </figcaption>
       <div className="p-5 sm:p-6">
         <div className="flex items-center gap-3">
           <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-gold/35 bg-gold/10"><PhoneIncoming className="size-5 text-gold" strokeWidth={1.5} aria-hidden="true" /></span>
-          <div><p className="text-sm text-ivory">An incoming opportunity</p><p className="mt-1 text-xs text-mist">Example · Home services</p></div>
-          <span className="ml-auto text-xs text-gold">01 / 05</span>
+          <div><p className="text-sm text-ivory">An incoming inquiry</p><p className="mt-1 text-xs text-mist">Example · Home services</p></div>
+          <span className="ml-auto shrink-0 text-xs whitespace-nowrap text-gold">01 / 05</span>
         </div>
         <div className="signal-field relative mt-6 overflow-hidden border border-white/10 px-5 py-7 sm:py-9">
           <span className="signal-orbit" aria-hidden="true" />

@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/page-metadata"
 import { randomUUID } from "node:crypto"
 import { connection } from "next/server"
 import { Suspense } from "react"
@@ -7,14 +7,11 @@ import { ContactInquiry } from "@/components/contact-form"
 import { Container } from "@/components/container"
 import { PageHero } from "@/components/page-hero"
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Request a VONTE strategy conversation. Tell us about your business and the package you want to discuss.",
-  ...(process.env.NEXT_PUBLIC_SITE_URL
-    ? { alternates: { canonical: "/contact" } }
-    : {}),
-}
+export const metadata = pageMetadata(
+  "Contact",
+  "Request a VONTE strategy conversation. Tell us about your business and the package you want to discuss.",
+  "/contact",
+)
 
 async function ContactBody({
   searchParams,
@@ -38,7 +35,7 @@ export default function ContactPage({
     <>
       <PageHero
         eyebrow="Contact"
-        title="Make room for your next opportunity."
+        title="Tell us what your business needs."
         lede="Tell us where inquiries stall. We’ll review your business and the package you’re considering, then follow up to discuss the fit. This request does not reserve a meeting."
       />
       <section className="bg-ivory py-16 sm:py-20">

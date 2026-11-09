@@ -18,6 +18,8 @@ export function SiteHeader() {
   const triggerRef = useRef<HTMLButtonElement>(null)
   const previousOverflow = useRef("")
   const [menuOpen, setMenuOpen] = useState(false)
+  const [ctaState, setCtaState] = useState({ pathname, visible: pathname !== "/" })
+  const headerCtaVisible = ctaState.pathname === pathname ? ctaState.visible : pathname !== "/"
   const menuId = useId()
   const callHref = strategyCallHref()
 
@@ -44,6 +46,21 @@ export function SiteHeader() {
 
   useEffect(() => { closeMenu() }, [pathname])
 
+  // Show the header action only when an in-page consultation action is out of view.
+  useEffect(() => {
+    const visible = new Set<Element>()
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.intersectionRatio >= 0.5) visible.add(entry.target)
+        else visible.delete(entry.target)
+      }
+      const show = visible.size === 0
+      setCtaState(current => current.pathname === pathname && current.visible === show ? current : { pathname, visible: show })
+    }, { rootMargin: "-81px 0px 0px 0px", threshold: [0, 0.5] })
+    document.querySelectorAll("main [data-strategy-cta]").forEach(target => observer.observe(target))
+    return () => observer.disconnect()
+  }, [pathname])
+
   return (
     <header className="site-header sticky top-0 z-40 border-b border-white/10 bg-navy/95 text-ivory backdrop-blur-md">
       <Container className="flex h-20 items-center justify-between gap-3">
@@ -56,9 +73,8 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="hidden lg:block"><CtaLink href={callHref}>Book a Strategy Call <ArrowUpRight aria-hidden="true" /></CtaLink></div>
+        <div className={cn("hidden focus-within:visible lg:block", !headerCtaVisible && "invisible")}><CtaLink href={callHref}>Book a Strategy Call <ArrowUpRight aria-hidden="true" /></CtaLink></div>
         <div className="flex items-center gap-2 lg:hidden">
-          <CtaLink href={callHref} className="h-11 px-3 text-sm">Book a call</CtaLink>
           <button ref={triggerRef} type="button" className="inline-flex size-11 items-center justify-center border border-white/20"
             aria-haspopup="dialog" aria-controls={menuId} aria-expanded={menuOpen}
             onClick={openMenu}>

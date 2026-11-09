@@ -45,12 +45,12 @@ for (const width of [375, 390, 768, 1024, 1440]) {
 }
 
 for (const width of [390, 1440]) {
-  test(`all six workflow stages reveal the correct example at ${width}px`, async ({ page }) => {
+  test(`all five workflow stages reveal the correct example at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 })
-    await page.goto("/#system")
+    await page.goto("/how-it-works#system")
     const steps = page.getByRole("group", { name: "System stages" }).locator("[data-workflow-step]")
-    const names = ["Incoming Inquiry", "Intelligent Response", "Lead Qualification", "Automated Follow-Up", "Booking Request", "Business Notification"]
-    const evidence = ["Sample conversation", "Scripted reply", "Routine · No immediate danger", "The sequence pauses", "Awaiting confirmation", "Owner summary"]
+    const names = ["Incoming Inquiry", "Intelligent Response", "Lead Qualification", "Booking Request", "Team Notification"]
+    const evidence = ["Sample conversation", "Scripted reply", "Routine · No immediate danger", "Awaiting confirmation", "Team summary"]
     for (let i = 0; i < names.length; i++) {
       await steps.nth(i).click()
       await expect(steps.nth(i)).toHaveAttribute("aria-expanded", "true")
@@ -71,7 +71,7 @@ for (const width of [390, 1440]) {
     await page.keyboard.press("End")
     await page.getByRole("button", { name: "Back to the beginning" }).click()
     await expect(steps.first()).toHaveAttribute("aria-expanded", "true")
-    await page.locator("#system").getByRole("link", { name: "Map your workflow" }).click()
+    await page.locator("footer").getByRole("link", { name: "Contact", exact: true }).click()
     await expect(page).toHaveURL(/\/contact$/)
   })
 

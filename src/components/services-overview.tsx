@@ -9,6 +9,7 @@ import { getPackage } from "@/lib/pricing"
 import { formatMoney } from "@/lib/format"
 
 export function ServicesOverview({ detailed = false }: { detailed?: boolean }) {
+  if (!detailed) return <ServiceCards />
   const receptionist = services[0]
   const followUp = services[1]
   const website = services[2]
@@ -20,6 +21,43 @@ export function ServicesOverview({ detailed = false }: { detailed?: boolean }) {
       <Website detailed={detailed} service={website} />
       <CompleteSolution />
     </div>
+  )
+}
+
+function ServiceCards() {
+  const summaries = [
+    { id: "ai-receptionist", audience: "For teams busy serving customers.", problem: "Answer incoming calls and capture the details your team needs.", features: [2, 3, 7, 8], icon: PhoneIncoming },
+    { id: "lead-follow-up", audience: "For businesses with new or unconverted leads.", problem: "Keep follow-up moving without relying on manual reminders.", features: [0, 1, 2, 4], icon: MessageSquare },
+    { id: "website-chatbot", audience: "For businesses that need a stronger website.", problem: "Help visitors find answers and request an appointment.", features: [0, 2, 3, 6], icon: Globe },
+  ] as const
+
+  return (
+    <section id="solutions" className="bg-navy-deep py-16 text-ivory sm:py-20">
+      <Container>
+        <p className="text-xs tracking-[0.18em] text-gold uppercase">Three services</p>
+        <h2 className="display mt-5 max-w-2xl text-4xl sm:text-5xl">Start where your business<span className="serif-em mt-2 block text-gold">needs support.</span></h2>
+        <div className="mt-9 grid gap-4 lg:grid-cols-3">
+          {summaries.map(({ id, audience, problem, features, icon: Icon }) => {
+            const pkg = getPackage(id)!
+            return (
+              <article key={id} className="flex min-w-0 flex-col border border-white/15 bg-navy p-5 sm:p-6">
+                <Icon className="size-5 text-gold" aria-hidden="true" />
+                <h3 className="mt-5 font-heading text-2xl leading-tight tracking-[-0.03em]">{pkg.name}</h3>
+                <p className="mt-3 text-xs leading-5 text-gold">{audience}</p>
+                <p className="mt-4 text-sm leading-6 text-silver">{problem}</p>
+                <ul className="mt-5 space-y-2 border-t border-white/15 pt-5">
+                  {features.map(index => <li key={index} className="flex gap-2 text-sm leading-6 text-silver"><Check className="mt-1 size-3.5 shrink-0 text-gold" aria-hidden="true" />{pkg.included[index]}</li>)}
+                </ul>
+                <div className="mt-auto pt-6">
+                  <PackageCost id={id} dark />
+                  <Link href={`/services#${id}`} className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm text-ivory underline decoration-gold underline-offset-4 hover:text-gold">Explore service<span className="sr-only">: {pkg.name}</span><ArrowUpRight className="size-4" aria-hidden="true" /></Link>
+                </div>
+              </article>
+            )
+          })}
+        </div>
+      </Container>
+    </section>
   )
 }
 
@@ -296,7 +334,7 @@ function CompleteSolution() {
           <h2 className="display mt-5 text-[2.7rem] sm:text-6xl">Built together.<span className="serif-em mt-2 block">Better connected.</span></h2>
           <p className="mt-6 text-base leading-7 text-quiet">One coordinated front office: the receptionist, follow-up, and website packages, with monthly reporting and strategy review, priority support, and quarterly optimization.</p>
           <PackageCost id={pkg.id}/>
-          <div className="mt-7"><CtaLink href={`/contact?package=${pkg.id}`} variant="navy">Discuss Vonte Complete <ArrowUpRight aria-hidden="true"/></CtaLink></div>
+          <div className="mt-7"><CtaLink href={`/contact?package=${pkg.id}`} variant="navy" primary>Discuss Vonte Complete <ArrowUpRight aria-hidden="true"/></CtaLink></div>
         </div>
         <div className="border border-navy/15 bg-ivory p-5 sm:p-8 lg:col-span-7">
           <p className="text-[0.65rem] tracking-[0.18em] text-gold-ink uppercase">Three services. One connected approach.</p>
@@ -327,7 +365,7 @@ function Actions({
   if (detailed) {
     return (
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <CtaLink href={`/contact?package=${serviceId}`} variant={dark ? "gold" : "navy"}>
+        <CtaLink href={`/contact?package=${serviceId}`} variant={dark ? "gold" : "navy"} primary>
           Discuss This Package
         </CtaLink>
         <CtaLink href={`/pricing#${serviceId}`} variant={dark ? "inverse" : "quiet"}>
