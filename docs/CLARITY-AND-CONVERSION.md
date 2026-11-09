@@ -114,3 +114,28 @@ WebKit launch attempt was blocked by missing executor system libraries.
 
 No production upload or GitHub push is part of this review work. Publication
 awaits the user's approval, consistent with the earlier transformation brief.
+
+## Verified review preview
+
+https://6af2280e7166ffd6e2f7be4b--vonte-ai.netlify.app
+
+Deploy `6af2280e7166ffd6e2f7be4b` is ready in the `deploy-preview` context and has
+not been published to production. The full Next.js adapter build/upload succeeded.
+Hosted checks passed all five routes at 320, 375, 768 and 1440px, plus direct System
+links and menu navigation at 320, 375, 390, 768, 1024 and 1440px. All five workflow
+stages, the scripted demo, calculator, client validation and a real test submission
+passed with zero captured page errors.
+
+Synthetic inquiry `VN-68352E35` was read back through the authenticated Netlify CLI
+from `vonte-inquiries-preview`, matching the browser's ID, reference and selected
+Vonte Complete package. The production inquiry store was not changed.
+
+The preview serves its real stylesheet and social PNG with HTTP 200. Every detail
+page has a social-image reference and the configured production canonical URL.
+Preview responses include `X-Robots-Tag: noindex`; raw server and configuration
+paths return HTTP 404. Hosted desktop and phone screenshots were reviewed.
+
+Production remains on `6af14b08b1015a4e744d7c54`. Implementation is committed locally
+as `5d9e490` on `improve/vonte-clarity`. Use the existing full build-and-deploy flow
+after production approval (`netlify deploy --prod --context production`); do not
+upload a raw `.next` directory or use `--no-build`.
