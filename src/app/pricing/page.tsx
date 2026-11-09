@@ -19,7 +19,7 @@ export default function PricingPage() {
     <>
       <PageHero
         eyebrow="Pricing"
-        title="Fixed packages. No invented extras."
+        title="Fixed packages. Setup and monthly, side by side."
         lede="Every package has a one-time setup fee and a monthly retainer. The included list is the scope. Anything beyond it is confirmed before work begins."
       />
       <PricingGrid intro={false} />

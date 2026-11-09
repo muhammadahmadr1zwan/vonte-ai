@@ -1,43 +1,43 @@
 import { Container } from "@/components/container"
-import { Eyebrow } from "@/components/eyebrow"
-import { Reveal } from "@/components/reveal"
 import { steps } from "@/lib/content"
 
 export function Process({ detailed = false }: { detailed?: boolean }) {
   return (
-    <section className="bg-white py-20 sm:py-28">
+    <section className="bg-ivory py-20 text-navy sm:py-28">
       <Container>
-        <Reveal>
-          <Eyebrow on="light">How VONTE works</Eyebrow>
-          <h2 className="mt-5 max-w-2xl font-heading text-[2.05rem] leading-[1.08] font-semibold tracking-[-0.035em] text-navy sm:text-5xl">
-            A clear path from the first conversation to a system you can run.
-          </h2>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-quiet">
-            VONTE aims to work with the calendar, phone, and CRM you already
-            use, where those systems are compatible. A launch date is confirmed
-            with the scope, not assumed up front.
+        <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
+            <p className="text-[0.7rem] font-medium tracking-[0.22em] text-gold-ink uppercase">
+              How VONTE works
+            </p>
+            <h2 className="display mt-5 text-[2.7rem] sm:text-6xl">
+              Discover. Design.
+              <span className="serif-em mt-2 block">Implement. Optimize.</span>
+            </h2>
+          </div>
+          <p className="text-base leading-7 text-quiet lg:col-span-4 lg:col-start-9">
+            VONTE learns the workflow, plans the automation, implements the
+            connections that are in scope, and reviews the system after launch.
+            A date is confirmed with the work, not assumed.
           </p>
-        </Reveal>
-        <ol className="relative mt-14 grid gap-10 md:grid-cols-4">
-          <div
-            className="absolute top-5 right-[8%] left-[8%] hidden h-px bg-gold/60 md:block"
-            aria-hidden="true"
-          />
-          {steps.map((step, index) => (
-            <Reveal key={step.number} delay={index * 70}>
-              <li className="relative">
-                <span className="relative z-10 flex size-10 items-center justify-center rounded-full border border-gold bg-white font-heading text-sm text-gold-ink">
-                  {step.number}
-                </span>
-                <h3 className="mt-5 font-heading text-2xl font-semibold tracking-[-0.03em] text-navy">
-                  {step.title}
-                </h3>
-                <p className="mt-3 text-sm leading-6 text-ink">{step.body}</p>
+        </div>
+        <ol className="mt-14 border-t border-navy/15">
+          {steps.map((step) => (
+            <li
+              key={step.number}
+              className="grid gap-4 border-b border-navy/15 py-8 md:grid-cols-12 md:items-start md:gap-8 md:py-10"
+            >
+              <p className="font-serif text-5xl text-gold-ink italic md:col-span-2">
+                {step.number}
+              </p>
+              <h3 className="display text-4xl md:col-span-4">{step.title}</h3>
+              <div className="md:col-span-6">
+                <p className="text-base leading-7 text-ink">{step.body}</p>
                 {detailed ? (
                   <p className="mt-3 text-sm leading-6 text-quiet">{step.detail}</p>
                 ) : null}
-              </li>
-            </Reveal>
+              </div>
+            </li>
           ))}
         </ol>
       </Container>

@@ -50,4 +50,4 @@ export function calculateRoi(input: RoiInput): RoiResult {
 }
 
 export const roiDisclaimer =
-  "Illustrative estimate only. Actual results depend on call volume, customer behavior, conversion rates, and implementation. This is not a promise that the calculated revenue will be recovered."
+  "Illustrative scenario. Actual results depend on your business, customer behavior, and implementation. This is not a promise that the calculated revenue will be recovered."

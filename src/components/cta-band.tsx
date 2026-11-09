@@ -1,22 +1,43 @@
+import Link from "next/link"
+
 import { Container } from "@/components/container"
 import { CtaLink } from "@/components/cta-link"
 import { strategyCallHref } from "@/lib/site"
 
 export function CtaBand() {
   return (
-    <section className="bg-navy py-20 text-ivory sm:py-24">
-      <Container className="grid items-end gap-8 lg:grid-cols-[1.4fr_auto]">
-        <div>
-          <div className="h-px w-10 bg-gold" />
-          <h2 className="mt-5 max-w-2xl font-heading text-[2.05rem] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-5xl">
-            Let&apos;s Build a Smarter Business.
-          </h2>
-          <p className="mt-5 max-w-xl text-lg leading-8 text-silver">
-            Tell us where your business is losing time or missing opportunities.
-            We&apos;ll explore which VONTE solution fits.
-          </p>
+    <section className="relative overflow-hidden bg-navy py-24 text-ivory sm:py-32">
+      <p
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-8 left-0 font-heading text-[18vw] leading-none tracking-[-0.07em] text-white/[0.045] select-none"
+      >
+        VONTE
+      </p>
+      <svg
+        className="pointer-events-none absolute top-0 right-0 h-full w-1/2 opacity-80"
+        viewBox="0 0 400 200"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path className="signal-track" pathLength={1} d="M20 160 C 120 160, 140 40, 380 40" />
+        <path className="signal-flow" pathLength={1} d="M20 160 C 120 160, 140 40, 380 40" />
+      </svg>
+      <Container className="relative">
+        <h2 className="display max-w-5xl text-[2.8rem] sm:text-6xl lg:text-[5.4rem]">
+          Your Next Opportunity
+          <span className="serif-em mt-2 block text-gold">Is Already Calling.</span>
+        </h2>
+        <p className="mt-8 max-w-xl text-lg leading-8 text-silver">
+          Let&apos;s build the systems that help your business answer.
+        </p>
+        <div className="mt-10">
+          <CtaLink href={strategyCallHref()}>Book a Strategy Call</CtaLink>
         </div>
-        <CtaLink href={strategyCallHref()}>Book a Strategy Call</CtaLink>
+        <p className="mt-6 text-sm text-mist">
+          <Link href="/contact" className="underline decoration-gold underline-offset-4 hover:text-ivory">
+            Tell us what you&apos;re looking to automate.
+          </Link>
+        </p>
       </Container>
     </section>
   )

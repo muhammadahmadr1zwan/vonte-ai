@@ -9,12 +9,15 @@ import { siteConfig } from "@/lib/site"
 export function SiteFooter() {
   return (
     <footer className="bg-navy-deep text-ivory">
-      <div className="h-px bg-gold/80" />
-      <Container className="grid gap-12 py-16 md:grid-cols-[1.3fr_0.7fr_0.9fr]">
-        <div>
+      <div className="h-px bg-gold/70" />
+      <Container className="grid gap-12 py-16 lg:grid-cols-12">
+        <div className="lg:col-span-5">
           <Wordmark />
-          <div className="mt-4 h-px w-10 bg-gold" />
-          <p className="mt-5 max-w-sm text-sm leading-7 text-silver">
+          <p className="display mt-6 max-w-sm text-3xl">
+            Intelligence
+            <span className="serif-em text-gold"> in motion.</span>
+          </p>
+          <p className="mt-4 max-w-sm text-sm leading-7 text-silver">
             VONTE builds systems that answer calls, follow up with leads, and
             give a service business a website that can request the next
             appointment.
@@ -43,8 +46,8 @@ export function SiteFooter() {
             </p>
           )}
         </div>
-        <div>
-          <p className="text-[0.72rem] font-semibold tracking-[0.2em] text-gold uppercase">
+        <div className="lg:col-span-3 lg:col-start-7">
+          <p className="text-[0.68rem] font-medium tracking-[0.2em] text-gold uppercase">
             Explore
           </p>
           <ul className="mt-4 space-y-3 text-sm text-silver">
@@ -57,8 +60,8 @@ export function SiteFooter() {
             ))}
           </ul>
         </div>
-        <div>
-          <p className="text-[0.72rem] font-semibold tracking-[0.2em] text-gold uppercase">
+        <div className="lg:col-span-3">
+          <p className="text-[0.68rem] font-medium tracking-[0.2em] text-gold uppercase">
             Packages
           </p>
           <ul className="mt-4 space-y-3 text-sm text-silver">

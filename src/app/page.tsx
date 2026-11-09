@@ -2,6 +2,7 @@ import { CtaBand } from "@/components/cta-band"
 import { FaqList } from "@/components/faq-list"
 import { Hero } from "@/components/hero"
 import { Industries } from "@/components/industries"
+import { IntelligenceSystem } from "@/components/intelligence-system"
 import { PricingGrid } from "@/components/pricing-grid"
 import { Problem } from "@/components/problem"
 import { Process } from "@/components/process"
@@ -14,12 +15,13 @@ export default function HomePage() {
     <>
       <Hero />
       <Problem />
+      <IntelligenceSystem />
       <ServicesOverview />
-      <Process />
-      <RoiCalculator />
       <ProductDemo />
       <Industries />
+      <Process />
       <PricingGrid />
+      <RoiCalculator />
       <FaqList />
       <CtaBand />
     </>

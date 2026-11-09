@@ -38,8 +38,8 @@ export default function ContactPage({
     <>
       <PageHero
         eyebrow="Contact"
-        title="Let's Build a Smarter Business."
-        lede="Tell us where your business is losing time or missing opportunities. We'll explore which VONTE solution fits."
+        title="Tell us what you're looking to automate."
+        lede="Share the business, the package you want to discuss, and where inquiries stall. The form is the request. It does not reserve a meeting."
       />
       <section className="bg-ivory py-16 sm:py-20">
         <Container>

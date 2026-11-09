@@ -103,3 +103,28 @@ export const scopeNote =
   "Setup covers configuration, the connections agreed in writing, testing, and launch for the selected package. The monthly fee covers operation of that package, the included usage listed above, monitoring, and the updates or reporting named in the package. Usage above included allowances, third-party platform fees, and compatibility with a specific phone system, calendar, or CRM are confirmed before work begins. Commercial terms are set in the written agreement. This page is not a contract."
 
 export const includedCallMinutes = 600
+
+/** Capability matrix for the public comparison. Prices stay on `packages`. */
+export const comparisonRows: { feature: string; ids: readonly PackageId[] }[] = [
+  { feature: "AI voice receptionist", ids: ["ai-receptionist", "vonte-complete"] },
+  { feature: "Dedicated business number", ids: ["ai-receptionist", "vonte-complete"] },
+  { feature: "Lead qualification", ids: ["ai-receptionist", "vonte-complete"] },
+  { feature: "Appointment booking integration", ids: ["ai-receptionist", "website-chatbot", "vonte-complete"] },
+  { feature: "Missed-call text-back", ids: ["ai-receptionist", "vonte-complete"] },
+  { feature: "After-hours call coverage", ids: ["ai-receptionist", "vonte-complete"] },
+  { feature: "Call summaries and human escalation", ids: ["ai-receptionist", "vonte-complete"] },
+  { feature: "About 600 included call minutes / month", ids: ["ai-receptionist", "vonte-complete"] },
+  { feature: "Automated new-lead responses", ids: ["lead-follow-up", "vonte-complete"] },
+  { feature: "SMS and email follow-up sequences", ids: ["lead-follow-up", "vonte-complete"] },
+  { feature: "Lead reactivation", ids: ["lead-follow-up", "vonte-complete"] },
+  { feature: "Review requests", ids: ["lead-follow-up", "vonte-complete"] },
+  { feature: "Pipeline dashboard", ids: ["lead-follow-up", "vonte-complete"] },
+  { feature: "Custom 5–8 page website", ids: ["website-chatbot", "vonte-complete"] },
+  { feature: "AI chatbot on approved business content", ids: ["website-chatbot", "vonte-complete"] },
+  { feature: "Basic SEO, analytics, and hosting", ids: ["website-chatbot", "vonte-complete"] },
+  { feature: "Monthly site updates", ids: ["website-chatbot", "vonte-complete"] },
+  { feature: "Monthly results reporting", ids: ["vonte-complete"] },
+  { feature: "Strategy reviews", ids: ["vonte-complete"] },
+  { feature: "Priority support", ids: ["vonte-complete"] },
+  { feature: "Quarterly optimization", ids: ["vonte-complete"] },
+]

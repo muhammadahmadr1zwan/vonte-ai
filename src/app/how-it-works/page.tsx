@@ -36,12 +36,12 @@ export default function HowItWorksPage() {
       <PageHero
         eyebrow="How it works"
         title="From the way you work today to a system that can keep up."
-        lede="Four steps, with the decisions made in the open. VONTE aims to use the calendar, phone, and CRM you already have when those tools can support the workflow."
+        lede="Four stages, with the decisions made in the open. VONTE learns the workflow, plans the automation, implements supported connections, and reviews what is live."
       />
       <Process detailed />
       <section className="bg-ivory py-20 sm:py-28">
         <Container className="grid gap-6 lg:grid-cols-2">
-          <article className="rounded-[1.5rem] bg-white p-7">
+          <article className="border border-navy/10 bg-paper p-7">
             <Eyebrow on="light">What you bring</Eyebrow>
             <ul className="mt-6 space-y-4">
               {brings.map((item) => (
@@ -51,7 +51,7 @@ export default function HowItWorksPage() {
               ))}
             </ul>
           </article>
-          <article className="rounded-[1.5rem] bg-navy p-7 text-ivory">
+          <article className="bg-navy p-7 text-ivory">
             <Eyebrow>What the consultation confirms</Eyebrow>
             <ul className="mt-6 space-y-4">
               {confirms.map((item) => (

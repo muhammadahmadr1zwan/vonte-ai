@@ -4,10 +4,11 @@ export function Wordmark({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "font-heading text-[0.95rem] font-semibold tracking-[0.28em] uppercase",
+        "inline-flex items-center gap-2.5 font-heading text-[0.78rem] font-medium tracking-[0.34em] uppercase",
         className,
       )}
     >
+      <span className="size-1.5 bg-gold" aria-hidden="true" />
       Vonte
     </span>
   )

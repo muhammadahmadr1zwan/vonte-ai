@@ -49,7 +49,7 @@ export const services = [
   {
     id: "lead-follow-up",
     eyebrow: "Follow-up",
-    headline: "Follow Up Faster. Lose Fewer Leads.",
+    headline: "The Right Follow-Up. At the Right Time.",
     lede: "Help turn incoming inquiries and overlooked opportunities into active conversations through timely, automated follow-up.",
     paragraphs: [
       "A new inquiry should not wait for someone to notice it between jobs. This package is built to respond by text and email, continue a short sequence of follow-ups, and reopen conversations with older leads that never converted.",
@@ -61,7 +61,7 @@ export const services = [
   {
     id: "website-chatbot",
     eyebrow: "Website",
-    headline: "A Website That Does More Than Look Good.",
+    headline: "An Online Presence That Works Harder.",
     lede: "Conversion-focused websites combined with intelligent assistants that help visitors find answers and take the next step.",
     paragraphs: [
       "The package pairs a custom 5–8 page website with an assistant trained on information you approve: services, hours, service area, and the questions customers already ask. A visitor can get an answer and request a time.",
@@ -107,24 +107,24 @@ export const industries = [
   {
     id: "home-services",
     name: "Home Services",
-    help: "Answer inquiries even when your team is on a job.",
+    help: "Your next customer may call while you're on a job.",
     problem:
-      "HVAC, plumbing, and roofing calls often arrive while the crew is already on site. Voicemail is a weak stand-in for a person who can capture the job.",
-    boundary: "",
+      "HVAC, plumbing, and roofing calls often arrive while the crew is already on site. The system is there to capture the request and prepare the next step for your team.",
+    boundary: "The assistant collects the job request. It does not diagnose equipment or quote work you have not approved.",
   },
   {
     id: "dental",
-    name: "Dental Practices",
-    help: "Help prospective patients request appointments without waiting on hold.",
+    name: "Dental",
+    help: "Make it easier for prospective patients to request appointments.",
     problem:
-      "The front desk is with a patient. A new patient who reaches a long hold, or no one at all, may not try again.",
+      "The front desk is with a patient. A new patient who reaches a long hold, or no one at all, may not call back.",
     boundary:
       "The assistant does not provide medical or dental advice. It collects the request for your staff to review.",
   },
   {
     id: "law",
-    name: "Law Firms",
-    help: "Capture potential client inquiries and route them for appropriate staff review.",
+    name: "Legal",
+    help: "Help route new inquiries for appropriate human review.",
     problem:
       "Intake calls compete with the work already on a lawyer’s desk. A missed inquiry is a conversation the firm never gets to evaluate.",
     boundary:
@@ -133,16 +133,16 @@ export const industries = [
   {
     id: "real-estate",
     name: "Real Estate",
-    help: "Respond to property inquiries and help organize prospective client follow-up.",
+    help: "Respond to property inquiries while a showing is already underway.",
     problem:
-      "Property questions arrive while an agent is in a showing. Slow replies lose the next conversation.",
+      "Property questions arrive while an agent is with a client. The system can capture the question and organize the follow-up.",
     boundary:
       "The assistant does not provide legal, lending, or investment advice.",
   },
   {
     id: "med-spa",
     name: "Med Spas",
-    help: "Support appointment inquiries and timely follow-up.",
+    help: "Keep appointment inquiries moving, even during busy hours.",
     problem:
       "Treatment rooms and a busy front desk leave little room for every new question about availability.",
     boundary:
@@ -151,7 +151,7 @@ export const industries = [
   {
     id: "other-appointment",
     name: "Appointment-Based Businesses",
-    help: "Keep the next request from depending on who is free to answer.",
+    help: "The next request should not depend on who is free to answer.",
     problem:
       "Any business that books time has the same pressure: the phone, the inbox, and the website all create work while the owner is serving someone else.",
     boundary:

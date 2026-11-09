@@ -1,5 +1,4 @@
 import { Container } from "@/components/container"
-import { Eyebrow } from "@/components/eyebrow"
 
 export function PageHero({
   eyebrow,
@@ -12,13 +11,14 @@ export function PageHero({
 }) {
   return (
     <section className="relative overflow-hidden bg-navy text-ivory">
-      <div className="hero-grid pointer-events-none absolute inset-0" />
+      <div className="hero-grid pointer-events-none absolute inset-0 opacity-60" />
       <Container className="relative py-16 sm:py-24">
-        <Eyebrow>{eyebrow}</Eyebrow>
-        <h1 className="mt-5 max-w-3xl font-heading text-[2.35rem] leading-[1.08] font-semibold tracking-[-0.035em] text-balance sm:text-5xl">
-          {title}
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg leading-8 text-silver">{lede}</p>
+        <p className="flex items-center gap-3 text-[0.7rem] font-medium tracking-[0.22em] text-gold uppercase">
+          <span className="h-px w-8 bg-gold" aria-hidden="true" />
+          {eyebrow}
+        </p>
+        <h1 className="display mt-6 max-w-4xl text-[2.6rem] sm:text-6xl">{title}</h1>
+        <p className="mt-6 max-w-2xl text-lg leading-8 text-silver">{lede}</p>
       </Container>
     </section>
   )

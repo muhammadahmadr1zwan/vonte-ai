@@ -55,7 +55,7 @@ export function SiteHeader() {
   }, [open])
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-navy/90 text-ivory backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-navy/95 text-ivory backdrop-blur-md">
       <Container className="flex h-[4.5rem] items-center justify-between gap-4">
         <Link href="/" className="shrink-0 rounded-sm text-ivory" aria-label="VONTE home">
           <Wordmark />
@@ -69,7 +69,7 @@ export function SiteHeader() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "text-sm tracking-wide text-silver transition-colors hover:text-gold",
+                  "text-[0.75rem] tracking-[0.16em] text-silver uppercase transition-colors hover:text-gold",
                   active && "text-gold",
                 )}
               >
@@ -87,7 +87,7 @@ export function SiteHeader() {
           </CtaLink>
           <button
             type="button"
-            className="inline-flex size-11 items-center justify-center rounded-full border border-white/15 text-ivory"
+            className="inline-flex size-11 items-center justify-center border border-white/15 text-ivory"
             aria-expanded={open}
             aria-controls={menuId}
             onClick={() => setOpen(true)}
@@ -111,7 +111,7 @@ export function SiteHeader() {
             <button
               ref={closeRef}
               type="button"
-              className="inline-flex size-11 items-center justify-center rounded-full border border-white/15"
+              className="inline-flex size-11 items-center justify-center border border-white/15"
               onClick={() => setOpen(false)}
             >
               <X aria-hidden="true" className="size-5" />

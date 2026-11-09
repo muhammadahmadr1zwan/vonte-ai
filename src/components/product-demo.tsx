@@ -3,161 +3,181 @@
 import { useState } from "react"
 
 import { Container } from "@/components/container"
-import { Eyebrow } from "@/components/eyebrow"
 import { siteConfig } from "@/lib/site"
 
-const services = [
-  { id: "cooling", label: "Cooling repair" },
-  { id: "plumbing", label: "Plumbing visit" },
-  { id: "estimate", label: "System estimate" },
-]
-
-const windows = [
-  { id: "morning", label: "Morning" },
-  { id: "afternoon", label: "Afternoon" },
-]
+const scenarios = [
+  {
+    id: "appointment",
+    title: "New appointment inquiry",
+    kicker: "During the day",
+    messages: [
+      { from: "caller", text: "The upstairs unit stopped cooling this morning." },
+      {
+        from: "assistant",
+        text: "I can take a service request. Is this a home, and is anyone unsafe without cooling?",
+      },
+      { from: "caller", text: "It's a house. Warm, but it can wait until tomorrow." },
+      {
+        from: "assistant",
+        text: "I'll record a cooling-repair request and an afternoon window for the team to confirm.",
+      },
+    ],
+    captured: [
+      ["Need", "Cooling repair"],
+      ["Property", "Residence"],
+      ["Timing", "Next day, afternoon"],
+    ],
+    route: "Booking request prepared for staff. No calendar event is created by this demo.",
+  },
+  {
+    id: "after-hours",
+    title: "After-hours question",
+    kicker: "Office closed",
+    messages: [
+      { from: "caller", text: "Are you open tomorrow? There is a slow leak under the kitchen sink." },
+      {
+        from: "assistant",
+        text: "The office is closed. I can record the request so the team sees it in the morning.",
+      },
+      { from: "caller", text: "Yes. Please have someone call about a morning visit." },
+      {
+        from: "assistant",
+        text: "Recorded. A person reviews the morning request when the office opens.",
+      },
+    ],
+    captured: [
+      ["Need", "Plumbing visit"],
+      ["Timing", "Morning, next open day"],
+      ["Queue", "After hours"],
+    ],
+    route: "Held for the next business morning. This demo does not send a text or email.",
+  },
+  {
+    id: "urgent",
+    title: "Urgent request",
+    kicker: "Human handoff",
+    messages: [
+      { from: "caller", text: "Water is coming through the ceiling right now." },
+      {
+        from: "assistant",
+        text: "That needs a person. I'm marking this urgent and preparing a summary for the on-call contact.",
+      },
+      { from: "caller", text: "Please. The kitchen ceiling is actively leaking." },
+      {
+        from: "assistant",
+        text: "The summary is ready for human follow-up. I won't book this as a routine visit.",
+      },
+    ],
+    captured: [
+      ["Need", "Active leak"],
+      ["Urgency", "Immediate"],
+      ["Route", "Human handoff"],
+    ],
+    route: "Designed to reach a person you designate. This screen does not place a live call.",
+  },
+] as const
 
 export function ProductDemo() {
-  const [service, setService] = useState<string | null>(null)
-  const [timeWindow, setTimeWindow] = useState<string | null>(null)
-  const serviceLabel = services.find((item) => item.id === service)?.label
-  const windowLabel = windows.find((item) => item.id === timeWindow)?.label
-
-  function reset() {
-    setService(null)
-    setTimeWindow(null)
-  }
+  const [active, setActive] = useState(0)
+  const scenario = scenarios[active]
 
   return (
     <section id="experience" className="bg-navy py-20 text-ivory sm:py-28">
       <Container>
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-          <div>
-            <Eyebrow>Product example</Eyebrow>
-            <h2 className="mt-5 font-heading text-[2.05rem] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-5xl">
-              See the Experience.
+        <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
+            <p className="text-[0.7rem] font-medium tracking-[0.22em] text-gold uppercase">
+              Interactive demo
+            </p>
+            <h2 className="display mt-5 text-[2.7rem] sm:text-6xl lg:text-[4.3rem]">
+              See Intelligence
+              <span className="serif-em mt-2 block text-gold">in Action.</span>
             </h2>
-            <p className="mt-5 text-lg leading-8 text-silver">
-              Walk through a scripted receptionist conversation. It shows how a
-              request can be captured, prepared, and summarized.
-            </p>
-            <p className="mt-4 inline-flex rounded-full border border-gold/40 px-3 py-1 text-xs font-semibold tracking-[0.14em] text-gold uppercase">
-              Interactive product example — not a live phone call
-            </p>
-            {siteConfig.voiceDemoNumber ? (
-              <p className="mt-5 text-sm leading-6 text-silver">
-                A separate voice sample is available at{" "}
-                <a className="text-gold underline-offset-4 hover:underline" href={`tel:${siteConfig.voiceDemoNumber}`}>
-                  {siteConfig.voiceDemoNumber}
-                </a>
-                . The on-screen example stays a scripted walkthrough.
-              </p>
-            ) : null}
           </div>
-          <div className="rounded-[1.6rem] border border-white/10 bg-[#0e1c33] p-5 sm:p-6">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-[0.68rem] tracking-[0.16em] text-mist uppercase">
-                Sample business
+          <p className="text-sm leading-6 text-silver lg:col-span-4 lg:col-start-9">
+            Choose a situation. The exchange is scripted. It is not a phone connection,
+            and it does not book a real appointment.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6 lg:grid-cols-12">
+          <div className="flex flex-col gap-2 lg:col-span-4" role="tablist" aria-label="Demo scenarios">
+            {scenarios.map((item, index) => {
+              const selected = index === active
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="tab"
+                  id={`demo-tab-${item.id}`}
+                  aria-selected={selected}
+                  aria-controls="demo-panel"
+                  onClick={() => setActive(index)}
+                  className={`border px-4 py-4 text-left ${
+                    selected ? "border-gold bg-gold text-navy" : "border-white/15 text-ivory hover:border-gold"
+                  }`}
+                >
+                  <span className={`text-[0.68rem] tracking-[0.16em] uppercase ${selected ? "text-navy/70" : "text-gold"}`}>
+                    {item.kicker}
+                  </span>
+                  <span className="mt-1 block font-heading text-xl tracking-[-0.03em]">
+                    {item.title}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          <div
+            id="demo-panel"
+            role="tabpanel"
+            aria-labelledby={`demo-tab-${scenario.id}`}
+            className="border border-white/10 bg-[#0c1830] lg:col-span-8"
+          >
+            <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
+              <p className="text-[0.68rem] tracking-[0.18em] text-mist uppercase">
+                {scenario.title}
               </p>
-              <button
-                type="button"
-                onClick={reset}
-                className="text-sm font-semibold text-gold hover:text-[#e0c15a]"
-              >
-                Start over
-              </button>
+              <p className="text-[0.68rem] tracking-[0.18em] text-gold uppercase">Illustrative</p>
             </div>
-            <div className="mt-5 space-y-3" aria-live="polite">
-              <p className="ml-8 rounded-2xl rounded-tr-md bg-white/8 px-4 py-3 text-sm leading-6">
-                Hi, I&apos;d like to schedule an appointment.
-              </p>
-              <p className="mr-6 rounded-2xl rounded-tl-md border border-gold/30 bg-gold/10 px-4 py-3 text-sm leading-6">
-                Absolutely. What service are you looking for?
-              </p>
-              <div className="flex flex-wrap gap-2 pt-1">
-                {services.map((item) => {
-                  const selected = service === item.id
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      aria-pressed={selected}
-                      onClick={() => {
-                        setService(item.id)
-                        setTimeWindow(null)
-                      }}
-                      className={`rounded-full border px-3 py-2 text-sm ${
-                        selected
-                          ? "border-gold bg-gold text-navy"
-                          : "border-white/15 text-ivory hover:border-gold"
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  )
-                })}
-              </div>
-              {serviceLabel ? (
-                <>
-                  <p className="ml-8 rounded-2xl rounded-tr-md bg-white/8 px-4 py-3 text-sm leading-6">
-                    {serviceLabel}.
-                  </p>
-                  <p className="mr-6 rounded-2xl rounded-tl-md border border-gold/30 bg-gold/10 px-4 py-3 text-sm leading-6">
-                    Thank you. Which part of the day should the request use?
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {windows.map((item) => {
-                      const selected = timeWindow === item.id
-                      return (
-                        <button
-                          key={item.id}
-                          type="button"
-                          aria-pressed={selected}
-                          onClick={() => setTimeWindow(item.id)}
-                          className={`rounded-full border px-3 py-2 text-sm ${
-                            selected
-                              ? "border-gold bg-gold text-navy"
-                              : "border-white/15 text-ivory hover:border-gold"
-                          }`}
-                        >
-                          {item.label}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </>
-              ) : null}
-              {serviceLabel && windowLabel ? (
-                <div className="grid gap-3 pt-2 sm:grid-cols-3">
-                  <article className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
-                    <p className="text-[0.68rem] tracking-[0.14em] text-gold uppercase">
-                      Captured
-                    </p>
-                    <p className="mt-2 text-sm leading-6 text-silver">
-                      Sample caller. Service: {serviceLabel}.
-                    </p>
-                  </article>
-                  <article className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
-                    <p className="text-[0.68rem] tracking-[0.14em] text-gold uppercase">
-                      Request
-                    </p>
-                    <p className="mt-2 text-sm leading-6 text-silver">
-                      Booking request prepared for the {windowLabel.toLowerCase()}.
-                    </p>
-                  </article>
-                  <article className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
-                    <p className="text-[0.68rem] tracking-[0.14em] text-gold uppercase">
-                      Owner note
-                    </p>
-                    <p className="mt-2 text-sm leading-6 text-silver">
-                      Notification prepared. Not sent. Nobody was contacted.
-                    </p>
-                  </article>
+            <div className="space-y-3 px-5 py-5" aria-live="polite">
+              {scenario.messages.map((message, index) => (
+                <p
+                  key={`${scenario.id}-${index}`}
+                  className={`max-w-md px-3 py-2.5 text-sm leading-6 ${
+                    message.from === "assistant"
+                      ? "ml-auto border border-gold/40 bg-gold/10"
+                      : "border border-white/10"
+                  }`}
+                >
+                  <span className="mb-1 block text-[0.65rem] tracking-[0.14em] text-mist uppercase">
+                    {message.from === "assistant" ? "Assistant" : "Caller"}
+                  </span>
+                  {message.text}
+                </p>
+              ))}
+            </div>
+            <div className="grid gap-px border-t border-white/10 bg-white/10 sm:grid-cols-3">
+              {scenario.captured.map(([term, value]) => (
+                <div key={term} className="bg-[#0c1830] px-5 py-4">
+                  <p className="text-[0.68rem] tracking-[0.14em] text-mist uppercase">{term}</p>
+                  <p className="mt-1 text-sm text-ivory">{value}</p>
                 </div>
-              ) : null}
+              ))}
             </div>
+            <p className="px-5 py-4 text-sm leading-6 text-silver">{scenario.route}</p>
           </div>
         </div>
+
+        {siteConfig.voiceDemoNumber ? (
+          <p className="mt-6 text-sm leading-6 text-silver">
+            A separate voice sample is available at{" "}
+            <a className="text-gold underline-offset-4 hover:underline" href={`tel:${siteConfig.voiceDemoNumber}`}>
+              {siteConfig.voiceDemoNumber}
+            </a>
+            . The on-screen example stays a scripted walkthrough.
+          </p>
+        ) : null}
       </Container>
     </section>
   )

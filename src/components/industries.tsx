@@ -1,48 +1,77 @@
+"use client"
+
+import { useState } from "react"
+
 import { Container } from "@/components/container"
 import { CtaLink } from "@/components/cta-link"
-import { Eyebrow } from "@/components/eyebrow"
-import { Reveal } from "@/components/reveal"
 import { industries } from "@/lib/content"
 import { strategyCallHref } from "@/lib/site"
 
 export function Industries() {
+  const [active, setActive] = useState(0)
+  const industry = industries[active]
+
   return (
-    <section className="bg-white py-20 sm:py-28">
+    <section className="bg-paper py-20 text-navy sm:py-28">
       <Container>
-        <Reveal>
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <Eyebrow on="light">Industries</Eyebrow>
-              <h2 className="mt-5 font-heading text-[2.05rem] leading-[1.08] font-semibold tracking-[-0.035em] text-navy sm:text-5xl">
-                Built for businesses that book time.
-              </h2>
-            </div>
-            <CtaLink href={strategyCallHref()} variant="navy">
-              Let&apos;s Discuss Your Business.
-            </CtaLink>
+        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div className="max-w-2xl">
+            <p className="text-[0.7rem] font-medium tracking-[0.22em] text-gold-ink uppercase">
+              Industries
+            </p>
+            <h2 className="display mt-5 text-[2.7rem] sm:text-6xl">
+              Built for businesses
+              <span className="serif-em mt-2 block">that book time.</span>
+            </h2>
           </div>
-        </Reveal>
-        <div className="mt-12 divide-y divide-navy/10 border-y border-navy/10">
-          {industries.map((industry, index) => (
-            <article
-              key={industry.id}
-              className="grid gap-3 py-7 md:grid-cols-[7rem_0.8fr_1.2fr] md:gap-8"
-            >
-              <p className="font-heading text-sm text-gold-ink">0{index + 1}</p>
-              <div>
-                <h3 className="font-heading text-2xl font-semibold tracking-[-0.03em] text-navy">
-                  {industry.name}
-                </h3>
-                <p className="mt-2 text-base leading-7 text-ink">{industry.help}</p>
-              </div>
-              <div>
-                <p className="text-sm leading-7 text-quiet">{industry.problem}</p>
-                {industry.boundary ? (
-                  <p className="mt-3 text-sm leading-6 text-ink">{industry.boundary}</p>
-                ) : null}
-              </div>
-            </article>
-          ))}
+          <CtaLink href={strategyCallHref()} variant="navy">
+            Book a Strategy Call
+          </CtaLink>
+        </div>
+
+        <div className="mt-12 grid border border-navy/10 lg:grid-cols-12">
+          <div className="lg:col-span-5" role="listbox" aria-label="Industries">
+            {industries.map((item, index) => {
+              const selected = index === active
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="option"
+                  aria-selected={selected}
+                  onClick={() => setActive(index)}
+                  className={`flex w-full items-baseline justify-between gap-4 border-b border-navy/10 px-5 py-4 text-left last:border-b-0 ${
+                    selected ? "bg-navy text-ivory" : "bg-paper hover:bg-ivory"
+                  }`}
+                >
+                  <span className="font-heading text-xl tracking-[-0.03em] sm:text-2xl">
+                    {item.name}
+                  </span>
+                  <span className={`text-[0.68rem] tracking-[0.16em] ${selected ? "text-gold" : "text-gold-ink"}`}>
+                    0{index + 1}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+          <article className="flex flex-col justify-between bg-ivory px-6 py-8 sm:px-10 lg:col-span-7" aria-live="polite">
+            <div>
+              <p className="font-serif text-6xl text-gold-ink italic">0{active + 1}</p>
+              <h3 className="display mt-4 text-4xl sm:text-5xl">{industry.name}</h3>
+              <p className="serif-em mt-5 max-w-md text-2xl leading-snug text-navy sm:text-3xl">
+                {industry.help}
+              </p>
+              <p className="mt-5 max-w-lg text-base leading-7 text-quiet">{industry.problem}</p>
+              {industry.boundary ? (
+                <p className="mt-4 max-w-lg border-l border-gold pl-4 text-sm leading-6 text-ink">
+                  {industry.boundary}
+                </p>
+              ) : null}
+            </div>
+            <p className="mt-8 text-xs tracking-[0.16em] text-mist uppercase">
+              Illustrative fit. Not a certification or a client result.
+            </p>
+          </article>
         </div>
       </Container>
     </section>

@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react"
 
 import { Container } from "@/components/container"
-import { Eyebrow } from "@/components/eyebrow"
 import { formatCount, formatMoney } from "@/lib/format"
 import { getPackage } from "@/lib/pricing"
 import {
@@ -24,22 +23,11 @@ const fields: {
   sliderMax: number
   step: number
 }[] = [
-  {
-    key: "callsPerMonth",
-    label: "Incoming calls per month",
-    sliderMax: 2000,
-    step: 1,
-  },
-  {
-    key: "missedPercent",
-    label: "Percentage of calls missed",
-    suffix: "%",
-    sliderMax: 100,
-    step: 1,
-  },
+  { key: "callsPerMonth", label: "Incoming calls per month", sliderMax: 2000, step: 1 },
+  { key: "missedPercent", label: "Percentage of calls missed", suffix: "%", sliderMax: 100, step: 1 },
   {
     key: "bookingPercent",
-    label: "Percentage of missed callers who could become booked jobs",
+    label: "Missed callers who could become booked jobs",
     suffix: "%",
     sliderMax: 100,
     step: 1,
@@ -68,7 +56,7 @@ function useAnimatedNumber(value: number) {
     const started = performance.now()
     let frame = 0
     const tick = (now: number) => {
-      const progress = Math.min(1, (now - started) / 480)
+      const progress = Math.min(1, (now - started) / 520)
       const eased = 1 - (1 - progress) ** 3
       const next = from + (value - from) * eased
       current.current = next
@@ -88,6 +76,7 @@ export function RoiCalculator() {
   const missed = useAnimatedNumber(result.missedCalls)
   const bookings = useAnimatedNumber(result.potentialBookings)
   const revenue = useAnimatedNumber(result.illustrativeRevenue)
+  const missedShare = Math.min(100, input.missedPercent)
 
   function update(key: keyof RoiInput, raw: string) {
     const numeric = raw.trim() === "" ? 0 : Number(raw)
@@ -95,29 +84,27 @@ export function RoiCalculator() {
   }
 
   return (
-    <section id="calculator" className="bg-ivory py-20 sm:py-28">
+    <section id="calculator" className="bg-paper py-20 text-navy sm:py-28">
       <Container>
-        <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-          <div>
-            <Eyebrow on="light">Illustrative estimate</Eyebrow>
-            <h2 className="mt-5 font-heading text-[2.05rem] leading-[1.08] font-semibold tracking-[-0.035em] text-balance text-navy sm:text-5xl">
-              What Could Missed Calls Be Costing Your Business?
-            </h2>
-            <p className="mt-5 text-lg leading-8 text-quiet">
-              Use your own call volume and job value. The starting numbers are
-              an example: 200 calls, 30% missed, a 25% potential booking rate,
-              and a $400 average job.
-            </p>
-            <p className="mt-5 text-sm leading-6 text-quiet">{roiDisclaimer}</p>
-          </div>
-          <div className="rounded-[1.6rem] border border-navy/10 bg-white p-5 shadow-[0_30px_70px_-48px_rgba(9,22,41,0.8)] sm:p-7">
-            <div className="grid gap-5">
+        <div className="max-w-3xl">
+          <p className="text-[0.7rem] font-medium tracking-[0.22em] text-gold-ink uppercase">
+            Illustrative model
+          </p>
+          <h2 className="display mt-5 text-[2.7rem] sm:text-6xl">
+            What Is an Unanswered
+            <span className="serif-em mt-2 block">Opportunity Worth?</span>
+          </h2>
+        </div>
+
+        <div className="mt-12 grid gap-6 lg:grid-cols-12">
+          <div className="border border-navy/10 bg-ivory p-5 sm:p-7 lg:col-span-6">
+            <div className="grid gap-6">
               {fields.map((field) => (
                 <div key={field.key}>
-                  <label htmlFor={field.key} className="text-sm font-medium text-ink">
+                  <label htmlFor={field.key} className="text-sm text-ink">
                     {field.label}
                   </label>
-                  <div className="mt-2 grid grid-cols-[1fr_7.5rem] items-center gap-3">
+                  <div className="mt-3 grid grid-cols-[1fr_6.5rem] items-center gap-4">
                     <input
                       type="range"
                       min={0}
@@ -126,9 +113,9 @@ export function RoiCalculator() {
                       value={Math.min(input[field.key], field.sliderMax)}
                       onChange={(event) => update(field.key, event.target.value)}
                       aria-label={`${field.label} slider`}
-                      className="accent-[#CCA629]"
+                      className="roi-range"
                     />
-                    <span className="flex h-11 items-center rounded-xl border border-navy/15 bg-ivory px-2">
+                    <span className="flex h-11 items-center border border-navy/15 bg-paper px-2">
                       {field.prefix ? (
                         <span className="pr-1 text-sm text-quiet">{field.prefix}</span>
                       ) : null}
@@ -147,7 +134,7 @@ export function RoiCalculator() {
                         step={field.key === "averageJobValue" ? 1 : field.step}
                         value={input[field.key]}
                         onChange={(event) => update(field.key, event.target.value)}
-                        className="w-full bg-transparent text-right text-sm font-medium text-navy outline-none"
+                        className="w-full bg-transparent text-right text-sm text-navy outline-none"
                       />
                       {field.suffix ? (
                         <span className="pl-1 text-sm text-quiet">{field.suffix}</span>
@@ -157,50 +144,46 @@ export function RoiCalculator() {
                 </div>
               ))}
             </div>
-            <div
-              className="mt-6 rounded-2xl bg-navy p-5 text-ivory"
-              aria-live="polite"
-            >
-              <dl className="grid gap-5 sm:grid-cols-3">
-                <div>
-                  <dt className="text-xs tracking-[0.14em] text-mist uppercase">
-                    Missed calls
-                  </dt>
-                  <dd className="mt-1 font-heading text-3xl font-semibold text-gold">
-                    {formatCount(missed)}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs tracking-[0.14em] text-mist uppercase">
-                    Potential bookings
-                  </dt>
-                  <dd className="mt-1 font-heading text-3xl font-semibold text-ivory">
-                    {formatCount(bookings)}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs tracking-[0.14em] text-mist uppercase">
-                    Illustrative monthly revenue
-                  </dt>
-                  <dd className="mt-1 font-heading text-3xl font-semibold text-ivory">
-                    {formatMoney(Math.round(revenue))}
-                  </dd>
-                </div>
-              </dl>
-              <p className="mt-5 border-t border-white/10 pt-4 text-sm leading-6 text-silver">
-                The AI Receptionist retainer is {formatMoney(receptionist.monthly)}{" "}
-                per month. Place that figure beside the estimate and decide what
-                it means for your business. The calculator does not predict
-                recovered revenue.
-              </p>
-            </div>
             <button
               type="button"
-              className="mt-4 text-sm font-semibold text-gold-ink underline-offset-4 hover:underline"
+              className="mt-6 text-sm text-gold-ink underline decoration-gold underline-offset-4"
               onClick={() => setInput({ ...roiDefaults })}
             >
               Reset to the sample figures
             </button>
+          </div>
+
+          <div className="bg-navy p-6 text-ivory sm:p-8 lg:col-span-6" aria-live="polite">
+            <p className="text-[0.68rem] tracking-[0.18em] text-gold uppercase">
+              Illustrative monthly opportunity
+            </p>
+            <p className="display mt-4 text-6xl text-gold sm:text-7xl">
+              {formatMoney(Math.round(revenue))}
+            </p>
+            <div className="mt-8" aria-hidden="true">
+              <div className="h-px w-full bg-white/15">
+                <div className="h-px bg-gold" style={{ width: `${missedShare}%` }} />
+              </div>
+              <p className="mt-2 text-xs tracking-[0.14em] text-mist uppercase">
+                {missedShare}% of calls missed in this scenario
+              </p>
+            </div>
+            <dl className="mt-8 grid grid-cols-2 gap-6 border-t border-white/10 pt-6">
+              <div>
+                <dt className="text-[0.68rem] tracking-[0.16em] text-mist uppercase">Missed calls</dt>
+                <dd className="mt-2 font-heading text-4xl tracking-[-0.04em]">{formatCount(missed)}</dd>
+              </div>
+              <div>
+                <dt className="text-[0.68rem] tracking-[0.16em] text-mist uppercase">Potential bookings</dt>
+                <dd className="mt-2 font-heading text-4xl tracking-[-0.04em]">{formatCount(bookings)}</dd>
+              </div>
+            </dl>
+            <p className="mt-8 text-sm leading-6 text-silver">{roiDisclaimer}</p>
+            <p className="mt-3 text-sm leading-6 text-mist">
+              The AI Receptionist retainer is {formatMoney(receptionist.monthly)} per
+              month. Place that figure beside the scenario. The calculator does
+              not predict recovered revenue.
+            </p>
           </div>
         </div>
       </Container>

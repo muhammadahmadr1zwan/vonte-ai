@@ -17,7 +17,7 @@ import { siteConfig } from "@/lib/site"
 import { cn } from "cn"
 
 const fieldClass =
-  "h-12 rounded-xl border-navy/15 bg-white px-3 text-base text-ink md:text-base"
+  "h-12 rounded-[2px] border-navy/15 bg-paper px-3 text-base text-ink md:text-base"
 
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null
@@ -57,7 +57,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
 
   if (state.status === "success" || state.status === "saved-notify-failed") {
     return (
-      <div className="rounded-[1.5rem] border border-navy/10 bg-white p-6 sm:p-8">
+      <div className="border border-navy/10 bg-paper p-6 sm:p-8">
         <p className="text-[0.72rem] font-semibold tracking-[0.18em] text-gold-ink uppercase">
           {state.status === "success" ? "Request received" : "Request saved"}
         </p>
@@ -72,7 +72,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
         </h2>
         <p className="mt-4 text-base leading-7 text-quiet">{state.message}</p>
         {state.reference ? (
-          <p className="mt-6 rounded-xl bg-ivory px-4 py-3 font-heading text-lg text-navy">
+          <p className="mt-6 bg-ivory px-4 py-3 font-heading text-lg text-navy">
             Reference {state.reference}
           </p>
         ) : null}
@@ -84,7 +84,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
     <form
       action={formAction}
       noValidate
-      className="relative rounded-[1.5rem] border border-navy/10 bg-white p-6 sm:p-8"
+      className="relative border border-navy/10 bg-paper p-6 sm:p-8"
       onSubmit={(event) => {
         const parsed = parseInquiry(new FormData(event.currentTarget))
         if (!parsed.success) {
@@ -223,7 +223,7 @@ export function ContactForm({ initialPackage }: { initialPackage?: string }) {
             rows={5}
             aria-invalid={Boolean(errors.challenge)}
             aria-describedby={errors.challenge ? "challenge-error" : undefined}
-            className="mt-2 min-h-32 rounded-xl border-navy/15 bg-white px-3 py-3 text-base text-ink"
+            className="mt-2 min-h-32 rounded-[2px] border-navy/15 bg-paper px-3 py-3 text-base text-ink"
           />
           <FieldError id="challenge-error" message={errors.challenge} />
         </div>
@@ -302,7 +302,7 @@ export function ContactAside({ initialPackage }: { initialPackage?: string }) {
   const chosen = getPackage(initialPackage)
   return (
     <aside className="space-y-6">
-      <div className="rounded-[1.5rem] bg-navy p-6 text-ivory">
+      <div className="bg-navy p-6 text-ivory">
         <p className="text-[0.72rem] font-semibold tracking-[0.18em] text-gold uppercase">
           What happens next
         </p>
@@ -319,7 +319,7 @@ export function ContactAside({ initialPackage }: { initialPackage?: string }) {
         </ol>
       </div>
       {chosen ? (
-        <div className="rounded-[1.5rem] border border-navy/10 bg-white p-6">
+        <div className="border border-navy/10 bg-paper p-6">
           <p className="text-[0.72rem] font-semibold tracking-[0.18em] text-gold-ink uppercase">
             Selected package
           </p>
