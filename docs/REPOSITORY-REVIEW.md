@@ -38,7 +38,7 @@ screenshots cover all five routes on phone and desktop. Evidence lives under
 | Process `/how-it-works` | `process.tsx`, route scope and launch requirements | WORKING informational content. Discover/design/implement/optimize and owner approval requirements are retained. No assumed launch time. |
 | FAQ `/how-it-works` | `faq-list.tsx`, native details/summary | WORKING keyboard-accessible disclosure. Existing browser Enter-key and accessibility checks. |
 | Contact `/contact` | `contact-form.tsx`, `contact/actions.ts`, `inquiry-schema`, `inquiry-service` | WORKING validation, consent, loading, failure and saved-reference states. Native fields stayed editable during a pending POST: FIXED. Server action handles a real persistence path; UI alone is not the proof. |
-| Inquiry storage | `inquiries.ts`, `inquiry-blob-store.ts`; create-only UUID JSON, strong-consistent private Netlify store; local file fallback | WORKING: previous hosted preview read-back and new local round-trip tests; SDK tests use the official local Blobs server. Production/preview namespaces are separate. No public read endpoint. No customer records are changed. |
+| Inquiry storage | `inquiries.ts`, `inquiry-blob-store.ts`; create-only UUID JSON, strong-consistent private Netlify store; local file fallback | WORKING: this release's hosted preview submission and authenticated read-back, plus local round-trip tests; SDK tests use the official local Blobs server. Production/preview namespaces are separate. No public read endpoint. No customer records are changed. |
 | Optional notifications | `inquiries.ts`, environment config; webhook or verified Resend sender after save | UNCONFIGURED externally. Failure/timeout/partial-config tests are MOCKED with intercepted fetch and send no external email. No real notification delivery is claimed. Operator review of private records is required. |
 | Booking / voice sample | `lib/site.ts`, `cta-link`, optional scheduling and telephone values | Consultation form WORKING; real scheduling/voice links UNCONFIGURED. Submission explicitly does not reserve a meeting. No fake contact address or number is supplied. |
 | Navigation | `site-header`, `site-footer`, `lib/content`; six links, dialog menu, active page, anchor offsets, route/back handling | WORKING core paths; missing observer support caused a page error and System never became current: FIXED. Footer targets improved. Existing focus, touch and resize tests retained. |
@@ -100,7 +100,7 @@ outgoing notification was authorized or performed by this review.
 Changes are scoped to the existing header, form, industries, demo, hero illustration,
 footer and motion styles, with focused browser regressions. Source package data,
 backend persistence, framework, route URLs and lockfile are unchanged. Final checks,
-measurements and review link are recorded below after execution.
+measurements and review link are recorded below.
 
 ### Changed files
 
@@ -200,5 +200,35 @@ Recheck routes/assets/metadata and submit a clearly marked QA inquiry, then veri
 its private object in `vonte-inquiries-production`. Review builds use the separate
 `vonte-inquiries-preview` store. Do not delete customer records during QA.
 
-The review preview, hosted verification and final source commit are recorded in
-the delivery section below when those checks finish.
+### Review delivery and hosted verification
+
+- Branch: `improve/vonte-audit-reliability`.
+- Implementation commit: `cd3bb650091d81cf6b1eae506c716e3811a15e9f`.
+  A subsequent documentation-only commit records this hosted verification.
+- Review preview: https://6af2ad8fc85b8087421b512b--vonte-ai.netlify.app.
+- Netlify deploy `6af2ad8fc85b8087421b512b` is `ready`, context `deploy-preview`,
+  with no production publication timestamp. The full adapter build/upload ran.
+- Hosted browser checks passed all five routes at 320, 375, 768 and 1440px, plus
+  System deep links and menu destinations at 320, 375, 390, 768, 1024 and 1440px.
+  No horizontal overflow or captured page errors. All five workflow controls,
+  calculator sample/change, scripted demo completion and package-specific CTA,
+  menu Escape, mobile industry safety copy and mobile package summary passed.
+- Invalid form feedback followed by corrected submission succeeded. The clearly
+  marked QA request `VN-A6675C9F` was read back through the authenticated CLI from
+  `vonte-inquiries-preview`. UUID, reference and selected Complete package matched
+  the browser. No email, text or appointment was sent/created. The QA object was
+  not deleted and contains an explicit no-follow-up request.
+- Referenced homepage CSS/JavaScript, sitemap, robots and Open Graph image returned
+  HTTP 200 with expected content types. Preview responses carry `noindex`;
+  canonicals and sitemap retain the production origin. Raw server, configuration
+  and environment-file paths returned HTTP 404.
+- Hosted evidence: `/workspace/work/netlify-qa/audit-preview-report.json`,
+  `/workspace/work/vonte-audit-3/hosted-assets.json` and corresponding screenshots.
+  The local private QA read-back is excluded from Git and the source archive.
+- Production was checked again after preview testing and remains on
+  `6af14b08b1015a4e744d7c54`. No GitHub push or production deployment occurred.
+
+The result is ready for owner review. Production release still needs explicit
+approval of the reviewed commit, an agreed inquiry-monitoring process and the
+release checks described above. Unconfigured service integrations and untested
+Safari/real-device behavior are not represented as completed work.
