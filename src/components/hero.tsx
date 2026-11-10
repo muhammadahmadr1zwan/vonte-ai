@@ -10,20 +10,20 @@ export function Hero() {
     <section className="hero-shell">
       <Container className="hero-layout">
         <div className="hero-copy rise">
-          <p className="hero-eyebrow section-label">VONTE / AI for service businesses</p>
-          <h1 className="hero-title text-foreground">
+          <p className="hero-eyebrow section-label" data-hero-step="0">VONTE / AI for service businesses</p>
+          <h1 className="hero-title text-foreground" data-hero-step="1">
             <span>Every Opportunity.</span>{" "}<span className="hero-answered">Answered.</span>
           </h1>
-          <p className="hero-support">
+          <p className="hero-support" data-hero-step="2">
             Answer calls, follow up with leads, and help website visitors request an appointment.
           </p>
-          <div className="hero-actions">
+          <div className="hero-actions" data-hero-step="3" data-hero-actions>
             <CtaLink href={strategyCallHref()} primary>Book a Strategy Call <ArrowUpRight aria-hidden="true" /></CtaLink>
             <Link href="/#system" className="hero-secondary">Explore VONTE <ArrowRight className="size-4" aria-hidden="true" /></Link>
           </div>
           <p className="hero-audience">For home services, dental, legal, med spas, and other appointment-based businesses.</p>
         </div>
-        <div className="hero-visual"><OperationsStage /></div>
+        <div className="hero-visual" data-hero-step="4"><OperationsStage /></div>
       </Container>
     </section>
   )

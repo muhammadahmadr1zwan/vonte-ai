@@ -4,6 +4,7 @@ import { ArrowUpRight, PhoneIncoming, MessageSquare, Globe, Check } from "lucide
 import { Container } from "@/components/container"
 import { CtaLink } from "@/components/cta-link"
 import { FollowUpSequence } from "@/components/follow-up-sequence"
+import { ServiceConversation } from "@/components/service-conversation"
 import { services } from "@/lib/content"
 import { getPackage } from "@/lib/pricing"
 import { formatMoney } from "@/lib/format"
@@ -34,7 +35,7 @@ function ServiceCards() {
   return (
     <section id="solutions" className="services-section">
       <Container>
-        <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-end lg:gap-20">
+        <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-end lg:gap-20" data-motion="section">
           <div><p className="section-label">The VONTE offering / 01—03</p>
           <h2 className="display services-heading mt-5">A better first response.<span className="serif-em mt-2 block text-accent">Wherever inquiries begin.</span></h2></div>
           <p className="services-intro">An unanswered call. A lead waiting for a reply. A visitor with a question. Start with the gap your team needs to close.</p>
@@ -43,7 +44,7 @@ function ServiceCards() {
           {summaries.map(({ id, audience, problem, features }, index) => {
             const pkg = getPackage(id)!
             return (
-              <article key={id} className="service-row">
+              <article key={id} className="service-row" data-motion="service">
                 <div><p className="service-number">0{index + 1}</p><h3 className="service-name">{pkg.name}</h3><p className="service-audience">{audience}</p></div>
                 <div><p className="service-problem text-sm leading-7 text-muted-foreground">{problem}</p>
                   <ul className="service-scope">{features.map(feature => <li key={feature}>{pkg.included[feature]}</li>)}</ul>
@@ -117,20 +118,7 @@ function CallConsole() {
         <span className="text-accent">Illustrative</span>
       </figcaption>
       <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="space-y-3 border-line px-5 py-5 lg:border-r">
-          <p className="max-w-[16rem] border border-line px-3 py-2.5 text-sm leading-6">
-            The upstairs unit stopped cooling. Can someone come tomorrow?
-          </p>
-          <p className="ml-6 border border-accent/40 bg-accent/10 px-3 py-2.5 text-sm leading-6">
-            I can take a cooling-repair request. Is anyone unsafe without cooling right now?
-          </p>
-          <p className="max-w-[16rem] border border-line px-3 py-2.5 text-sm leading-6">
-            No. Afternoon tomorrow is fine.
-          </p>
-          <p className="ml-6 border border-accent/40 bg-accent/10 px-3 py-2.5 text-sm leading-6">
-            I&apos;ll prepare that window and send your team the summary.
-          </p>
-        </div>
+        <ServiceConversation kind="call" />
         <div className="px-5 py-5">
           <p className="text-[0.68rem] tracking-[0.18em] text-accent uppercase">Captured</p>
           <dl className="mt-4 space-y-3 text-sm">
@@ -270,16 +258,7 @@ function Website({
           </div>
           <div className="bg-background px-5 py-6 text-foreground">
             <p className="text-[0.68rem] tracking-[0.18em] text-accent uppercase">Assistant</p>
-            <div className="mt-5 space-y-3 text-sm leading-6">
-              <p className="border border-line px-3 py-2.5">Do you take afternoon requests?</p>
-              <p className="border border-accent/40 bg-accent/10 px-3 py-2.5">
-                I can record an afternoon request and pass it to the team.
-              </p>
-              <p className="border border-line px-3 py-2.5">Thursday afternoon, please.</p>
-              <p className="border border-accent/40 bg-accent/10 px-3 py-2.5">
-                Thursday afternoon is noted as a booking request.
-              </p>
-            </div>
+            <ServiceConversation kind="chat" />
             <dl className="mt-6 border-t border-line pt-4 text-sm">
               <dt className="text-subtle">Captured intent</dt>
               <dd className="mt-1">Appointment · Thursday afternoon</dd>

@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useRef } from "react"
+
+import { SequenceControls, useSequencePlayer } from "@/components/motion-system"
 
 const sequence = [
   {
@@ -46,11 +48,13 @@ const sequence = [
 ] as const
 
 export function FollowUpSequence() {
-  const [active, setActive] = useState(0)
+  const sceneRef = useRef<HTMLDivElement>(null)
+  const player = useSequencePlayer(sceneRef, sequence.length)
+  const active = player.active
   const current = sequence[active]
 
   return (
-    <div>
+    <div ref={sceneRef} className="motion-scene" data-motion-scene data-playing={player.playing}>
       <ol className="grid gap-px bg-background/10 grid-cols-5" aria-label="Follow-up sequence">
         {sequence.map((step, index) => {
           const selected = index === active
@@ -60,7 +64,7 @@ export function FollowUpSequence() {
                 type="button"
                 aria-pressed={selected}
                 aria-label={`0${index + 1} ${step.label} — ${step.when}`}
-                onClick={() => setActive(index)}
+                onClick={() => player.select(index)}
                 className={`flex h-full w-full flex-col items-start px-3 py-4 text-left ${
                   selected ? "bg-raised text-foreground shadow-[inset_0_2px_var(--v-accent)]" : "bg-surface text-muted-foreground hover:bg-raised"
                 }`}
@@ -79,7 +83,7 @@ export function FollowUpSequence() {
           )
         })}
       </ol>
-      <div className="mt-px grid gap-px bg-background/10 lg:grid-cols-[1.1fr_0.9fr]" aria-live="polite">
+      <div className="mt-px grid gap-px bg-background/10 lg:grid-cols-[1.1fr_0.9fr]" aria-live={player.playing ? "off" : "polite"}>
         <div className="bg-background px-5 py-6 sm:px-7">
           <p className="text-[0.68rem] tracking-[0.18em] text-accent uppercase">
             {current.label} / Illustrative sequence
@@ -98,6 +102,7 @@ export function FollowUpSequence() {
           </p>
         </div>
       </div>
+      <SequenceControls player={player} name="follow-up sequence" status={`${active+1}/5 · ${current.status}`} />
     </div>
   )
 }

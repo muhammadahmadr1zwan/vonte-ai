@@ -5,7 +5,7 @@ import { faqs } from "@/lib/content"
 export function FaqList({ compact = false }: { compact?: boolean }) {
   const items = compact ? faqs.slice(0, 6) : faqs
   return (
-    <section className="bg-background py-20 text-foreground sm:py-28">
+    <section className="faq-section bg-background py-20 text-foreground sm:py-28">
       <Container className="grid gap-10 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <p className="text-xs font-medium tracking-[0.2em] text-accent uppercase">Questions</p>
@@ -14,7 +14,7 @@ export function FaqList({ compact = false }: { compact?: boolean }) {
         </div>
         <div className="border-t border-line lg:col-span-8">
           {items.map((item, index) => (
-            <details key={item.question} className="group border-b border-line">
+            <details key={item.question} className="faq-details group border-b border-line">
               <summary className="flex min-h-16 cursor-pointer list-none items-start gap-4 py-5 text-left [&::-webkit-details-marker]:hidden">
                 <span className="pt-1 text-xs tracking-[0.16em] text-accent" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
                 <h3 className="flex-1 font-heading text-xl leading-snug tracking-[-0.03em] sm:text-2xl">{item.question}</h3>

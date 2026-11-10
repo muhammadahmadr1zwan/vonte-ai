@@ -38,12 +38,14 @@ export function PricingGrid({ intro = true, preview = false }: { intro?: boolean
 
       <Container className="py-12 sm:py-16">
         <div className="pricing-packages grid border md:grid-cols-2 xl:grid-cols-4">
-          {packages.map((item) => {
+          {packages.map((item, index) => {
             const featured = item.featured
             return (
               <article
                 key={item.id}
                 id={item.id}
+                data-motion="pricing"
+                data-motion-delay={index*40}
                 className={`pricing-package flex flex-col ${featured ? "is-featured" : ""}`}
               >
                 <p className="section-label">

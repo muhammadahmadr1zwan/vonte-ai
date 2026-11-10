@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { navigateTabs } from "@/components/ui/tab-navigation"
 
+import { useMotionPulse } from "@/components/motion-system"
 import { Container } from "@/components/container"
 import { siteConfig } from "@/lib/site"
 
@@ -82,6 +83,8 @@ const scenarios = [
 export function ProductDemo() {
   const [active, setActive] = useState(0)
   const [visible, setVisible] = useState(1)
+  const panelRef = useRef<HTMLDivElement>(null)
+  useMotionPulse(panelRef, `${active}-${visible}`)
   const scenario = scenarios[active]
   const complete = visible === scenario.messages.length
   function select(index: number) { setActive(index); setVisible(1) }
@@ -89,7 +92,7 @@ export function ProductDemo() {
   return (
     <section id="experience" className="bg-background py-16 text-foreground sm:py-20">
       <Container>
-        <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+        <div className="grid gap-6 lg:grid-cols-12 lg:items-end" data-motion="section">
           <div className="lg:col-span-7">
             <p className="text-[0.7rem] font-medium tracking-[0.22em] text-accent uppercase">
               Interactive demo
@@ -136,6 +139,7 @@ export function ProductDemo() {
           </div>
 
           <div
+            ref={panelRef}
             id="demo-panel"
             role="tabpanel"
             tabIndex={0}

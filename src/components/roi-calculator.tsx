@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
+import { useMotionPulse } from "@/components/motion-system"
 
 import { CtaLink } from "@/components/cta-link"
 import { Container } from "@/components/container"
@@ -48,6 +49,8 @@ export function RoiCalculator() {
   const missed = result.missedCalls
   const bookings = result.potentialBookings
   const revenue = result.illustrativeRevenue
+  const outputRef = useRef<HTMLParagraphElement>(null)
+  useMotionPulse(outputRef, revenue)
   const missedShare = Math.min(100, input.missedPercent)
 
   function update(key: keyof RoiInput, raw: string) {
@@ -129,12 +132,12 @@ export function RoiCalculator() {
             <p className="text-[0.68rem] tracking-[0.18em] text-accent uppercase">
               Illustrative monthly opportunity
             </p>
-            <p className="display roi-output mt-4 text-accent" aria-live="polite" aria-atomic="true" aria-label="Illustrative monthly revenue">
+            <p ref={outputRef} className="display roi-output mt-4 text-accent" aria-live="polite" aria-atomic="true" aria-label="Illustrative monthly revenue">
               {formatMoney(Math.round(revenue))}
             </p>
             <div className="mt-8" aria-hidden="true">
               <div className="h-px w-full bg-line">
-                <div className="h-px bg-accent" style={{ width: `${missedShare}%` }} />
+                <div className="roi-indicator h-px bg-accent" style={{ transform: `scaleX(${missedShare/100})` }} />
               </div>
               <p className="mt-2 text-xs tracking-[0.14em] text-subtle uppercase">
                 {missedShare}% of calls missed in this scenario

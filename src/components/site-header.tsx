@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, X, ArrowUpRight } from "lucide-react"
-import { useEffect, useId, useRef, useState } from "react"
+import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from "react"
 
 import { Container } from "@/components/container"
 import { CtaLink } from "@/components/cta-link"
@@ -12,10 +12,24 @@ import { navItems } from "@/lib/content"
 import { strategyCallHref } from "@/lib/site"
 import { cn } from "cn"
 
+const subscribeDialogSupport = () => () => {}
+const supportsDialog = () => typeof HTMLDialogElement !== "undefined" && typeof HTMLDialogElement.prototype.showModal === "function"
+const serverDialogSupport = () => false
+
 export function SiteHeader() {
   const pathname = usePathname()
+  const previousPathname = useRef(pathname)
   const dialogRef = useRef<HTMLDialogElement>(null)
-  const triggerRef = useRef<HTMLButtonElement>(null)
+  const triggerRef = useRef<HTMLElement>(null)
+  const disclosureRef = useRef<HTMLDetailsElement>(null)
+  const subscribeDisclosure = useCallback((callback: () => void) => {
+    const disclosure = disclosureRef.current
+    disclosure?.addEventListener("toggle", callback)
+    return () => disclosure?.removeEventListener("toggle", callback)
+  }, [])
+  const disclosureSnapshot = useCallback(() => Boolean(disclosureRef.current?.open), [])
+  const disclosureOpen = useSyncExternalStore(subscribeDisclosure, disclosureSnapshot, serverDialogSupport)
+  const dialogSupported = useSyncExternalStore(subscribeDialogSupport, supportsDialog, serverDialogSupport)
   const previousOverflow = useRef("")
   const [menuOpen, setMenuOpen] = useState(false)
   const [systemVisible, setSystemVisible] = useState(false)
@@ -24,10 +38,14 @@ export function SiteHeader() {
   const menuId = useId()
   const callHref = strategyCallHref()
 
-  function closeMenu() { dialogRef.current?.close() }
+  function closeMenu() {
+    if (dialogRef.current?.open && typeof dialogRef.current.close === "function") dialogRef.current.close()
+    if (disclosureRef.current) disclosureRef.current.open = false
+  }
 
   function openMenu() {
-    if (!dialogRef.current || dialogRef.current.open) return
+    if (!dialogRef.current || dialogRef.current.open || !supportsDialog()) return
+    if (disclosureRef.current) disclosureRef.current.open = false
     previousOverflow.current = document.body.style.overflow
     dialogRef.current.showModal()
     document.body.style.overflow = "hidden"
@@ -36,16 +54,24 @@ export function SiteHeader() {
 
   useEffect(() => {
     const dialog = dialogRef.current
-    const query = window.matchMedia("(min-width: 1024px)")
-    const onResize = () => { if (query.matches) closeMenu() }
-    query.addEventListener("change", onResize)
+    const query = typeof window.matchMedia === "function" ? window.matchMedia("(min-width: 1024px)") : null
+    const onResize = () => { if (query?.matches ?? window.innerWidth >= 1024) closeMenu() }
+    if (typeof query?.addEventListener === "function") query.addEventListener("change", onResize)
+    else if (typeof query?.addListener === "function") query.addListener(onResize)
+    else window.addEventListener("resize", onResize)
     return () => {
-      query.removeEventListener("change", onResize)
+      if (typeof query?.removeEventListener === "function") query.removeEventListener("change", onResize)
+      else if (typeof query?.removeListener === "function") query.removeListener(onResize)
+      else window.removeEventListener("resize", onResize)
       if (dialog?.open) document.body.style.overflow = previousOverflow.current
     }
   }, [])
 
-  useEffect(() => { closeMenu() }, [pathname])
+  useEffect(() => {
+    // Preserve a native menu opened while scripts were still arriving.
+    if (previousPathname.current !== pathname) closeMenu()
+    previousPathname.current = pathname
+  }, [pathname])
 
   // Show the header action only when an in-page consultation action is out of view.
   useEffect(() => {
@@ -94,17 +120,17 @@ export function SiteHeader() {
         .find(element => element.getClientRects().length > 0)
       if (!system) return
       event.preventDefault()
-      system.scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" })
+      system.scrollIntoView({ block: "start", behavior: typeof window.matchMedia !== "function" || window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" })
     }
     document.addEventListener("click", repeatSystemLink, true)
     return () => document.removeEventListener("click", repeatSystemLink, true)
   }, [])
 
   return (
-    <header className="site-header sticky top-0 z-40 border-b border-line bg-background/95 text-foreground backdrop-blur-md">
-      <Container className="flex h-20 items-center justify-between gap-3">
+    <header className="site-header" data-site-header>
+      <Container className="header-layout">
         <Link href="/" className="shrink-0 text-foreground" aria-label="VONTE home"><Wordmark /></Link>
-        <nav className="hidden items-center gap-5 lg:flex xl:gap-7" aria-label="Primary">
+        <nav className="desktop-navigation" aria-label="Primary">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} onClick={closeMenu} aria-current={currentItem(item.href)}
               className={cn("whitespace-nowrap py-3 text-xs tracking-[0.04em] text-muted-foreground transition-colors hover:text-accent", currentItem(item.href) && "text-accent")}>
@@ -112,14 +138,29 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className={cn("hidden focus-within:visible lg:block", !headerCtaVisible && "invisible")}><CtaLink href={callHref}>Book a Strategy Call <ArrowUpRight aria-hidden="true" /></CtaLink></div>
-        <div className="flex items-center gap-2 lg:hidden">
-          <button ref={triggerRef} type="button" className="inline-flex size-11 items-center justify-center border border-line"
-            aria-haspopup="dialog" aria-controls={menuId} aria-expanded={menuOpen}
-            onClick={openMenu}>
-            <Menu aria-hidden="true" className="size-5" /><span className="sr-only">Open menu</span>
-          </button>
-        </div>
+        <div className="header-action" data-visible={headerCtaVisible}><CtaLink href={callHref}>Book a Strategy Call <ArrowUpRight aria-hidden="true" /></CtaLink></div>
+        {/* Native interaction may change only this element's open attribute before hydration. */}
+        <details ref={disclosureRef} suppressHydrationWarning className="mobile-disclosure" onKeyDown={event => {
+          if (event.key === "Escape") { closeMenu(); triggerRef.current?.focus() }
+        }}>
+          <summary ref={triggerRef} className="mobile-menu-trigger" role="button"
+            aria-haspopup={dialogSupported ? "dialog" : undefined} aria-controls={dialogSupported ? menuId : `${menuId}-fallback`}
+            aria-expanded={dialogSupported ? menuOpen || disclosureOpen : undefined}
+            onClick={event => {
+              if (supportsDialog()) {
+                event.preventDefault()
+                if (disclosureRef.current?.open) closeMenu()
+                else openMenu()
+              }
+            }}>
+            <Menu aria-hidden="true" className="menu-closed-icon size-4" /><X aria-hidden="true" className="menu-open-icon size-4" />
+            <span className="menu-closed-label"><span className="sr-only">Open menu</span><span aria-hidden="true">Menu</span></span><span className="menu-open-label">Close menu</span>
+          </summary>
+          <nav id={`${menuId}-fallback`} className="fallback-navigation" aria-label="Mobile fallback">
+            {navItems.map(item => <Link key={item.href} href={item.href} onClick={closeMenu} aria-current={currentItem(item.href)}>{item.label}</Link>)}
+            <CtaLink href={callHref} primary>Book a Strategy Call</CtaLink>
+          </nav>
+        </details>
       </Container>
       <dialog onKeyDown={(event) => {
         if (event.key !== "Tab") return
