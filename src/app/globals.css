@@ -293,6 +293,9 @@
 }
 @media (max-width: 639px) {
   .hero-title { font-size: clamp(2.35rem, 9.6vw, 3.25rem); }
+  /* Show the mobile message immediately and keep the call illustration still. */
+  .rise { animation: none; opacity: 1; transform: none; }
+  .signal-orbit { display: none; }
 }
 
 .roi-output { font-size: clamp(2.5rem, 5.3vw, 4.75rem); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }

@@ -15,15 +15,15 @@ export function OperationsStage() {
           <div><p className="text-sm text-ivory">An incoming inquiry</p><p className="mt-1 text-xs text-mist">Example · Home services</p></div>
           <span className="ml-auto shrink-0 text-xs whitespace-nowrap text-gold">01 / 05</span>
         </div>
-        <div className="signal-field relative mt-6 overflow-hidden border border-white/10 px-5 py-7 sm:py-9">
+        <div className="signal-field relative mt-4 overflow-hidden border border-white/10 px-4 py-4 sm:mt-6 sm:px-5 sm:py-9">
           <span className="signal-orbit" aria-hidden="true" />
           <p className="relative text-[0.65rem] tracking-[0.18em] text-mist uppercase">The customer asks</p>
           <p className="signal-quote relative mt-3 max-w-xs font-heading text-[1.75rem] leading-tight tracking-[-0.04em] text-ivory sm:text-[2rem]">“Can someone come tomorrow?”</p>
-          <div className="relative mt-6 flex items-center gap-3">
-            <div className="flex h-6 items-center gap-[3px]" aria-hidden="true">
+          <div className="relative mt-4 flex items-center gap-3 sm:mt-6">
+            <div className="hidden h-6 items-center gap-[3px] sm:flex" aria-hidden="true">
               {Array.from({length: 18}, (_, i) => <span key={i} className="wave-bar w-[2px] bg-gold" style={{height: `${5 + ((i * 13) % 20)}px`,animationDelay:`${i * 0.05}s`}} />)}
             </div>
-            <span className="text-xs text-silver">A useful conversation begins.</span>
+            <span className="text-xs text-silver">AI response · Scripted example</span>
           </div>
         </div>
         <div className="flex justify-center py-3 text-gold/70" aria-hidden="true"><ArrowDown className="size-4" /></div>

@@ -31,7 +31,10 @@ function FieldError({ id, message }: { id: string; message?: string }) {
 export function ContactInquiry({ initialPackage, submissionId }: { initialPackage?: string; submissionId: string }) {
   const [selected, setSelected] = useState(getPackage(initialPackage)?.id ?? "unsure")
   return <div className="grid items-start gap-8 lg:grid-cols-[1.25fr_0.75fr]">
-    <ContactForm initialPackage={initialPackage} onPackageChange={setSelected} submissionId={submissionId} />
+    <div>
+      <PackageSummary packageId={selected} className="mb-5 lg:hidden" />
+      <ContactForm initialPackage={initialPackage} onPackageChange={setSelected} submissionId={submissionId} />
+    </div>
     <ContactAside initialPackage={selected} />
   </div>
 }
@@ -130,6 +133,8 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
         }
       }}
     >
+      <fieldset disabled={pending} className="min-w-0 border-0 p-0 disabled:opacity-70">
+      <legend className="sr-only">Consultation request details</legend>
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="sm:col-span-1">
           <Label htmlFor="fullName">Full name</Label>
@@ -303,7 +308,7 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
           <FieldError id="consent-error" message={errors.consent} />
         </div>
       </div>
-
+      </fieldset>
       <div className="pointer-events-none absolute h-0 w-0 overflow-hidden" aria-hidden="true">
         <label htmlFor="company_fax">Fax</label>
         <input id="company_fax" name="company_fax" tabIndex={-1} autoComplete="off" />
@@ -337,9 +342,9 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
 }
 
 export function ContactAside({ initialPackage }: { initialPackage?: string }) {
-  const chosen = getPackage(initialPackage)
   return (
     <aside className="space-y-6">
+      <PackageSummary packageId={initialPackage} className="hidden lg:block" />
       <div className="bg-navy p-6 text-ivory">
         <p className="text-[0.72rem] font-semibold tracking-[0.18em] text-gold uppercase">
           What happens next
@@ -356,17 +361,6 @@ export function ContactAside({ initialPackage }: { initialPackage?: string }) {
           ))}
         </ol>
       </div>
-      {chosen ? (
-        <div className="border border-navy/10 bg-paper p-6">
-          <p className="text-[0.72rem] font-semibold tracking-[0.18em] text-gold-ink uppercase">
-            Selected package
-          </p>
-          <p className="mt-3 font-heading text-2xl font-semibold text-navy">{chosen.name}</p>
-          <p className="mt-2 text-sm leading-6 text-quiet">
-            {formatMoney(chosen.setup)} setup · {formatMoney(chosen.monthly)} per month
-          </p>
-        </div>
-      ) : null}
       {siteConfig.schedulingUrl ? (
         <p className="text-sm leading-6 text-quiet">
           Prefer to choose a time now?{" "}
@@ -378,4 +372,14 @@ export function ContactAside({ initialPackage }: { initialPackage?: string }) {
       ) : null}
     </aside>
   )
+}
+
+function PackageSummary({ packageId, className }: { packageId?: string; className?: string }) {
+  const chosen = getPackage(packageId)
+  if (!chosen) return null
+  return <div className={cn("border border-navy/15 border-t-gold bg-paper p-5", className)} data-package-summary>
+    <p className="text-xs tracking-[0.15em] text-gold-ink uppercase">Selected package</p>
+    <p className="mt-2 font-heading text-2xl tracking-[-0.03em] text-navy">{chosen.name}</p>
+    <p className="mt-2 text-sm leading-6 text-quiet">{formatMoney(chosen.setup)} setup · {formatMoney(chosen.monthly)} per month</p>
+  </div>
 }

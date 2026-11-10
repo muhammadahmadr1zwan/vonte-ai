@@ -26,14 +26,14 @@ export function SiteFooter() {
             <ul className="mt-6 space-y-1 text-sm text-silver">
               {siteConfig.email ? (
                 <li>
-                  <a className="hover:text-gold" href={`mailto:${siteConfig.email}`}>
+                  <a className="inline-flex min-h-11 items-center hover:text-gold" href={`mailto:${siteConfig.email}`}>
                     {siteConfig.email}
                   </a>
                 </li>
               ) : null}
               {siteConfig.phone ? (
                 <li>
-                  <a className="hover:text-gold" href={`tel:${siteConfig.phone}`}>
+                  <a className="inline-flex min-h-11 items-center hover:text-gold" href={`tel:${siteConfig.phone}`}>
                     {siteConfig.phone}
                   </a>
                 </li>
@@ -49,10 +49,10 @@ export function SiteFooter() {
           <p className="text-[0.68rem] font-medium tracking-[0.2em] text-gold uppercase">
             Explore
           </p>
-          <ul className="mt-4 space-y-3 text-sm text-silver">
+          <ul className="mt-3 text-sm text-silver">
             {navItems.map((item) => (
               <li key={item.href}>
-                <Link className="hover:text-gold" href={item.href}>
+                <Link className="inline-flex min-h-11 items-center hover:text-gold" href={item.href}>
                   {item.label}
                 </Link>
               </li>
@@ -63,10 +63,10 @@ export function SiteFooter() {
           <p className="text-[0.68rem] font-medium tracking-[0.2em] text-gold uppercase">
             Packages
           </p>
-          <ul className="mt-4 space-y-3 text-sm text-silver">
+          <ul className="mt-3 text-sm text-silver">
             {packages.map((item) => (
               <li key={item.id}>
-                <Link className="hover:text-gold" href={`/pricing#${item.id}`}>
+                <Link className="inline-flex min-h-11 items-center hover:text-gold" href={`/pricing#${item.id}`}>
                   {item.name}
                 </Link>
               </li>

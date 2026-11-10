@@ -29,8 +29,15 @@ export function Industries() {
           </CtaLink>
         </div>
 
-        <div className="mt-12 grid border border-navy/10 lg:grid-cols-12">
-          <div className="grid grid-cols-2 lg:col-span-5 lg:block" role="group" aria-label="Industries">
+        <div className="mt-8 grid border border-navy/10 lg:mt-12 lg:grid-cols-12">
+          <div className="border-b border-navy/10 bg-paper p-5 lg:hidden">
+            <label htmlFor="industry-preview" className="text-sm font-medium">Explore an industry</label>
+            <select id="industry-preview" value={active} onChange={event => setActive(Number(event.target.value))}
+              aria-controls="industry-detail" className="mt-3 min-h-12 w-full border border-navy/20 bg-white px-3 text-base text-navy">
+              {industries.map((item, index) => <option key={item.id} value={index}>{item.name}</option>)}
+            </select>
+          </div>
+          <div className="hidden lg:col-span-5 lg:block" role="group" aria-label="Industries">
             {industries.map((item, index) => {
               const selected = index === active
               return (

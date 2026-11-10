@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { navigateTabs } from "@/components/ui/tab-navigation"
 
 import { Container } from "@/components/container"
@@ -172,7 +173,8 @@ export function ProductDemo() {
                 </div>
               ))}
             </div>
-            <p className="px-5 py-4 text-sm leading-6 text-silver">{scenario.route}</p></> : null}
+            <p className="px-5 pt-4 text-sm leading-6 text-silver">{scenario.route}</p>
+            <Link href="/contact?package=ai-receptionist" className="mx-5 mb-4 inline-flex min-h-11 items-center text-sm text-gold underline underline-offset-4 hover:text-ivory">Discuss this receptionist workflow →</Link></> : null}
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 px-5 py-4">
               <p className="text-xs text-mist" role="status">Exchange {visible} of {scenario.messages.length}{complete ? " · Summary ready" : ""}</p>
               <div className="flex flex-wrap gap-3">
