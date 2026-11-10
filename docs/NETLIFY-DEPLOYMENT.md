@@ -4,45 +4,55 @@ Project: `vonte-ai` (`32c06496-b748-47d9-9f99-eac0fca21737`).
 Production address: https://vonte-ai.netlify.app.
 Dashboard: https://app.netlify.com/projects/vonte-ai.
 
-This release uses an authenticated manual CLI upload. Git continuous deployment is
-not connected. Reviewed application source `5b54b7a` is pushed on
-`design/vonte-editorial-refinement` in `muhammadahmadr1zwan/vonte-ai`.
-Pushing a branch alone does not publish this project.
+This site uses authenticated manual CLI uploads. Git continuous deployment is
+not connected, so pushing a branch alone does not publish the site. Reviewed
+application source `b982464` is pushed on `fix/vonte-navigation-motion` in
+`muhammadahmadr1zwan/vonte-ai`.
 
 ## Current production release
 
-The founder-selected Obsidian & Champagne design and editorial refinement were
-published on November 10, 2026, at 2:24 a.m. EST, with explicit release approval.
+The navigation repair and controlled motion upgrade were published on
+November 10, 2026, at **3:58 a.m. EST**, after the owner's explicit instruction
+“push to prod now.”
 
-- Application commit: `5b54b7abe9fa3d778c5489c4e1036f06dd346798`.
-- Production deploy: `6af2c67c9e988207d831c099`.
-- [Deploy details](https://app.netlify.com/projects/vonte-ai/deploys/6af2c67c9e988207d831c099).
+- Application commit: `b98246407044d931912bface21babf298c81435f`.
+- Production deploy: `6af2dc91ef3ecadd3be0dada`.
+- [Deploy details](https://app.netlify.com/projects/vonte-ai/deploys/6af2dc91ef3ecadd3be0dada).
 - Netlify reports `ready`, context `production`, published at
-  `2026-11-10T07:24:09.857Z`, and the project's current published deploy matches.
+  `2026-11-10T08:58:22.723Z`. The project's current published-deploy ID matches.
 - The complete CLI Next.js adapter pipeline ran with `--prod --context production`.
-  No raw `.next` upload or skipped build/publish hooks.
-- Existing checks for this application revision: 24 unit tests, 41 browser tests,
-  production build, TypeScript and ESLint passed.
-- Live browser sweep: all five routes at 320, 375, 390, 430, 768, 1024 and 1440px
-  returned HTTP 200 with no overflow or captured page errors. Additional System
-  deep links/menu destinations passed at six widths. The default theme and
-  revised inquiry artwork are present on production.
-- All five workflow stages, calculator sample/change, demo-to-inquiry selection,
-  mobile industry safety copy, menu Escape, package summary, invalid form and
-  corrected submission passed.
-- Marked QA inquiry `VN-C10F56D9` was read back through the authenticated CLI from
-  `vonte-inquiries-production`. UUID, reference, selected Complete package and QA
-  marker matched the browser. No customer data was deleted. Email/SMS/webhook
-  notifications remain unconfigured; the QA request explicitly needs no follow-up.
-- Referenced homepage CSS/JavaScript, sitemap, robots and Open Graph image returned
-  HTTP 200. Canonical and sitemap use the production origin; production is
-  indexable. `/design-lab`, raw server code, configuration and environment-file
-  paths return HTTP 404. A development theme query cannot change the public theme.
+  No raw `.next` upload, skipped build or skipped publishing hook was used.
+  The deployed Next.js server handler uses adapter `5.16.6` and Node.js 24.
+- Source checks: **24 unit tests and 67 browser tests**, build, TypeScript and
+  ESLint passed before publication. All 41 original browser tests remain intact.
+- Live browser sweep: **35/35** checks across all five routes at 320, 375, 390,
+  430, 768, 1024 and 1440px returned HTTP 200, with visible navigation, no
+  horizontal overflow and no captured page/console errors. All six navigation
+  destinations were checked at each size/route; mobile Escape restored focus.
+- Finite hero playback, manual service preview, clickable process stages,
+  reduced motion, mobile navigation/calculator, completed demo-to-inquiry
+  package selection and native navigation with JavaScript disabled passed.
+- A clearly marked QA submission `VN-1689CB10` was read back from the private
+  `vonte-inquiries-production` store. UUID, reference, Complete package,
+  consent and no-follow-up QA marker matched the browser. No customer record
+  was read or deleted. Notifications remain unconfigured; this was not a real
+  booking or service request.
+- Referenced homepage CSS/JavaScript, sitemap, robots and Open Graph image
+  returned HTTP 200. Production canonical metadata uses the live origin.
+  `/design-lab`, raw server code, configuration and environment-file paths
+  returned HTTP 404.
+- The Obsidian identity, exact prices and scripted-preview safety language
+  remain. Physical devices/Safari and the originally reported production
+  disappearance remain unverified; see `NAVIGATION-AND-MOTION.md` for the
+  confirmed failure modes and repair scope.
 
-Evidence is under `/workspace/work/vonte-production-5b54b7a/` and
-`/workspace/work/netlify-qa/production-5b54b7a-report.json`. The private QA object
-is outside Git. Subsequent documentation-only commits record this release and
-do not change the deployed application.
+Evidence is under `/workspace/work/vonte-production-b982464/`. The private QA
+object is outside Git. Documentation-only commits record this release and do not
+change the deployed application.
+
+The previous production application `5b54b7a`, deploy
+`6af2c67c9e988207d831c099`, was published at 2:24 a.m. EST the same day. Its
+retained evidence is under `/workspace/work/vonte-production-5b54b7a/`.
 
 ## Build and publish
 
@@ -55,6 +65,13 @@ netlify deploy --context deploy-preview
 # After verifying the preview and with release authorization:
 netlify deploy --prod --context production
 ```
+
+In this managed environment, use `NODE_USE_ENV_PROXY=1` for the CLI while
+preserving inherited proxy and CA settings. Without it, the configuration
+resolver can fail its network request, fall back to offline resolution and
+misreport “Project not found.” The release succeeded after enabling Node's
+standard environment-proxy handling; relinking and new credentials were not
+needed.
 
 The local `.netlify/` directory is ignored by Git. Do not commit CLI link state,
 generated artifacts, credentials, or inquiry records. Do not upload raw `.next`

@@ -1,10 +1,19 @@
 # VONTE navigation repair and motion review
 
+**Release update:** The owner subsequently approved production publication.
+Application `b982464` was pushed to GitHub and deployed to
+[the live website](https://vonte-ai.netlify.app/) on November 10, 2026, at
+3:58 a.m. EST. Netlify deploy `6af2dc91ef3ecadd3be0dada` is ready and published.
+All 35 hosted route/width checks and an actual private QA-inquiry readback passed.
+See [deployment operations](NETLIFY-DEPLOYMENT.md) for the release record.
+
 Local work on `fix/vonte-navigation-motion`, starting from clean `2c36f01`.
 Review date: November 10, 2026 (EST). The selected A / Obsidian & Champagne design,
 Next.js framework, five public routes, service scope and exact prices are retained.
-No GitHub push, Netlify deployment, credentials change, paid service, live business
-transaction or hosted form submission was performed for this task.
+During the local implementation/review below, no GitHub push, Netlify deployment,
+credentials change, paid service, live business transaction or hosted form
+submission was performed. Production publication and a marked QA submission
+followed the subsequent explicit release approval recorded above.
 
 ## Diagnosis: confirmed findings and limits
 
@@ -247,13 +256,15 @@ The review artifact passed all 10 route/width selector combinations; embedded
 images decoded and both recordings loaded and played, with no captured page
 errors or horizontal overflow at 390px.
 
-The deployed application remains `5b54b7a`; these changes are local only.
+At the time of the local review, production remained `5b54b7a`. The release
+update above records the subsequent authorized publication of these changes.
 
 ## Remaining limits and approval readiness
 
-Ready for owner review and deployment approval of the local changes. No release
-has been attempted. Once approved, the existing full Netlify adapter pipeline
-and hosted route/form-storage verification must be used.
+The local review was ready for deployment approval. The owner then approved
+publication; the full Netlify adapter pipeline and hosted route/form-storage
+verification completed successfully, as recorded above. The limitations below
+still apply.
 
 The exact production disappearance still needs affected-session evidence to
 close its diagnosis. Native menu fallback and regression coverage address
