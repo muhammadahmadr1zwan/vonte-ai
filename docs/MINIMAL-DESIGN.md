@@ -38,7 +38,7 @@ concept images.
 All four have deliberate phone arrangements, comfortable buttons and a simplified
 vertical inquiry rail. Mobile comparisons retain the same content as desktop.
 
-## Recommendation: B · Graphite & Silver
+## Initial recommendation: B · Graphite & Silver
 
 This is a creative assessment, not a measured conversion claim.
 
@@ -53,8 +53,11 @@ This is a creative assessment, not a measured conversion claim.
 | Timelessness | B's neutral palette depends least on a fashionable accent color; A is a close editorial alternative. |
 | Conversion clarity | Every direction keeps the same primary strategy-call path, accurate fees and package-aware inquiry flow. |
 
-B is the local default. A, C and D remain in source and in the development lab
-for founder review. No alternative was deleted.
+The founder selected **A · Obsidian & Champagne** after reviewing the alternatives.
+A is now the local default across all five routes and generated brand assets.
+B, C and D remain in source and in the development lab. No alternative was deleted.
+The assessment above records the initial recommendation; the founder's selection
+governs the implementation. This selection does not authorize a push or deployment.
 
 ## Implemented redesign
 
@@ -117,7 +120,7 @@ metadata. Screenshot artifacts live outside the application, not in `public/`.
 Edit **`src/lib/visual-directions.ts`**:
 
 ```ts
-export const DEFAULT_DIRECTION: VisualDirection = "graphite"
+export const DEFAULT_DIRECTION: VisualDirection = "obsidian"
 ```
 
 Available values: `obsidian`, `graphite`, `ice`, `sage`. Each direction's `colors`
@@ -180,9 +183,9 @@ Final checks against the production build passed:
   native select and ROI-input borders, aligned package headings, kept fees clear
   and confirmed the simplified mobile illustration and secondary action.
 
-### Fresh Lighthouse lab measurements
+### Initial Graphite default Lighthouse lab measurements
 
-Sequential runs against the final production build on localhost, after browser
+Sequential runs against the initial Graphite production build on localhost, after browser
 tests/capture work finished, with Chromium and Lighthouse mobile/desktop presets:
 
 | Measurement | Mobile | Desktop |
@@ -218,5 +221,31 @@ TBT is not an INP measurement. No performance warning was reported by either run
   including all four themes, development lab and this report. Private inquiry
   records, environment files, dependencies and build outputs are excluded.
 
-The redesign is local and ready for founder review. Production and the previous
-Netlify review links do not contain this new visual direction.
+The redesign remains local. Production and the previous Netlify review links do
+not contain this new visual direction.
+
+## Selected A default verification
+
+After the founder selected A, changed `DEFAULT_DIRECTION` to `obsidian`, updated
+the lab's default/selection labels, README and comparison file, and rebuilt the
+site. No package, backend or route behavior was changed.
+
+- 24 unit tests and 41 browser tests passed with A as the production-build default.
+- Production build, TypeScript, ESLint and `git diff --check` passed.
+- The complete browser suite checked all five routes at 320–1440px, including
+  package selection, inquiry persistence, calculator, demo, navigation, keyboard,
+  reduced motion and automated accessibility checks at 390/1440px.
+- Additional rendering confirmed all five routes use `data-theme="obsidian"`
+  and background `#0A0A0B`, return HTTP 200, have no horizontal overflow and produce
+  no captured page errors at 390 and 1440px. Desktop/mobile homepage captures
+  were inspected. The production design-lab route still returns 404.
+- Current default screenshots: `/workspace/outputs/vonte-selected-a-desktop.png`
+  and `/workspace/outputs/vonte-selected-a-mobile.png`.
+- Updated comparison file retains all 32 captures and passed its image decode,
+  viewport, section, expand/reduce and narrow-layout checks.
+- The source archive now includes the founder-selected A default. Earlier
+  Lighthouse scores above are explicitly for the initial B default; no new
+  performance measurement is claimed for this selection.
+- No GitHub push, Netlify deployment, credential change or external notification
+  was performed. Selecting the visual direction is recorded separately from
+  authorizing a release.

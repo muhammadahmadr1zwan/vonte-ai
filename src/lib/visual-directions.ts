@@ -23,7 +23,7 @@ export const visualDirections = {
 } as const
 
 export type VisualDirection = keyof typeof visualDirections
-export const DEFAULT_DIRECTION: VisualDirection = "graphite"
+export const DEFAULT_DIRECTION: VisualDirection = "obsidian"
 export const defaultPalette = visualDirections[DEFAULT_DIRECTION].colors
 
 export function directionVariables(direction: VisualDirection): Record<string, string> {

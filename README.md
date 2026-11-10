@@ -25,7 +25,7 @@ The dev server runs at [http://127.0.0.1:3847](http://127.0.0.1:3847).
 ## Local design review
 
 Run `npm run dev` and open `http://127.0.0.1:3847/design-lab` to compare the four
-rendered directions on desktop and mobile. Graphite & Silver is the local default.
+rendered directions on desktop and mobile. Obsidian & Champagne (A) is the founder-selected local default.
 The lab and query-based palette overrides are available only in development;
 the lab returns 404 in production. Palette values and the default are centralized
 in `src/lib/visual-directions.ts`. See [the design review](docs/MINIMAL-DESIGN.md)

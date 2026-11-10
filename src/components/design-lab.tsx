@@ -25,7 +25,7 @@ export function DesignLab() {
     </div>
     <div className="lab-choices" role="group" aria-label="Visual directions">
       {(Object.entries(visualDirections) as [VisualDirection, typeof theme][]).map(([key, item]) => <button key={key} type="button" aria-pressed={direction === key} onClick={() => setDirection(key)} className="lab-choice">
-        <span className="text-xs text-subtle">Direction {item.letter}{key === DEFAULT_DIRECTION ? " · Recommended" : ""}</span>
+        <span className="text-xs text-subtle">Direction {item.letter}{key === DEFAULT_DIRECTION ? " · Selected default" : ""}</span>
         <span className="mt-3 block text-lg">{item.name}</span>
         <span className="mt-3 flex gap-2" aria-hidden="true">{[item.colors.bg, item.colors.text, item.colors.accent].map(color => <span key={color} className="size-4 rounded-full border border-white/30" style={{background:color}} />)}</span>
       </button>)}
@@ -40,6 +40,6 @@ export function DesignLab() {
     <div ref={host} className="lab-frame-host" style={{height:height*scale}}>
       <iframe key={`${direction}-${width}`} title={`${theme.name} VONTE homepage at ${width}px`} src={`/?direction=${direction}`} className="lab-frame" style={{width,height,transform:`scale(${scale})`,left:"50%",marginLeft:-width/2}} />
     </div>
-    <p className="mt-5 text-sm leading-6 text-muted-foreground">Recommended: Graphite &amp; Silver. Its typography and neutral surfaces give every service equal weight, keep prices legible and let the workflow carry the identity. All four directions remain available here. This route returns 404 in production.</p>
+    <p className="mt-5 text-sm leading-6 text-muted-foreground">Selected default: {visualDirections[DEFAULT_DIRECTION].name}. {visualDirections[DEFAULT_DIRECTION].description} All four directions remain available here. This route returns 404 in production.</p>
   </div>
 }
