@@ -32,6 +32,10 @@ in `src/lib/visual-directions.ts`. See [the design review](docs/MINIMAL-DESIGN.m
 for switching instructions, screenshots, verification and remaining limitations.
 This redesign has not been pushed or deployed.
 
+The latest [editorial refinement](docs/EDITORIAL-REFINEMENT.md) records the changes
+made after reviewing the supplied UI/UX discussion, with before/after captures
+and verification. The founder-selected A palette remains the default.
+
 ## Consultation requests
 
 The contact form validates in the browser and again on the server. On Netlify, `INQUIRY_STORAGE=netlify-blobs` stores each inquiry as a private JSON document in Netlify Blobs. Production uses `vonte-inquiries-production`; preview deploys use `vonte-inquiries-preview`. The store namespace is fixed at build time from the Netlify deploy context. Locally, the default remains `data/inquiries/<id>.json`, which is gitignored because records can contain personal information.

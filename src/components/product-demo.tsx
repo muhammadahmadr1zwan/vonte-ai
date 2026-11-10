@@ -105,7 +105,7 @@ export function ProductDemo() {
 
         <div className="mt-8 grid items-start gap-6 lg:grid-cols-12">
           <div className="lg:col-span-4">
-          <div className="flex flex-col gap-2" role="tablist" aria-label="Demo scenarios" aria-orientation="vertical" onKeyDown={(event) => navigateTabs(event, active, scenarios.length, select)}>
+          <div className="demo-scenarios flex flex-col gap-2" role="tablist" aria-label="Demo scenarios" aria-orientation="vertical" onKeyDown={(event) => navigateTabs(event, active, scenarios.length, select)}>
             {scenarios.map((item, index) => {
               const selected = index === active
               return (
@@ -118,7 +118,7 @@ export function ProductDemo() {
                   tabIndex={selected ? 0 : -1}
                   aria-controls="demo-panel"
                   onClick={() => select(index)}
-                  className={`border px-4 py-4 text-left ${
+                  className={`demo-scenario border px-4 py-4 text-left ${
                     selected ? "border-accent bg-accent/10 text-foreground" : "border-line text-foreground hover:border-accent"
                   }`}
                 >
@@ -152,7 +152,7 @@ export function ProductDemo() {
               {scenario.messages.slice(0, visible).map((message, index) => (
                 <p
                   key={`${scenario.id}-${index}`}
-                  className={`max-w-md px-3 py-2.5 text-sm leading-6 ${
+                  className={`demo-message max-w-md px-3 py-2.5 text-sm leading-6 ${
                     message.from === "assistant"
                       ? "ml-auto border border-accent/40 bg-accent/10"
                       : "border border-line"

@@ -2,12 +2,12 @@
 export const visualDirections = {
   obsidian: {
     letter: "A", name: "Obsidian & Champagne", mood: "Warm. Editorial. Deliberate.",
-    description: "An asymmetric composition, expressive serif detail and warm champagne actions.",
+    description: "An asymmetric composition, expressive serif detail, an illustrated inquiry and warm champagne actions.",
     colors: { bg: "#0A0A0B", surface: "#121213", raised: "#1C1B1B", text: "#F2EEE6", muted: "#BEB8AF", subtle: "#A7A198", accent: "#BEA47B", line: "#36332F", control: "#79736B", button: "#BEA47B", "button-ink": "#0A0A0B" },
   },
   graphite: {
     letter: "B", name: "Graphite & Silver", mood: "Precise. Quiet. Enduring.",
-    description: "A centered typographic statement, a horizontal inquiry rail and almost no decorative color.",
+    description: "A centered typographic statement, an illustrated inquiry and almost no decorative color.",
     colors: { bg: "#101114", surface: "#16181C", raised: "#1D2026", text: "#F5F5F5", muted: "#B7BBC4", subtle: "#A0A6B1", accent: "#969DA8", line: "#343840", control: "#777E89", button: "#F5F5F5", "button-ink": "#101114" },
   },
   ice: {

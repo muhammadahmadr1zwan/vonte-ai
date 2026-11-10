@@ -35,8 +35,8 @@ function ServiceCards() {
     <section id="solutions" className="services-section">
       <Container>
         <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-end lg:gap-20">
-          <div><p className="section-label">Three services. Built around your business.</p>
-          <h2 className="display services-heading mt-5">The work between an inquiry and an appointment.</h2></div>
+          <div><p className="section-label">The VONTE offering / 01—03</p>
+          <h2 className="display services-heading mt-5">A better first response.<span className="serif-em mt-2 block text-accent">Wherever inquiries begin.</span></h2></div>
           <p className="services-intro">An unanswered call. A lead waiting for a reply. A visitor with a question. Start with the gap your team needs to close.</p>
         </div>
         <div className="service-list">
@@ -45,7 +45,7 @@ function ServiceCards() {
             return (
               <article key={id} className="service-row">
                 <div><p className="service-number">0{index + 1}</p><h3 className="service-name">{pkg.name}</h3><p className="service-audience">{audience}</p></div>
-                <div><p className="text-sm leading-7 text-muted-foreground">{problem}</p>
+                <div><p className="service-problem text-sm leading-7 text-muted-foreground">{problem}</p>
                   <ul className="service-scope">{features.map(feature => <li key={feature}>{pkg.included[feature]}</li>)}</ul>
                 </div>
                 <div className="service-commercial">
