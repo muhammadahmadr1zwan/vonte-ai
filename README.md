@@ -30,7 +30,9 @@ The lab and query-based palette overrides are available only in development;
 the lab returns 404 in production. Palette values and the default are centralized
 in `src/lib/visual-directions.ts`. See [the design review](docs/MINIMAL-DESIGN.md)
 for switching instructions, screenshots, verification and remaining limitations.
-This redesign has not been pushed or deployed.
+The selected design is live at [vonte-ai.netlify.app](https://vonte-ai.netlify.app).
+Production application source is commit `5b54b7a`; deployment and verification
+details are recorded in [Netlify operations](docs/NETLIFY-DEPLOYMENT.md).
 
 The latest [editorial refinement](docs/EDITORIAL-REFINEMENT.md) records the changes
 made after reviewing the supplied UI/UX discussion, with before/after captures
