@@ -5,6 +5,8 @@ import { JsonLd } from "@/components/json-ld"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { siteConfig } from "@/lib/site"
+import { DEFAULT_DIRECTION, directionVariables } from "@/lib/visual-directions"
+import { DesignPreview } from "@/components/design-preview"
 
 import "./globals.css"
 
@@ -53,12 +55,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      data-theme={DEFAULT_DIRECTION}
+      style={directionVariables(DEFAULT_DIRECTION)}
       className={`${instrument.variable} ${instrumentSerif.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">
+        {process.env.NODE_ENV === "development" ? <DesignPreview /> : null}
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[70] focus:bg-gold focus:px-4 focus:py-2 focus:text-navy"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[70] focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
         >
           Skip to content
         </a>

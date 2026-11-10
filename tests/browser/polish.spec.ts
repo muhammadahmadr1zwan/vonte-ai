@@ -5,7 +5,7 @@ for (const width of [320, 1440]) {
   test(`short homepage retains service and package journeys at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 })
     await page.goto("/")
-    await expect(page.locator("h1")).toHaveText("Turn missed inquiries into booked opportunities.")
+    await expect(page.locator("h1")).toHaveText("Every Opportunity. Answered.")
     const cards = page.locator("#solutions article")
     await expect(cards).toHaveCount(3)
     for (let i = 0; i < 3; i++) {

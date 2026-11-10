@@ -22,6 +22,16 @@ The dev server runs at [http://127.0.0.1:3847](http://127.0.0.1:3847).
 - `npm run build` — production build
 - `npm run start` — production server on port 3847
 
+## Local design review
+
+Run `npm run dev` and open `http://127.0.0.1:3847/design-lab` to compare the four
+rendered directions on desktop and mobile. Graphite & Silver is the local default.
+The lab and query-based palette overrides are available only in development;
+the lab returns 404 in production. Palette values and the default are centralized
+in `src/lib/visual-directions.ts`. See [the design review](docs/MINIMAL-DESIGN.md)
+for switching instructions, screenshots, verification and remaining limitations.
+This redesign has not been pushed or deployed.
+
 ## Consultation requests
 
 The contact form validates in the browser and again on the server. On Netlify, `INQUIRY_STORAGE=netlify-blobs` stores each inquiry as a private JSON document in Netlify Blobs. Production uses `vonte-inquiries-production`; preview deploys use `vonte-inquiries-preview`. The store namespace is fixed at build time from the Netlify deploy context. Locally, the default remains `data/inquiries/<id>.json`, which is gitignored because records can contain personal information.

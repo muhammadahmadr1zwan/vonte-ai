@@ -17,12 +17,12 @@ import { siteConfig } from "@/lib/site"
 import { cn } from "cn"
 
 const fieldClass =
-  "h-12 rounded-[2px] border-navy/15 bg-paper px-3 text-base text-ink md:text-base"
+  "h-12 rounded-[2px] border border-control bg-background px-3 text-base text-foreground aria-invalid:border-destructive md:text-base"
 
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null
   return (
-    <p id={id} className="mt-1.5 text-sm text-[#9f2d2d]">
+    <p id={id} className="mt-1.5 text-sm text-destructive">
       {message}
     </p>
   )
@@ -86,22 +86,22 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
 
   if (state.status === "success" || state.status === "saved-notify-failed") {
     return (
-      <div className="border border-navy/10 bg-paper p-6 sm:p-8">
-        <p className="text-[0.72rem] font-semibold tracking-[0.18em] text-gold-ink uppercase">
+      <div className="border border-line bg-surface p-6 sm:p-8">
+        <p className="text-[0.72rem] font-semibold tracking-[0.18em] text-accent uppercase">
           {state.status === "success" ? "Request received" : "Request saved"}
         </p>
         <h2
           ref={successRef}
           tabIndex={-1}
-          className="mt-3 font-heading text-3xl font-semibold tracking-[-0.03em] text-navy outline-none"
+          className="mt-3 font-heading text-3xl font-semibold tracking-[-0.03em] text-foreground outline-none"
         >
           {state.status === "success"
             ? "We'll follow up from here."
             : "Keep this reference."}
         </h2>
-        <p className="mt-4 text-base leading-7 text-quiet">{state.message}</p>
+        <p className="mt-4 text-base leading-7 text-muted-foreground">{state.message}</p>
         {state.reference ? (
-          <p className="mt-6 bg-ivory px-4 py-3 font-heading text-lg text-navy">
+          <p className="mt-6 bg-background px-4 py-3 font-heading text-lg text-foreground">
             Reference {state.reference}
           </p>
         ) : null}
@@ -116,7 +116,7 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
       onReset={(event) => event.preventDefault()}
       aria-busy={pending}
 
-      className="relative border border-navy/10 bg-paper p-6 sm:p-8"
+      className="relative border border-line bg-surface p-6 sm:p-8"
       onSubmit={(event) => {
         if (pending || submittingRef.current) { event.preventDefault(); return }
         const parsed = parseInquiry(new FormData(event.currentTarget))
@@ -203,7 +203,7 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
             required
             aria-invalid={Boolean(errors.industry)}
             aria-describedby={errors.industry ? "industry-error" : undefined}
-            className={cn(fieldClass, "mt-2 w-full bg-white")}
+            className={cn(fieldClass, "mt-2 w-full bg-surface")}
           >
             <option value="" disabled>
               Select an industry
@@ -239,7 +239,7 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
             value={values.packageId} onChange={handleChange}
             aria-invalid={Boolean(errors.packageId)}
             aria-describedby={errors.packageId ? "packageId-error" : undefined}
-            className={cn(fieldClass, "mt-2 w-full bg-white")}
+            className={cn(fieldClass, "mt-2 w-full bg-surface")}
           >
             <option value="unsure">Not sure yet</option>
             {packages.map((item) => (
@@ -250,7 +250,7 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
           </select>
           <FieldError id="packageId-error" message={errors.packageId} />
           {chosen ? (
-            <p className="mt-2 text-sm text-quiet">
+            <p className="mt-2 text-sm text-muted-foreground">
               {formatMoney(chosen.setup)} setup + {formatMoney(chosen.monthly)}/month. Your consultation will cover this package.
             </p>
           ) : null}
@@ -265,21 +265,21 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
             rows={5}
             aria-invalid={Boolean(errors.challenge)}
             aria-describedby={errors.challenge ? "challenge-error" : undefined}
-            className="mt-2 min-h-32 rounded-[2px] border-navy/15 bg-paper px-3 py-3 text-base text-ink"
+            className="mt-2 min-h-32 rounded-[2px] border-control bg-background px-3 py-3 text-base text-foreground"
           />
           <FieldError id="challenge-error" message={errors.challenge} />
         </div>
         <fieldset className="sm:col-span-2">
-          <legend className="text-sm font-medium text-ink">Preferred contact method</legend>
+          <legend className="text-sm font-medium text-foreground">Preferred contact method</legend>
           <div className="mt-3 flex flex-wrap gap-4">
             {contactMethods.map((method) => (
-              <label key={method.id} className="inline-flex min-h-11 items-center gap-2 text-sm text-ink">
+              <label key={method.id} className="inline-flex min-h-11 items-center gap-2 text-sm text-foreground">
                 <input
                   type="radio"
                   name="contactMethod"
                   value={method.id}
                   checked={values.contactMethod === method.id} onChange={handleChange}
-                  className="size-4 accent-[#091629]"
+                  className="size-4 accent-primary"
                 />
                 {method.label}
               </label>
@@ -288,7 +288,7 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
           <FieldError id="contactMethod-error" message={errors.contactMethod} />
         </fieldset>
         <div className="sm:col-span-2">
-          <label className="flex items-start gap-3 text-sm leading-6 text-ink">
+          <label className="flex items-start gap-3 text-sm leading-6 text-foreground">
             <input
               type="checkbox"
               id="consent"
@@ -298,7 +298,7 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
               required
               aria-invalid={Boolean(errors.consent)}
               aria-describedby={errors.consent ? "consent-error" : "consent-note"}
-              className="mt-1 size-4 accent-[#091629]"
+              className="mt-1 size-4 accent-primary"
             />
             <span id="consent-note">
               I agree to be contacted about this inquiry. Submitting this form
@@ -317,7 +317,7 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
       <input ref={startedRef} type="hidden" name="formStarted" defaultValue="" />
 
       {(Object.values(clientErrors).some(Boolean) || (!edited && state.status === "error" && state.message)) ? (
-        <p role="alert" className="mt-5 text-sm text-[#9f2d2d]">
+        <p role="alert" className="mt-5 text-sm text-destructive">
           {Object.values(clientErrors).some(Boolean) ? "Check the highlighted fields and send the request again." : state.message}
         </p>
       ) : null}
@@ -331,7 +331,7 @@ export function ContactForm({ initialPackage, onPackageChange, submissionId }: {
       >
         {pending ? "Sending request…" : "Request a consultation"}
       </Button>
-      <p className="mt-4 text-xs leading-5 text-quiet">
+      <p className="mt-4 text-xs leading-5 text-muted-foreground">
         We use your details to respond to this inquiry and keep a private record of your request. We do not sell these details.
         {siteConfig.schedulingUrl
           ? " A scheduling link is also available if you would rather pick a time directly."
@@ -345,26 +345,26 @@ export function ContactAside({ initialPackage }: { initialPackage?: string }) {
   return (
     <aside className="space-y-6">
       <PackageSummary packageId={initialPackage} className="hidden lg:block" />
-      <div className="bg-navy p-6 text-ivory">
-        <p className="text-[0.72rem] font-semibold tracking-[0.18em] text-gold uppercase">
+      <div className="bg-background p-6 text-foreground">
+        <p className="text-[0.72rem] font-semibold tracking-[0.18em] text-accent uppercase">
           What happens next
         </p>
         <ol className="mt-5 space-y-5">
           {expectations.map((item, index) => (
             <li key={item.title}>
               <p className="font-heading text-lg font-semibold">
-                <span className="mr-2 text-gold">0{index + 1}</span>
+                <span className="mr-2 text-accent">0{index + 1}</span>
                 {item.title}
               </p>
-              <p className="mt-1 text-sm leading-6 text-silver">{item.body}</p>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">{item.body}</p>
             </li>
           ))}
         </ol>
       </div>
       {siteConfig.schedulingUrl ? (
-        <p className="text-sm leading-6 text-quiet">
+        <p className="text-sm leading-6 text-muted-foreground">
           Prefer to choose a time now?{" "}
-          <a className="font-semibold text-gold-ink underline-offset-4 hover:underline" href={siteConfig.schedulingUrl}>
+          <a className="font-semibold text-accent underline-offset-4 hover:underline" href={siteConfig.schedulingUrl}>
             Open the scheduling page
           </a>
           . That link is separate from this form.
@@ -377,9 +377,9 @@ export function ContactAside({ initialPackage }: { initialPackage?: string }) {
 function PackageSummary({ packageId, className }: { packageId?: string; className?: string }) {
   const chosen = getPackage(packageId)
   if (!chosen) return null
-  return <div className={cn("border border-navy/15 border-t-gold bg-paper p-5", className)} data-package-summary>
-    <p className="text-xs tracking-[0.15em] text-gold-ink uppercase">Selected package</p>
-    <p className="mt-2 font-heading text-2xl tracking-[-0.03em] text-navy">{chosen.name}</p>
-    <p className="mt-2 text-sm leading-6 text-quiet">{formatMoney(chosen.setup)} setup · {formatMoney(chosen.monthly)} per month</p>
+  return <div className={cn("border border-line border-t-accent bg-surface p-5", className)} data-package-summary>
+    <p className="text-xs tracking-[0.15em] text-accent uppercase">Selected package</p>
+    <p className="mt-2 font-heading text-2xl tracking-[-0.03em] text-foreground">{chosen.name}</p>
+    <p className="mt-2 text-sm leading-6 text-muted-foreground">{formatMoney(chosen.setup)} setup · {formatMoney(chosen.monthly)} per month</p>
   </div>
 }

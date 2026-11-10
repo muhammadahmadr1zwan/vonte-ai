@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { Container } from "@/components/container"
 import { CtaLink } from "@/components/cta-link"
@@ -7,26 +6,23 @@ import { strategyCallHref } from "@/lib/site"
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-navy text-ivory">
-      <div className="hero-grid pointer-events-none absolute inset-0" />
-      <Container className="relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-12 lg:gap-10">
-        <div className="rise lg:col-span-7">
-          <p className="flex items-center gap-3 text-[0.65rem] font-medium tracking-[0.2em] text-gold uppercase sm:text-xs">
-            <span className="h-px w-6 shrink-0 bg-gold" aria-hidden="true" />Intelligence in motion
-          </p>
-          <h1 className="display hero-title mt-7 text-ivory">
-            Turn missed inquiries{" "}<span className="serif-em mt-2 block text-gold">into booked opportunities.</span>
+    <section className="hero-shell">
+      <Container className="hero-layout">
+        <div className="hero-copy rise">
+          <p className="hero-eyebrow section-label">Intelligence in motion</p>
+          <h1 className="hero-title text-foreground">
+            <span>Every Opportunity.</span>{" "}<span className="hero-answered">Answered.</span>
           </h1>
-          <p className="mt-7 max-w-lg text-base leading-7 text-silver sm:text-lg sm:leading-8">
-            VONTE helps service businesses answer calls, follow up with leads, and guide website visitors toward the next step.
+          <p className="hero-support">
+            AI-powered calls, lead follow-up, and websites that help businesses capture more opportunities.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="hero-actions">
             <CtaLink href={strategyCallHref()} primary>Book a Strategy Call <ArrowUpRight aria-hidden="true" /></CtaLink>
-            <Link href="/how-it-works" className="inline-flex min-h-12 items-center justify-center gap-2 px-2 text-sm text-silver underline decoration-white/30 underline-offset-4 transition-colors hover:text-ivory">See How It Works <ArrowRight className="size-4" aria-hidden="true" /></Link>
+            <CtaLink href="/#system" variant="inverse">Explore VONTE <ArrowRight aria-hidden="true" /></CtaLink>
           </div>
-          <p className="mt-6 max-w-lg text-sm leading-6 text-mist">For home services, dental, legal, med spas, and other appointment-based businesses.</p>
+          <p className="hero-audience">For home services, dental, legal, med spas, and other appointment-based businesses.</p>
         </div>
-        <div className="rise min-w-0 lg:col-span-5" style={{animationDelay:"100ms"}}><OperationsStage /></div>
+        <div className="hero-visual"><OperationsStage /></div>
       </Container>
     </section>
   )

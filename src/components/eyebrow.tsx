@@ -2,7 +2,6 @@ import { cn } from "cn"
 
 export function Eyebrow({
   children,
-  on = "dark",
   className,
 }: {
   children: React.ReactNode
@@ -13,11 +12,11 @@ export function Eyebrow({
     <p
       className={cn(
         "flex items-center gap-3 text-[0.72rem] font-semibold tracking-[0.22em] uppercase",
-        on === "dark" ? "text-gold" : "text-gold-ink",
+        "text-subtle",
         className,
       )}
     >
-      <span className="h-px w-8 bg-gold" aria-hidden="true" />
+      <span className="h-px w-8 bg-accent" aria-hidden="true" />
       {children}
     </p>
   )

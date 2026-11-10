@@ -38,11 +38,11 @@ export default function ContactPage({
         title="Tell us what your business needs."
         lede="Tell us where inquiries stall. We’ll review your business and the package you’re considering, then follow up to discuss the fit. This request does not reserve a meeting."
       />
-      <section className="bg-ivory py-16 sm:py-20">
+      <section className="bg-background py-16 sm:py-20">
         <Container>
           <Suspense
             fallback={
-              <p className="text-quiet" role="status">
+              <p className="text-muted-foreground" role="status">
                 Loading the consultation form…
               </p>
             }

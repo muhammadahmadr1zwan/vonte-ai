@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og"
+import { defaultPalette } from "@/lib/visual-directions"
 
 export const alt = "VONTE — AI automation for calls, leads, and websites"
 export const size = { width: 1200, height: 630 }
@@ -14,15 +15,15 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#091629",
+          background: defaultPalette.bg,
           padding: "72px",
-          color: "#F5F3ED",
+          color: defaultPalette.text,
         }}
       >
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
-              color: "#CCA629",
+              color: defaultPalette.accent,
               fontSize: 18,
               letterSpacing: 6,
               textTransform: "uppercase",
@@ -45,7 +46,7 @@ export default function OpenGraphImage() {
               marginTop: 22,
               width: 88,
               height: 4,
-              background: "#CCA629",
+              background: defaultPalette.accent,
             }}
           />
         </div>

@@ -101,20 +101,20 @@ export function SiteHeader() {
   }, [])
 
   return (
-    <header className="site-header sticky top-0 z-40 border-b border-white/10 bg-navy/95 text-ivory backdrop-blur-md">
+    <header className="site-header sticky top-0 z-40 border-b border-line bg-background/95 text-foreground backdrop-blur-md">
       <Container className="flex h-20 items-center justify-between gap-3">
-        <Link href="/" className="shrink-0 text-ivory" aria-label="VONTE home"><Wordmark /></Link>
+        <Link href="/" className="shrink-0 text-foreground" aria-label="VONTE home"><Wordmark /></Link>
         <nav className="hidden items-center gap-5 lg:flex xl:gap-7" aria-label="Primary">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} onClick={closeMenu} aria-current={currentItem(item.href)}
-              className={cn("whitespace-nowrap py-3 text-xs tracking-[0.04em] text-silver transition-colors hover:text-gold", currentItem(item.href) && "text-gold")}>
+              className={cn("whitespace-nowrap py-3 text-xs tracking-[0.04em] text-muted-foreground transition-colors hover:text-accent", currentItem(item.href) && "text-accent")}>
               {item.label}
             </Link>
           ))}
         </nav>
         <div className={cn("hidden focus-within:visible lg:block", !headerCtaVisible && "invisible")}><CtaLink href={callHref}>Book a Strategy Call <ArrowUpRight aria-hidden="true" /></CtaLink></div>
         <div className="flex items-center gap-2 lg:hidden">
-          <button ref={triggerRef} type="button" className="inline-flex size-11 items-center justify-center border border-white/20"
+          <button ref={triggerRef} type="button" className="inline-flex size-11 items-center justify-center border border-line"
             aria-haspopup="dialog" aria-controls={menuId} aria-expanded={menuOpen}
             onClick={openMenu}>
             <Menu aria-hidden="true" className="size-5" /><span className="sr-only">Open menu</span>
@@ -132,22 +132,22 @@ export function SiteHeader() {
         <div className="flex min-h-full flex-col">
           <div className="flex h-20 shrink-0 items-center justify-between px-5">
             <Wordmark />
-            <button type="button" className="inline-flex size-11 items-center justify-center border border-white/20" onClick={closeMenu}>
+            <button type="button" className="inline-flex size-11 items-center justify-center border border-line" onClick={closeMenu}>
               <X aria-hidden="true" className="size-5" /><span className="sr-only">Close menu</span>
             </button>
           </div>
-          <p className="px-5 pt-5 text-xs tracking-[0.2em] text-gold uppercase">Explore VONTE</p>
+          <p className="px-5 pt-5 text-xs tracking-[0.2em] text-accent uppercase">Explore VONTE</p>
           <nav className="flex flex-1 flex-col px-5 pt-4" aria-label="Mobile">
             {navItems.map((item, index) => (
               <Link key={item.href} href={item.href} onClick={closeMenu} aria-current={currentItem(item.href)}
-                className={cn("flex items-center justify-between gap-4 border-b border-white/15 py-4 font-heading text-2xl tracking-[-0.03em]", currentItem(item.href) && "text-gold")}>
-                {item.label}<span aria-hidden="true" className="font-sans text-xs tracking-widest text-gold">0{index + 1}</span>
+                className={cn("flex items-center justify-between gap-4 border-b border-line py-4 font-heading text-2xl tracking-[-0.03em]", currentItem(item.href) && "text-accent")}>
+                {item.label}<span aria-hidden="true" className="font-sans text-xs tracking-widest text-accent">0{index + 1}</span>
               </Link>
             ))}
           </nav>
           <div className="px-5 pt-6 pb-8" onClick={closeMenu}>
             <CtaLink href={callHref} className="w-full">Book a Strategy Call <ArrowUpRight aria-hidden="true" /></CtaLink>
-            <p className="mt-5 text-sm text-mist">Intelligence in motion.</p>
+            <p className="mt-5 text-sm text-subtle">Intelligence in motion.</p>
           </div>
         </div>
       </dialog>

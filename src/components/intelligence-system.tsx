@@ -66,14 +66,14 @@ export function IntelligenceSystem({ compact = false }: { compact?: boolean }) {
   }
 
   return (
-    <section id="system" className="bg-navy py-16 text-ivory sm:py-20">
+    <section id="system" className="bg-background py-16 text-foreground sm:py-20">
       <Container>
         <div className="grid gap-5 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <p className="text-xs tracking-[0.18em] text-gold uppercase">One connected system</p>
-            <h2 className="display mt-5 text-4xl sm:text-5xl">From the first inquiry<span className="serif-em mt-2 block text-gold">to an informed team.</span></h2>
+            <p className="text-xs tracking-[0.18em] text-accent uppercase">One connected system</p>
+            <h2 className="display mt-5 text-4xl sm:text-5xl">From the first inquiry<span className="serif-em mt-2 block text-accent">to an informed team.</span></h2>
           </div>
-          <p className="max-w-sm text-sm leading-6 text-silver lg:col-span-4 lg:col-start-9">Five stages. Select one to see how it helps a customer request move forward.</p>
+          <p className="max-w-sm text-sm leading-6 text-muted-foreground lg:col-span-4 lg:col-start-9">Five stages. Select one to see how it helps a customer request move forward.</p>
         </div>
         <p id="system-instructions" className="sr-only">Use the arrow keys or Home and End to explore the stages. Press Tab to enter the selected explanation.</p>
         <div className="workflow-steps mt-8" role="group" aria-label="System stages" aria-describedby="system-instructions" onKeyDown={handleKeys}>
@@ -88,9 +88,9 @@ export function IntelligenceSystem({ compact = false }: { compact?: boolean }) {
                   className={`workflow-step ${selected ? "is-selected" : ""}`}>
                   <span className="workflow-node" aria-hidden="true">{index < active ? <Check className="size-4" /> : <Icon className="size-4" />}</span>
                   <span className="min-w-0">
-                    <span className="text-[0.65rem] tracking-wider text-gold" aria-hidden="true">0{index + 1}</span>
+                    <span className="text-[0.65rem] tracking-wider text-accent" aria-hidden="true">0{index + 1}</span>
                     <span className="mt-1 block text-sm font-medium leading-5">{item.title}</span>
-                    {!compact ? <span className="mt-1 block text-xs leading-5 text-mist">{item.short}</span> : null}
+                    {!compact ? <span className="mt-1 block text-xs leading-5 text-subtle">{item.short}</span> : null}
                   </span>
                   <ArrowRight className="workflow-arrow size-3.5" aria-hidden="true" />
                 </button>
@@ -100,8 +100,8 @@ export function IntelligenceSystem({ compact = false }: { compact?: boolean }) {
           })}
         </div>
         <div className="mt-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-          <p className="max-w-lg text-xs leading-5 text-mist">Illustrative workflow. No live customer data, calls, messages, or bookings are created.</p>
-          {compact ? <Link href="/how-it-works#system" className="inline-flex min-h-11 items-center text-sm text-silver underline decoration-gold underline-offset-4 hover:text-ivory">Explore the full workflow →</Link> : null}
+          <p className="max-w-lg text-xs leading-5 text-subtle">Illustrative workflow. No live customer data, calls, messages, or bookings are created.</p>
+          {compact ? <Link href="/how-it-works#system" className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline decoration-accent underline-offset-4 hover:text-foreground">Explore the full workflow →</Link> : null}
         </div>
       </Container>
     </section>
@@ -110,27 +110,27 @@ export function IntelligenceSystem({ compact = false }: { compact?: boolean }) {
 
 function StagePanel({ active, compact, onNext }: { active: number; compact: boolean; onNext: () => void }) {
   const stage = stages[active]
-  const nextButton = <button type="button" onClick={onNext} className="inline-flex min-h-11 shrink-0 items-center gap-2 text-sm text-gold underline-offset-4 hover:underline">{active === stages.length - 1 ? "Back to the beginning" : "Next stage"}<ArrowRight className="size-4" aria-hidden="true" /></button>
+  const nextButton = <button type="button" onClick={onNext} className="inline-flex min-h-11 shrink-0 items-center gap-2 text-sm text-accent underline-offset-4 hover:underline">{active === stages.length - 1 ? "Back to the beginning" : "Next stage"}<ArrowRight className="size-4" aria-hidden="true" /></button>
 
   return (
     <div id="stage-panel" role="region" tabIndex={0} aria-labelledby={`stage-tab-${stage.id}`}
-      className={`workflow-panel border border-white/15 bg-slate ${compact ? "p-5 sm:p-6" : "grid overflow-hidden lg:grid-cols-2"}`}>
+      className={`workflow-panel border border-line bg-raised ${compact ? "p-5 sm:p-6" : "grid overflow-hidden lg:grid-cols-2"}`}>
       {compact ? (
         <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center sm:gap-8">
-          <div><h3 className="font-heading text-lg tracking-[-0.02em]">{stage.title}</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-silver">{stage.body}</p></div>
+          <div><h3 className="font-heading text-lg tracking-[-0.02em]">{stage.title}</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{stage.body}</p></div>
           {nextButton}
         </div>
       ) : (
         <>
-          <div className="border-b border-white/10 p-5 sm:p-8 lg:border-r lg:border-b-0">
-            <div className="mb-5 flex items-center justify-between gap-3 text-[0.65rem] tracking-wider uppercase"><span className="text-silver">VONTE / Workflow preview</span><span className="text-gold">Illustrative</span></div>
+          <div className="border-b border-line p-5 sm:p-8 lg:border-r lg:border-b-0">
+            <div className="mb-5 flex items-center justify-between gap-3 text-[0.65rem] tracking-wider uppercase"><span className="text-muted-foreground">VONTE / Workflow preview</span><span className="text-accent">Illustrative</span></div>
             <WorkflowPreview active={active} />
           </div>
           <div className="flex flex-col p-5 sm:p-8">
-            <p className="text-xs text-gold">Stage 0{active + 1} / 0{stages.length}</p>
+            <p className="text-xs text-accent">Stage 0{active + 1} / 0{stages.length}</p>
             <h3 className="mt-4 font-heading text-3xl tracking-[-0.035em]">{stage.title}</h3>
-            <p className="mt-4 text-base leading-7 text-ivory">{stage.body}</p>
-            <p className="mt-4 text-sm leading-6 text-silver">{stage.detail}</p>
+            <p className="mt-4 text-base leading-7 text-foreground">{stage.body}</p>
+            <p className="mt-4 text-sm leading-6 text-muted-foreground">{stage.detail}</p>
             <div className="mt-auto flex justify-end pt-5">{nextButton}</div>
           </div>
         </>
@@ -142,23 +142,23 @@ function StagePanel({ active, compact, onNext }: { active: number; compact: bool
 function WorkflowPreview({ active }: { active: number }) {
   if (active <= 1) return (
     <div className="workflow-artifact">
-      <p className="text-sm">Home services inquiry</p><p className="mt-1 text-xs text-mist">Sample conversation</p>
-      <p className="mt-6 text-xs text-mist">Customer</p>
+      <p className="text-sm">Home services inquiry</p><p className="mt-1 text-xs text-subtle">Sample conversation</p>
+      <p className="mt-6 text-xs text-subtle">Customer</p>
       <p className="mt-2 font-heading text-2xl leading-tight tracking-[-0.03em]">“Can someone come tomorrow? The upstairs unit stopped cooling.”</p>
-      {active === 1 ? <div className="mt-5 border-l-2 border-gold bg-gold/[0.06] p-4"><p className="text-xs text-gold">AI assistant · Scripted reply</p><p className="mt-2 text-sm leading-6">I can help request a visit. Is anyone unsafe without cooling right now?</p></div> : <p className="mt-6 text-xs text-gold">Ready for a response.</p>}
+      {active === 1 ? <div className="mt-5 border-l-2 border-accent bg-accent/[0.06] p-4"><p className="text-xs text-accent">AI assistant · Scripted reply</p><p className="mt-2 text-sm leading-6">I can help request a visit. Is anyone unsafe without cooling right now?</p></div> : <p className="mt-6 text-xs text-accent">Ready for a response.</p>}
     </div>
   )
   if (active === 3) return (
     <div className="workflow-artifact">
-      <p className="text-xs text-mist">Appointment request</p>
-      <div className="mt-5 flex gap-4 border border-gold/30 bg-gold/[0.04] p-4"><CalendarDays className="mt-1 size-6 shrink-0 text-gold" aria-hidden="true" /><div><p className="font-heading text-2xl">Tomorrow</p><p className="mt-2 text-sm text-silver">Afternoon window</p><p className="mt-4 text-xs text-gold">Requested · Awaiting confirmation</p></div></div>
-      <p className="mt-5 text-sm leading-6 text-silver">Cooling repair. The team reviews availability before confirming a visit.</p><p className="mt-5 text-xs text-mist">Illustration only. No appointment is booked.</p>
+      <p className="text-xs text-subtle">Appointment request</p>
+      <div className="mt-5 flex gap-4 border border-accent/30 bg-accent/[0.04] p-4"><CalendarDays className="mt-1 size-6 shrink-0 text-accent" aria-hidden="true" /><div><p className="font-heading text-2xl">Tomorrow</p><p className="mt-2 text-sm text-muted-foreground">Afternoon window</p><p className="mt-4 text-xs text-accent">Requested · Awaiting confirmation</p></div></div>
+      <p className="mt-5 text-sm leading-6 text-muted-foreground">Cooling repair. The team reviews availability before confirming a visit.</p><p className="mt-5 text-xs text-subtle">Illustration only. No appointment is booked.</p>
     </div>
   )
   return (
     <div className="workflow-artifact">
-      <p className="border-b border-white/10 pb-4 text-sm">{active === 2 ? "Lead details" : "Team summary"}</p>
-      <dl className="mt-2">{[["Service needed", "Cooling repair"], ["Urgency", "Routine · No immediate danger"], ["Preferred window", "Tomorrow afternoon"], ["Next action", active === 2 ? "Continue the conversation" : "Review request and confirm availability"]].map(([label, value]) => <div key={label} className="grid grid-cols-[0.8fr_1.2fr] gap-4 border-b border-white/10 py-3 last:border-0"><dt className="text-xs leading-5 text-mist">{label}</dt><dd className="text-sm leading-5 text-ivory">{value}</dd></div>)}</dl>
+      <p className="border-b border-line pb-4 text-sm">{active === 2 ? "Lead details" : "Team summary"}</p>
+      <dl className="mt-2">{[["Service needed", "Cooling repair"], ["Urgency", "Routine · No immediate danger"], ["Preferred window", "Tomorrow afternoon"], ["Next action", active === 2 ? "Continue the conversation" : "Review request and confirm availability"]].map(([label, value]) => <div key={label} className="grid grid-cols-[0.8fr_1.2fr] gap-4 border-b border-line py-3 last:border-0"><dt className="text-xs leading-5 text-subtle">{label}</dt><dd className="text-sm leading-5 text-foreground">{value}</dd></div>)}</dl>
     </div>
   )
 }

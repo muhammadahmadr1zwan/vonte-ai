@@ -39,23 +39,23 @@ export default function HowItWorksPage() {
       />
       <Process detailed />
       <IntelligenceSystem />
-      <section className="bg-ivory py-20 sm:py-28">
+      <section className="bg-background py-20 sm:py-28">
         <Container className="grid gap-6 lg:grid-cols-2">
-          <article className="border border-navy/10 bg-paper p-7">
+          <article className="border border-line bg-surface p-7">
             <Eyebrow on="light">What you bring</Eyebrow>
             <ul className="mt-6 space-y-4">
               {brings.map((item) => (
-                <li key={item} className="border-l-2 border-gold pl-4 text-base leading-7 text-ink">
+                <li key={item} className="border-l-2 border-accent pl-4 text-base leading-7 text-foreground">
                   {item}
                 </li>
               ))}
             </ul>
           </article>
-          <article className="bg-navy p-7 text-ivory">
+          <article className="bg-background p-7 text-foreground">
             <Eyebrow>What the consultation confirms</Eyebrow>
             <ul className="mt-6 space-y-4">
               {confirms.map((item) => (
-                <li key={item} className="border-l-2 border-gold pl-4 text-base leading-7 text-silver">
+                <li key={item} className="border-l-2 border-accent pl-4 text-base leading-7 text-muted-foreground">
                   {item}
                 </li>
               ))}
@@ -63,7 +63,7 @@ export default function HowItWorksPage() {
           </article>
         </Container>
         <Container className="mt-8">
-          <p className="max-w-3xl text-sm leading-7 text-quiet">
+          <p className="max-w-3xl text-sm leading-7 text-muted-foreground">
             Launch timing is confirmed with the scope of work. Connections are
             confirmed for the systems in the agreement. Results depend on call
             volume, customer behavior, and how the system is used. Usage follows
