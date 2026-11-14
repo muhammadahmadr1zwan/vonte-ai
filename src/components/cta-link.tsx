@@ -1,43 +1,15 @@
 import Link from "next/link"
+import { buttonVariants } from "@/components/ui/button-variants"
 
-import { Button } from "@/components/ui/button"
-import { cn } from "cn"
-
-const variants = {
-  gold: "gold",
-  inverse: "inverse",
-  navy: "navy",
-  quiet: "quiet",
-} as const
-
-export function CtaLink({
-  href,
-  children,
-  className,
-  variant = "gold",
-}: {
+export function CtaLink({ href, children, className, variant = "gold", primary = false }: {
   href: string
   children: React.ReactNode
   className?: string
-  variant?: keyof typeof variants
+  variant?: "gold" | "inverse" | "navy" | "quiet"
+  primary?: boolean
 }) {
-  const external = href.startsWith("http://") || href.startsWith("https://")
-
-  return (
-    <Button
-      nativeButton={false}
-      variant={variants[variant]}
-      size="cta"
-      className={cn(className)}
-      render={
-        external ? (
-          <a href={href} rel="noreferrer" />
-        ) : (
-          <Link href={href} />
-        )
-      }
-    >
-      {children}
-    </Button>
-  )
+  const classes = buttonVariants({ variant, size: "cta", className })
+  return href.startsWith("http://") || href.startsWith("https://")
+    ? <a href={href} className={classes} data-strategy-cta={primary || undefined}>{children}</a>
+    : <Link href={href} className={classes} data-strategy-cta={primary || undefined}>{children}</Link>
 }

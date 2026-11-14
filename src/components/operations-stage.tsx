@@ -1,109 +1,54 @@
-const beats = [
-  {
-    kicker: "01  Incoming",
-    title: "New service inquiry",
-    body: "A call reaches the dedicated line while the team is occupied.",
-    wave: true,
-  },
-  {
-    kicker: "02  Response",
-    title: "Recognized as a new opportunity",
-    body: "The assistant answers from approved information and asks the next useful question.",
-  },
-  {
-    kicker: "03  Qualified",
-    title: "Lead record prepared",
-    body: "Need, timing, and urgency are captured for a person to review.",
-  },
-] as const
+"use client"
 
+import { useRef } from "react"
+
+import { ArrowDownRight, FileText, PhoneIncoming } from "lucide-react"
+import { SequenceControls, useSequencePlayer } from "@/components/motion-system"
+
+const stages = ["Incoming call", "AI response", "Lead captured", "Appointment requested", "Owner notified"]
+const explanations = [
+  "A caller asks for a repair visit. The inquiry starts here.",
+  "The assistant checks the need and whether a person should take over.",
+  "Service, timing and urgency are organized into a lead record.",
+  "An afternoon window is requested. Your team confirms availability.",
+  "A summary is prepared for the owner to review and follow up.",
+]
+
+/** An original vector and type composition. All business activity is illustrative. */
 export function OperationsStage() {
-  return (
-    <figure className="relative" aria-label="Illustrative call-to-booking sequence">
-      <figcaption className="mb-4 flex items-center justify-between gap-4 text-[0.68rem] font-medium tracking-[0.22em] text-mist uppercase">
-        <span>Call to booking</span>
-        <span className="text-gold">Illustrative demo</span>
-      </figcaption>
-      <div className="relative border border-white/12 bg-[#0c1830] p-4 sm:p-5">
-        <svg
-          className="pointer-events-none absolute top-7 bottom-7 left-[1.35rem] hidden w-3 sm:block"
-          viewBox="0 0 12 100"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path className="signal-track" pathLength={1} d="M6 0 V100" />
-          <path className="signal-flow" pathLength={1} d="M6 0 V100" />
-        </svg>
-        <ol className="relative space-y-3 sm:pl-8">
-          {beats.map((beat, index) => (
-            <li
-              key={beat.kicker}
-              className="ops-card relative border border-white/10 bg-white/[0.03] px-4 py-3.5"
-              style={{ animationDelay: `${160 + index * 180}ms` }}
-            >
-              <span
-                className="absolute top-5 -left-[1.85rem] hidden size-1.5 bg-gold sm:block"
-                aria-hidden="true"
-              />
-              <p className="text-[0.68rem] font-medium tracking-[0.18em] text-gold uppercase">
-                {beat.kicker}
-              </p>
-              <p className="mt-1.5 font-heading text-lg leading-tight tracking-[-0.03em] text-ivory">
-                {beat.title}
-              </p>
-              {"wave" in beat ? <Waveform /> : null}
-              <p className="mt-1.5 text-sm leading-6 text-silver">{beat.body}</p>
-            </li>
-          ))}
-          <li
-            className="ops-card grid gap-3 sm:grid-cols-2"
-            style={{ animationDelay: "700ms" }}
-          >
-            <div className="relative border border-gold/40 bg-gold/10 px-4 py-3.5">
-              <p className="text-[0.68rem] font-medium tracking-[0.18em] text-gold uppercase">
-                04  Booking
-              </p>
-              <p className="mt-1.5 font-heading text-lg leading-tight tracking-[-0.03em]">
-                Window requested
-              </p>
-              <p className="mt-1.5 text-sm leading-6 text-silver">
-                An afternoon opening is prepared. Nothing is written to a calendar here.
-              </p>
-            </div>
-            <div className="relative border border-white/10 px-4 py-3.5">
-              <p className="text-[0.68rem] font-medium tracking-[0.18em] text-mist uppercase">
-                05  Owner
-              </p>
-              <p className="mt-1.5 font-heading text-lg leading-tight tracking-[-0.03em]">
-                Summary ready
-              </p>
-              <p className="mt-1.5 text-sm leading-6 text-silver">
-                The business gets the record. Urgent calls are routed to a person.
-              </p>
-            </div>
-          </li>
-        </ol>
-        <p className="mt-4 text-xs leading-5 text-mist">
-          Scripted product concept. Not a live phone line, and not a customer record.
-        </p>
+  const sceneRef = useRef<HTMLElement>(null)
+  const player = useSequencePlayer(sceneRef, stages.length, { auto: true })
+  return <figure ref={sceneRef} className="inquiry-artboard motion-scene" data-motion-scene data-playing={player.playing} data-stage={player.active}
+    aria-label="Illustrative call-to-booking sequence">
+    <figcaption className="inquiry-artboard-meta">
+      <span>Intelligence in motion</span><span>Scripted example</span>
+    </figcaption>
+    <div className="inquiry-artboard-body">
+      <div className="inquiry-origin">
+        <span className="inquiry-origin-icon"><PhoneIncoming className="size-4" strokeWidth={1.5} aria-hidden="true" /></span>
+        <div><p className="inquiry-label">01 / An incoming call</p><p className="inquiry-origin-detail">Home services</p></div>
+        <span className="sequence-wave" aria-hidden="true">{[7,13,9,16,11,6].map((height,index)=><span key={index} style={{height,animationDelay:`${index*70}ms`}} />)}</span>
       </div>
-    </figure>
-  )
-}
-
-function Waveform() {
-  return (
-    <span className="mt-3 flex h-7 items-end gap-[3px]" aria-hidden="true">
-      {Array.from({ length: 16 }, (_, index) => (
-        <span
-          key={index}
-          className="wave-bar w-[3px] bg-gold/90"
-          style={{
-            height: `${8 + ((index * 13) % 16)}px`,
-            animationDelay: `${index * 0.07}s`,
-          }}
-        />
-      ))}
-    </span>
-  )
+      <blockquote className="inquiry-question">“Can someone<br className="hidden sm:block" /> come tomorrow?”</blockquote>
+      <div className="inquiry-routing" aria-hidden="true">
+        <div><span data-active={player.active===1}>Respond</span><span data-active={player.active===2}>Qualify</span><span data-active={player.active>=3}>Route</span></div>
+        <svg viewBox="0 0 400 80" fill="none" preserveAspectRatio="none">
+          <path key={player.active} pathLength={1} d="M12 12H86C100 12 108 20 108 34V44C108 58 116 66 130 66H270C284 66 292 58 292 44V34C292 20 300 12 314 12H388" className="inquiry-route-path" />
+          <circle cx="12" cy="12" r="3" /><circle cx="200" cy="66" r="3" /><circle cx="388" cy="12" r="3" />
+          <path d="m382 6 6 6-6 6" className="inquiry-route-arrow" />
+        </svg>
+      </div>
+      <div className="inquiry-phase-controls" data-motion-controls role="group" aria-label="Inspect illustrative workflow stages">
+        {stages.map((stage,index)=><button type="button" key={stage} aria-label={`Inspect ${stage}`} aria-pressed={player.active===index} onClick={()=>player.select(index)}>0{index+1}</button>)}
+      </div>
+      <SequenceControls player={player} name="workflow animation" bounded status={<span className="inquiry-stage-summary"><span className="inquiry-stage-title">{player.active+1}/5 · {stages[player.active]}</span><span className="inquiry-stage-detail">{explanations[player.active]}</span></span>} />
+      <div className="inquiry-record">
+        <p className="inquiry-record-title"><FileText className="size-4" strokeWidth={1.5} aria-hidden="true" />The request, organized<ArrowDownRight className="ml-auto size-4" aria-hidden="true" /></p>
+        <dl><div><dt>Service</dt><dd>Cooling repair</dd></div><div><dt>Preferred time</dt><dd>Tomorrow afternoon</dd></div></dl>
+        <p className="inquiry-record-status"><span aria-hidden="true" />Prepared for your team to review</p>
+      </div>
+    </div>
+    <ol className="sr-only" aria-label="Illustrative workflow stages">{stages.map(stage => <li key={stage}>{stage}</li>)}</ol>
+    <p className="inquiry-artboard-note">Scripted example. No call, message, or calendar event is created.</p>
+  </figure>
 }

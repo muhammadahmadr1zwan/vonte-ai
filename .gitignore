@@ -44,3 +44,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Browser test output (may include synthetic inquiry data)
+/test-results/
+/playwright-report/
+
+# Netlify local site link, platform cache and generated functions
+/.netlify/
+
+# Generated for each build; never reuse a previous release's identity.
+/public/build-info.json

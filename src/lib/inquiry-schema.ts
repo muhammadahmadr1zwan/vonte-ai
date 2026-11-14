@@ -28,7 +28,7 @@ export const inquirySchema = z.object({
     .trim()
     .min(2, "Enter your business name.")
     .max(160, "Business name is too long."),
-  email: z.email("Enter a valid business email."),
+  email: z.string().trim().pipe(z.email("Enter a valid business email.")),
   phone: z
     .string()
     .trim()

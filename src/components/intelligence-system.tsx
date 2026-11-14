@@ -1,162 +1,164 @@
 "use client"
 
-import { useState } from "react"
-
+import { useState, type KeyboardEvent } from "react"
+import { ArrowRight, Bell, CalendarDays, Check, FileText, MessageSquare, PhoneIncoming } from "lucide-react"
+import Link from "next/link"
 import { Container } from "@/components/container"
 
 const stages = [
   {
-    id: "inquiry",
-    number: "01",
-    title: "Incoming Inquiry",
-    body: "A call, form, or message enters as a new opportunity instead of waiting on whoever is free.",
-    detail: "The entry can be the dedicated receptionist number, a website request, or a lead that still needs a reply.",
+    id: "inquiry", title: "Incoming Inquiry", icon: PhoneIncoming,
+    short: "A customer reaches out.",
+    body: "A call, form, or message is captured so your team has a request to work with.",
+    detail: "Inquiries can come through the dedicated receptionist number or your website. Follow-up workflows can also reopen approved past-lead conversations.",
   },
   {
-    id: "response",
-    number: "02",
-    title: "Intelligent Response",
-    body: "The system answers from information you approved and asks the next useful question.",
-    detail: "Wording is limited to services, hours, and answers you have signed off. It does not invent offers.",
+    id: "response", title: "Intelligent Response", icon: MessageSquare,
+    short: "Approved answers, promptly.",
+    body: "The assistant answers approved business questions and asks what the customer needs.",
+    detail: "Services, hours, and wording are agreed with you. Questions outside that scope are handed to your team. The assistant does not invent offers.",
   },
   {
-    id: "qualify",
-    number: "03",
-    title: "Lead Qualification",
-    body: "The request is sorted by need, timing, and whether a person should take over.",
-    detail: "Urgent situations are marked for human attention. Routine requests stay in the booking path.",
+    id: "qualify", title: "Lead Qualification", icon: FileText,
+    short: "Need, timing, and urgency.",
+    body: "The request is organized by need, timing, and whether a person should take over.",
+    detail: "Urgency and follow-up rules are set before launch, including consent, opt-outs, and stopping messages on a reply. The assistant does not diagnose or give professional advice.",
   },
   {
-    id: "booking",
-    number: "04",
-    title: "Booking Request",
-    body: "A suitable window can be requested in the calendar that is in scope.",
-    detail: "A connection is confirmed before launch. This diagram does not write to a live calendar.",
+    id: "booking", title: "Booking Request", icon: CalendarDays,
+    short: "A time for the team to review.",
+    body: "A suitable appointment window is requested through the calendar connection agreed in scope.",
+    detail: "Your booking rules decide what can be confirmed and what needs staff review. This illustration does not reserve a time or write to a calendar.",
   },
   {
-    id: "notify",
-    number: "05",
-    title: "Business Notification",
-    body: "The owner receives a summary. Urgent calls are routed for a person to handle.",
-    detail: "Who is notified, and what counts as urgent, is defined with you before anything goes live.",
+    id: "notify", title: "Team Notification", icon: Bell,
+    short: "Context for a human handoff.",
+    body: "Your team receives a summary of the request, preferred timing, and action needed.",
+    detail: "You choose who receives notifications and which urgent situations need a human handoff. VONTE is not a replacement for emergency services.",
   },
 ] as const
 
-export function IntelligenceSystem() {
+export function IntelligenceSystem({ compact = false }: { compact?: boolean }) {
   const [active, setActive] = useState(0)
-  const stage = stages[active]
 
-  function move(next: number) {
-    const count = stages.length
-    const index = (next + count) % count
+  function selectStage(index: number, focus = false) {
     setActive(index)
-    document.getElementById(`stage-tab-${stages[index].id}`)?.focus()
+    requestAnimationFrame(() => {
+      const button = document.getElementById(`stage-tab-${stages[index].id}`)
+      if (focus) button?.focus({ preventScroll: true })
+      if (window.matchMedia("(max-width: 639px)").matches) {
+        button?.scrollIntoView({ block: "start", behavior: "instant" })
+      }
+    })
+  }
+
+  function handleKeys(event: KeyboardEvent<HTMLDivElement>) {
+    if (!(event.target instanceof HTMLElement) || !event.target.matches("[data-workflow-step]")) return
+    const index = Number(event.target.dataset.workflowStep)
+    let next: number
+    if (event.key === "Home") next = 0
+    else if (event.key === "End") next = stages.length - 1
+    else if (["ArrowRight", "ArrowDown"].includes(event.key)) next = (index + 1) % stages.length
+    else if (["ArrowLeft", "ArrowUp"].includes(event.key)) next = (index - 1 + stages.length) % stages.length
+    else return
+    event.preventDefault()
+    selectStage(next, true)
   }
 
   return (
-    <section id="system" className="bg-navy py-20 text-ivory sm:py-28">
+    <section id="system" className="bg-background py-16 text-foreground sm:py-20">
       <Container>
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+        <div className="grid gap-5 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <p className="text-[0.7rem] font-medium tracking-[0.22em] text-gold uppercase">
-              The system
-            </p>
-            <h2 className="display mt-5 text-[2.7rem] sm:text-6xl lg:text-[4.4rem]">
-              One Connected System.
-              <span className="serif-em mt-2 block text-gold">
-                More Opportunities in Motion.
-              </span>
-            </h2>
+            <p className="text-xs tracking-[0.18em] text-accent uppercase">One connected system</p>
+            <h2 className="display mt-5 text-4xl sm:text-5xl">From the first inquiry<span className="serif-em mt-2 block text-accent">to an informed team.</span></h2>
           </div>
-          <p className="max-w-sm text-sm leading-6 text-silver lg:col-span-4 lg:col-start-9">
-            Five stages, one path. Select a stage to see what it is for. Nothing
-            here is live customer activity.
-          </p>
+          <p className="max-w-sm text-sm leading-6 text-muted-foreground lg:col-span-4 lg:col-start-9">Five stages. Select one to see how it helps a customer request move forward.</p>
         </div>
-
-        <div className="mt-14 grid gap-8 lg:grid-cols-12 lg:gap-12">
-          <div
-            className="lg:col-span-5"
-            role="tablist"
-            aria-orientation="vertical"
-            aria-label="System stages"
-            onKeyDown={(event) => {
-              if (event.key === "ArrowDown") {
-                event.preventDefault()
-                move(active + 1)
-              }
-              if (event.key === "ArrowUp") {
-                event.preventDefault()
-                move(active - 1)
-              }
-            }}
-          >
-            <div className="relative border-l border-white/15">
-              {stages.map((item, index) => {
-                const selected = index === active
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    role="tab"
-                    id={`stage-tab-${item.id}`}
-                    aria-selected={selected}
-                    aria-controls="stage-panel"
-                    tabIndex={selected ? 0 : -1}
-                    onClick={() => setActive(index)}
-                    className={`relative block w-full border-b border-white/10 py-4 pr-4 pl-6 text-left transition-colors ${
-                      selected ? "text-ivory" : "text-mist hover:text-ivory"
-                    }`}
-                  >
-                    <span
-                      className={`absolute inset-y-0 -left-px w-px ${
-                        selected ? "bg-gold" : "bg-transparent"
-                      }`}
-                      aria-hidden="true"
-                    />
-                    <span className="text-[0.68rem] tracking-[0.18em] text-gold uppercase">
-                      {item.number}
-                    </span>
-                    <span className="mt-1 block font-heading text-2xl tracking-[-0.03em]">
-                      {item.title}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-
-          <div
-            id="stage-panel"
-            role="tabpanel"
-            aria-labelledby={`stage-tab-${stage.id}`}
-            className="border border-white/10 bg-[#0c1830] p-6 sm:p-8 lg:col-span-7"
-          >
-            <p className="text-[0.68rem] tracking-[0.2em] text-gold uppercase">
-              Stage {stage.number}
-            </p>
-            <h3 className="display mt-4 text-4xl sm:text-5xl">{stage.title}</h3>
-            <p className="mt-5 max-w-lg text-base leading-7 text-silver">{stage.body}</p>
-            <p className="mt-4 max-w-lg text-sm leading-6 text-mist">{stage.detail}</p>
-            <ol className="mt-8 flex flex-wrap gap-2" aria-hidden="true">
-              {stages.map((item, index) => (
-                <li
-                  key={item.id}
-                  className={`px-2.5 py-1 text-[0.68rem] tracking-[0.14em] uppercase ${
-                    index === active
-                      ? "bg-gold text-navy"
-                      : index < active
-                        ? "border border-gold/40 text-gold"
-                        : "border border-white/10 text-mist"
-                  }`}
-                >
-                  {item.number}
-                </li>
-              ))}
-            </ol>
-          </div>
+        <p id="system-instructions" className="sr-only">Use the arrow keys or Home and End to explore the stages. Press Tab to enter the selected explanation.</p>
+        <div className="workflow-steps mt-8" role="group" aria-label="System stages" aria-describedby="system-instructions" onKeyDown={handleKeys}>
+          {stages.map((item, index) => {
+            const selected = active === index
+            const Icon = item.icon
+            return (
+              <div key={item.id} className="workflow-step-group">
+                <button type="button" data-workflow-step={index} id={`stage-tab-${item.id}`} aria-expanded={selected}
+                  aria-controls={selected ? "stage-panel" : undefined} aria-label={item.title}
+                  tabIndex={selected ? 0 : -1} onClick={() => selectStage(index)}
+                  className={`workflow-step ${selected ? "is-selected" : ""}`}>
+                  <span className="workflow-node" aria-hidden="true">{index < active ? <Check className="size-4" /> : <Icon className="size-4" />}</span>
+                  <span className="min-w-0">
+                    <span className="text-[0.65rem] tracking-wider text-accent" aria-hidden="true">0{index + 1}</span>
+                    <span className="mt-1 block text-sm font-medium leading-5">{item.title}</span>
+                    {!compact ? <span className="mt-1 block text-xs leading-5 text-subtle">{item.short}</span> : null}
+                  </span>
+                  <ArrowRight className="workflow-arrow size-3.5" aria-hidden="true" />
+                </button>
+                {selected ? <StagePanel active={active} compact={compact} onNext={() => selectStage((active + 1) % stages.length, true)} /> : null}
+              </div>
+            )
+          })}
+        </div>
+        <div className="mt-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+          <p className="max-w-lg text-xs leading-5 text-subtle">Illustrative workflow. No live customer data, calls, messages, or bookings are created.</p>
+          {compact ? <Link href="/how-it-works#system" className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline decoration-accent underline-offset-4 hover:text-foreground">Explore the full workflow →</Link> : null}
         </div>
       </Container>
     </section>
+  )
+}
+
+function StagePanel({ active, compact, onNext }: { active: number; compact: boolean; onNext: () => void }) {
+  const stage = stages[active]
+  const nextButton = <button type="button" onClick={onNext} className="inline-flex min-h-11 shrink-0 items-center gap-2 text-sm text-accent underline-offset-4 hover:underline">{active === stages.length - 1 ? "Back to the beginning" : "Next stage"}<ArrowRight className="size-4" aria-hidden="true" /></button>
+
+  return (
+    <div id="stage-panel" role="region" tabIndex={0} aria-labelledby={`stage-tab-${stage.id}`}
+      className={`workflow-panel border border-line bg-raised ${compact ? "p-5 sm:p-6" : "grid overflow-hidden lg:grid-cols-2"}`}>
+      {compact ? (
+        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center sm:gap-8">
+          <div><h3 className="font-heading text-lg tracking-[-0.02em]">{stage.title}</h3><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{stage.body}</p></div>
+          {nextButton}
+        </div>
+      ) : (
+        <>
+          <div className="border-b border-line p-5 sm:p-8 lg:border-r lg:border-b-0">
+            <div className="mb-5 flex items-center justify-between gap-3 text-[0.65rem] tracking-wider uppercase"><span className="text-muted-foreground">VONTE / Workflow preview</span><span className="text-accent">Illustrative</span></div>
+            <WorkflowPreview active={active} />
+          </div>
+          <div className="flex flex-col p-5 sm:p-8">
+            <p className="text-xs text-accent">Stage 0{active + 1} / 0{stages.length}</p>
+            <h3 className="mt-4 font-heading text-3xl tracking-[-0.035em]">{stage.title}</h3>
+            <p className="mt-4 text-base leading-7 text-foreground">{stage.body}</p>
+            <p className="mt-4 text-sm leading-6 text-muted-foreground">{stage.detail}</p>
+            <div className="mt-auto flex justify-end pt-5">{nextButton}</div>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+function WorkflowPreview({ active }: { active: number }) {
+  if (active <= 1) return (
+    <div className="workflow-artifact">
+      <p className="text-sm">Home services inquiry</p><p className="mt-1 text-xs text-subtle">Sample conversation</p>
+      <p className="mt-6 text-xs text-subtle">Customer</p>
+      <p className="mt-2 font-heading text-2xl leading-tight tracking-[-0.03em]">“Can someone come tomorrow? The upstairs unit stopped cooling.”</p>
+      {active === 1 ? <div className="mt-5 border-l-2 border-accent bg-accent/[0.06] p-4"><p className="text-xs text-accent">AI assistant · Scripted reply</p><p className="mt-2 text-sm leading-6">I can help request a visit. Is anyone unsafe without cooling right now?</p></div> : <p className="mt-6 text-xs text-accent">Ready for a response.</p>}
+    </div>
+  )
+  if (active === 3) return (
+    <div className="workflow-artifact">
+      <p className="text-xs text-subtle">Appointment request</p>
+      <div className="mt-5 flex gap-4 border border-accent/30 bg-accent/[0.04] p-4"><CalendarDays className="mt-1 size-6 shrink-0 text-accent" aria-hidden="true" /><div><p className="font-heading text-2xl">Tomorrow</p><p className="mt-2 text-sm text-muted-foreground">Afternoon window</p><p className="mt-4 text-xs text-accent">Requested · Awaiting confirmation</p></div></div>
+      <p className="mt-5 text-sm leading-6 text-muted-foreground">Cooling repair. The team reviews availability before confirming a visit.</p><p className="mt-5 text-xs text-subtle">Illustration only. No appointment is booked.</p>
+    </div>
+  )
+  return (
+    <div className="workflow-artifact">
+      <p className="border-b border-line pb-4 text-sm">{active === 2 ? "Lead details" : "Team summary"}</p>
+      <dl className="mt-2">{[["Service needed", "Cooling repair"], ["Urgency", "Routine · No immediate danger"], ["Preferred window", "Tomorrow afternoon"], ["Next action", active === 2 ? "Continue the conversation" : "Review request and confirm availability"]].map(([label, value]) => <div key={label} className="grid grid-cols-[0.8fr_1.2fr] gap-4 border-b border-line py-3 last:border-0"><dt className="text-xs leading-5 text-subtle">{label}</dt><dd className="text-sm leading-5 text-foreground">{value}</dd></div>)}</dl>
+    </div>
   )
 }

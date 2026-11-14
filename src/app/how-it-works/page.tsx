@@ -1,19 +1,18 @@
-import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/page-metadata"
 
 import { Container } from "@/components/container"
 import { CtaBand } from "@/components/cta-band"
 import { Eyebrow } from "@/components/eyebrow"
 import { PageHero } from "@/components/page-hero"
 import { Process } from "@/components/process"
+import { FaqList } from "@/components/faq-list"
+import { IntelligenceSystem } from "@/components/intelligence-system"
 
-export const metadata: Metadata = {
-  title: "How It Works",
-  description:
-    "How a VONTE engagement runs: discover the workflow, design the automation, implement and test it, then refine it after launch.",
-  ...(process.env.NEXT_PUBLIC_SITE_URL
-    ? { alternates: { canonical: "/how-it-works" } }
-    : {}),
-}
+export const metadata = pageMetadata(
+  "How It Works",
+  "Explore the VONTE inquiry workflow and engagement process: discover, design, implement, test, and refine with your team.",
+  "/how-it-works",
+)
 
 const brings = [
   "How calls, forms, and past leads are handled today.",
@@ -35,27 +34,28 @@ export default function HowItWorksPage() {
     <>
       <PageHero
         eyebrow="How it works"
-        title="From the way you work today to a system that can keep up."
+        title="Built around the way you work."
         lede="Four stages, with the decisions made in the open. VONTE learns the workflow, plans the automation, implements supported connections, and reviews what is live."
       />
       <Process detailed />
-      <section className="bg-ivory py-20 sm:py-28">
+      <IntelligenceSystem />
+      <section className="bg-background py-20 sm:py-28">
         <Container className="grid gap-6 lg:grid-cols-2">
-          <article className="border border-navy/10 bg-paper p-7">
+          <article className="border border-line bg-surface p-7">
             <Eyebrow on="light">What you bring</Eyebrow>
             <ul className="mt-6 space-y-4">
               {brings.map((item) => (
-                <li key={item} className="border-l-2 border-gold pl-4 text-base leading-7 text-ink">
+                <li key={item} className="border-l-2 border-accent pl-4 text-base leading-7 text-foreground">
                   {item}
                 </li>
               ))}
             </ul>
           </article>
-          <article className="bg-navy p-7 text-ivory">
+          <article className="bg-background p-7 text-foreground">
             <Eyebrow>What the consultation confirms</Eyebrow>
             <ul className="mt-6 space-y-4">
               {confirms.map((item) => (
-                <li key={item} className="border-l-2 border-gold pl-4 text-base leading-7 text-silver">
+                <li key={item} className="border-l-2 border-accent pl-4 text-base leading-7 text-muted-foreground">
                   {item}
                 </li>
               ))}
@@ -63,7 +63,7 @@ export default function HowItWorksPage() {
           </article>
         </Container>
         <Container className="mt-8">
-          <p className="max-w-3xl text-sm leading-7 text-quiet">
+          <p className="max-w-3xl text-sm leading-7 text-muted-foreground">
             Launch timing is confirmed with the scope of work. Connections are
             confirmed for the systems in the agreement. Results depend on call
             volume, customer behavior, and how the system is used. Usage follows
@@ -72,6 +72,7 @@ export default function HowItWorksPage() {
           </p>
         </Container>
       </section>
+      <FaqList />
       <CtaBand />
     </>
   )

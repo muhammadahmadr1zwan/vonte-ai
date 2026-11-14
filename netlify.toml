@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+# Next.js is served by Netlify's automatically updated OpenNext adapter.
+# No SPA catch-all: the adapter owns SSR, Server Actions and routing.
+
+[[headers]]
+  for = "/build-info.json"
+  [headers.values]
+    Cache-Control = "no-store"
