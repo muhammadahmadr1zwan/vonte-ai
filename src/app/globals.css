@@ -338,6 +338,17 @@ html[data-ui-ready="true"] .sequence-controls,html[data-ui-ready="true"] .inquir
 .sequence-controls button:hover { text-decoration:underline; }
 .sequence-controls button:disabled { cursor:not-allowed; opacity:.55; text-decoration:none; }
 .sequence-controls [role="status"] { flex-basis:100%; font-size:.7rem; line-height:1.6; color:var(--v-subtle); }
+.inquiry-artboard .sequence-controls [role="status"] { order:-1; }
+.inquiry-stage-summary { display:block; padding-block:.25rem; }
+.inquiry-stage-title { display:block; color:var(--v-text); font-family:var(--font-instrument),sans-serif; letter-spacing:-.015em; font-size:1rem; line-height:1.5; }
+.inquiry-stage-detail { display:block; min-height:3.3em; color:var(--v-muted); margin-top:.4rem; font-size:.8125rem; line-height:1.65; }
+.service-details summary { position:relative; }
+.service-details summary::after { content:""; background:var(--v-accent); transform-origin:left; height:1px; transition:transform .22s; position:absolute; inset:auto 0 -1px; transform:scaleX(0); }
+.service-details[open] summary::after,.service-details summary:hover::after,.service-details summary:focus-visible::after { transform:scaleX(1); }
+.service-details-toggle { font-size:1rem; transition:transform .18s; }
+.service-details[open] .service-details-toggle { transform:rotate(45deg); }
+.inquiry-artboard .sequence-controls { visibility:visible; }
+html:not([data-ui-ready="true"]) .inquiry-artboard .sequence-controls > button { visibility:hidden; }
 .inquiry-phase-controls { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:2px; border-top:1px solid var(--v-line); margin-top:.5rem; padding-top:.5rem; }
 .inquiry-phase-controls button { min-width:44px; min-height:44px; border-bottom:1px solid transparent; color:var(--v-subtle); font-size:.7rem; }
 .inquiry-phase-controls button[aria-pressed="true"] { color:var(--v-accent); border-color:var(--v-accent); }
@@ -392,12 +403,12 @@ html[data-motion-allowed="true"] .closing-action:hover .closing-signal,html[data
 html[data-motion-allowed="true"] .process-visual-route path { stroke-dasharray:1; animation:inquiry-trace .55s ease-out both; }
 @media(min-width:1024px) { .process-layout { grid-template-columns:1.1fr .9fr; gap:3rem; } .process-visual { display:block; position:sticky; top:108px; } .call-conversation { border-right:1px solid var(--v-line); } }
 @supports(interpolate-size:allow-keywords) {
-  .faq-details,.process-step { interpolate-size:allow-keywords; }
-  .faq-details::details-content,.process-step::details-content { block-size:0; opacity:0; overflow:clip; transition:block-size .24s ease,content-visibility .24s allow-discrete,opacity .18s ease; }
-  .faq-details[open]::details-content,.process-step[open]::details-content { block-size:auto; opacity:1; }
+  .faq-details,.process-step,.service-details { interpolate-size:allow-keywords; }
+  .faq-details::details-content,.process-step::details-content,.service-details::details-content { block-size:0; opacity:0; overflow:clip; transition:block-size .24s ease,content-visibility .24s allow-discrete,opacity .18s ease; }
+  .faq-details[open]::details-content,.process-step[open]::details-content,.service-details[open]::details-content { block-size:auto; opacity:1; }
 }
 @media(prefers-reduced-motion:reduce) {
-  .faq-details::details-content,.process-step::details-content { transition:none; }
+  .faq-details::details-content,.process-step::details-content,.service-details::details-content { transition:none; }
   .pricing-package:hover,.pricing-package:focus-within,.group\/button:hover svg,.hero-secondary:hover svg { transform:none; }
   .sequence-wave > span,.inquiry-route-path,.process-visual-route path { animation:none!important; stroke-dasharray:none!important; }
 }

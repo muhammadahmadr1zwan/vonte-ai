@@ -51,3 +51,6 @@ next-env.d.ts
 
 # Netlify local site link, platform cache and generated functions
 /.netlify/
+
+# Generated for each build; never reuse a previous release's identity.
+/public/build-info.json

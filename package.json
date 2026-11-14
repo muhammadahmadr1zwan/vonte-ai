@@ -2,8 +2,10 @@
   "name": "vonte",
   "version": "0.1.0",
   "private": true,
+  "engines": { "node": "24.x" },
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0 --port 3847",
+    "prebuild": "node scripts/build-info.mjs",
     "build": "next build",
     "start": "next start --hostname 0.0.0.0 --port 3847",
     "lint": "eslint",

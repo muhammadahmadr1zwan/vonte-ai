@@ -119,18 +119,20 @@ export function useSequencePlayer(ref: RefObject<HTMLElement | null>, length: nu
   }, [running, state.active, length, interval])
   const select = (active: number) => setState({ active, playing: false })
   const next = () => setState(previous => ({ active: (previous.active + 1) % length, playing: false }))
+  const previous = () => setState(previous => ({ active: Math.max(0, previous.active - 1), playing: false }))
   const toggle = () => setState(previous => previous.playing
     ? { ...previous, playing: false }
     : { active: previous.active === length - 1 ? 0 : previous.active, playing: true })
-  return { active: state.active, playing: running, canAnimate: allowed, select, next, toggle }
+  return { active: state.active, atEnd: state.active === length - 1, playing: running, canAnimate: allowed, select, next, previous, toggle }
 }
 
 export type SequencePlayer = ReturnType<typeof useSequencePlayer>
 
-export function SequenceControls({ player, name, status }: { player: SequencePlayer; name: string; status: string }) {
+export function SequenceControls({ player, name, status, bounded = false }: { player: SequencePlayer; name: string; status: ReactNode; bounded?: boolean }) {
   return <div className="sequence-controls" data-motion-controls role="group" aria-label={`${name} controls`}>
+    {bounded ? <button type="button" onClick={player.previous} disabled={player.active === 0} aria-label={`Previous ${name} stage`}><span aria-hidden="true">←</span> Previous</button> : null}
     <button type="button" onClick={player.toggle} disabled={!player.canAnimate} aria-label={`${player.playing ? "Pause" : "Play"} ${name}`}>{player.playing ? "Pause" : "Play"}</button>
-    <button type="button" onClick={player.next} aria-label={`Next ${name} stage`}>Next stage <span aria-hidden="true">→</span></button>
+    <button type="button" onClick={player.next} disabled={bounded && player.atEnd} aria-label={`Next ${name} stage`}>Next stage <span aria-hidden="true">→</span></button>
     <p role="status" aria-live={player.playing ? "off" : "polite"}>{status}</p>
   </div>
 }

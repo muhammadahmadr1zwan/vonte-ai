@@ -1,5 +1,18 @@
 # VONTE
 
+Company deployment recovery is prepared on `recovery/company-parity`. See
+[the source and deployment audit](docs/COMPANY-PARITY.md) before any push or
+release. The intended company production target is `https://vonte.netlify.app`,
+building from the reviewed GitHub `main`; this recovery has not been published.
+Personal-site details below are historical and must not be reused as the company
+deployment target. Use Node 24 (`.nvmrc`) and `npm ci` with the committed lockfile.
+
+Every `npm run build` now creates `/build-info.json` with an allowlisted commit,
+dirty-source flag, UTC timestamp, context, environment label and app version.
+The response is marked `no-store`. Netlify releases reject unknown/dirty source,
+temporary inquiry storage and a missing production HTTPS canonical origin.
+Configure the company env after approval; never commit `.env` or `.netlify` state.
+
 Marketing site for VONTE, an AI automation agency for appointment-driven service businesses. The site explains the receptionist, lead follow-up, and website packages, shows the published prices, and accepts consultation requests.
 
 Prices and package scope come from the VONTE executive plan (October 2026). Internal forecasts, margins, and operating costs are not published here.

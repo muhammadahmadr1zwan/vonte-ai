@@ -6,6 +6,13 @@ import { ArrowDownRight, FileText, PhoneIncoming } from "lucide-react"
 import { SequenceControls, useSequencePlayer } from "@/components/motion-system"
 
 const stages = ["Incoming call", "AI response", "Lead captured", "Appointment requested", "Owner notified"]
+const explanations = [
+  "A caller asks for a repair visit. The inquiry starts here.",
+  "The assistant checks the need and whether a person should take over.",
+  "Service, timing and urgency are organized into a lead record.",
+  "An afternoon window is requested. Your team confirms availability.",
+  "A summary is prepared for the owner to review and follow up.",
+]
 
 /** An original vector and type composition. All business activity is illustrative. */
 export function OperationsStage() {
@@ -34,9 +41,9 @@ export function OperationsStage() {
       <div className="inquiry-phase-controls" data-motion-controls role="group" aria-label="Inspect illustrative workflow stages">
         {stages.map((stage,index)=><button type="button" key={stage} aria-label={`Inspect ${stage}`} aria-pressed={player.active===index} onClick={()=>player.select(index)}>0{index+1}</button>)}
       </div>
-      <SequenceControls player={player} name="workflow animation" status={`${player.active+1}/5 · ${stages[player.active]}`} />
+      <SequenceControls player={player} name="workflow animation" bounded status={<span className="inquiry-stage-summary"><span className="inquiry-stage-title">{player.active+1}/5 · {stages[player.active]}</span><span className="inquiry-stage-detail">{explanations[player.active]}</span></span>} />
       <div className="inquiry-record">
-        <p className="inquiry-record-title"><FileText className="size-4" strokeWidth={1.5} aria-hidden="true" />02 / The request, organized<ArrowDownRight className="ml-auto size-4" aria-hidden="true" /></p>
+        <p className="inquiry-record-title"><FileText className="size-4" strokeWidth={1.5} aria-hidden="true" />The request, organized<ArrowDownRight className="ml-auto size-4" aria-hidden="true" /></p>
         <dl><div><dt>Service</dt><dd>Cooling repair</dd></div><div><dt>Preferred time</dt><dd>Tomorrow afternoon</dd></div></dl>
         <p className="inquiry-record-status"><span aria-hidden="true" />Prepared for your team to review</p>
       </div>

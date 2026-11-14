@@ -62,6 +62,16 @@ function ServiceCards() {
   )
 }
 
+function ServiceDetails({ service }: { service: (typeof services)[number] }) {
+  return <details className="service-details mt-6 max-w-3xl border-y border-line">
+    <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-sm text-accent [&::-webkit-details-marker]:hidden">
+      <span>Service details and scope<span className="sr-only"> for {getPackage(service.id)!.name}</span></span>
+      <span className="service-details-toggle" aria-hidden="true">+</span>
+    </summary>
+    <div className="space-y-4 pb-5">{service.paragraphs.map(paragraph => <p key={paragraph} className="text-sm leading-7 text-muted-foreground">{paragraph}</p>)}</div>
+  </details>
+}
+
 function Receptionist({
   detailed,
   service,
@@ -86,14 +96,7 @@ function Receptionist({
           </h2>
           <p className="mt-6 text-base leading-7 text-muted-foreground sm:text-lg">{service.lede}</p>
           <PackageCost id={service.id} dark />
-          {detailed ? (
-            <details className="mt-6 border-y border-line py-4">
-              <summary className="cursor-pointer py-2 text-sm text-accent">Service details and scope</summary>
-              <div className="space-y-4 pt-3">
-                {service.paragraphs.map((paragraph) => <p key={paragraph} className="text-sm leading-7 text-muted-foreground">{paragraph}</p>)}
-              </div>
-            </details>
-          ) : null}
+          {detailed ? <ServiceDetails service={service} /> : null}
           <CapabilityList items={pkg.included.slice(0, detailed ? pkg.included.length : 5)} />
           {detailed ? <p className="mt-6 text-sm leading-6 text-subtle">{service.note}</p> : null}
           <Actions
@@ -172,15 +175,7 @@ function FollowUp({
             <PackageCost id={service.id} />
           </p>
         </div>
-        {detailed ? (
-          <div className="mt-6 max-w-3xl space-y-4">
-            {service.paragraphs.map((paragraph) => (
-              <p key={paragraph} className="text-base leading-7 text-muted-foreground">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-        ) : null}
+        {detailed ? <ServiceDetails service={service} /> : null}
         <div className="mt-12">
           <FollowUpSequence />
         </div>
@@ -222,15 +217,7 @@ function Website({
           <p className="mt-6 text-base leading-7 text-muted-foreground sm:text-lg">{service.lede}</p>
           <PackageCost id={service.id} />
         </div>
-        {detailed ? (
-          <div className="mt-6 max-w-3xl space-y-4">
-            {service.paragraphs.map((paragraph) => (
-              <p key={paragraph} className="text-base leading-7 text-muted-foreground">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-        ) : null}
+        {detailed ? <ServiceDetails service={service} /> : null}
 
         <figure className="mt-12 grid overflow-hidden border border-line bg-surface lg:grid-cols-[1.25fr_0.75fr]" aria-label="Illustrated website with an AI chatbot">
           <div className="border-b border-line lg:border-r lg:border-b-0">
