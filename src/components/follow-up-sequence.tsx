@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useRef } from "react"
+
+import { SequenceControls, useSequencePlayer } from "@/components/motion-system"
 
 const sequence = [
   {
@@ -46,12 +48,14 @@ const sequence = [
 ] as const
 
 export function FollowUpSequence() {
-  const [active, setActive] = useState(0)
+  const sceneRef = useRef<HTMLDivElement>(null)
+  const player = useSequencePlayer(sceneRef, sequence.length)
+  const active = player.active
   const current = sequence[active]
 
   return (
-    <div>
-      <ol className="grid gap-px bg-navy/10 sm:grid-cols-5" aria-label="Follow-up sequence">
+    <div ref={sceneRef} className="motion-scene" data-motion-scene data-playing={player.playing}>
+      <ol className="grid gap-px bg-background/10 grid-cols-5" aria-label="Follow-up sequence">
         {sequence.map((step, index) => {
           const selected = index === active
           return (
@@ -59,18 +63,19 @@ export function FollowUpSequence() {
               <button
                 type="button"
                 aria-pressed={selected}
-                onClick={() => setActive(index)}
-                className={`flex h-full w-full flex-col items-start px-4 py-4 text-left ${
-                  selected ? "bg-navy text-ivory" : "bg-paper text-navy hover:bg-ivory"
+                aria-label={`0${index + 1} ${step.label} — ${step.when}`}
+                onClick={() => player.select(index)}
+                className={`flex h-full w-full flex-col items-start px-3 py-4 text-left ${
+                  selected ? "bg-raised text-foreground shadow-[inset_0_2px_var(--v-accent)]" : "bg-surface text-muted-foreground hover:bg-raised"
                 }`}
               >
-                <span className={`text-[0.68rem] tracking-[0.16em] uppercase ${selected ? "text-gold" : "text-gold-ink"}`}>
+                <span className="text-[0.68rem] tracking-[0.16em] uppercase">
                   0{index + 1}
                 </span>
-                <span className="mt-2 font-heading text-base leading-snug tracking-[-0.03em] sm:text-lg">
+                <span className="mt-2 hidden font-heading text-base leading-snug tracking-[-0.03em] sm:block sm:text-lg">
                   {step.label}
                 </span>
-                <span className={`mt-2 text-xs ${selected ? "text-silver" : "text-quiet"}`}>
+                <span className="mt-2 hidden text-xs text-muted-foreground sm:block">
                   {step.when}
                 </span>
               </button>
@@ -78,25 +83,26 @@ export function FollowUpSequence() {
           )
         })}
       </ol>
-      <div className="mt-px grid gap-px bg-navy/10 lg:grid-cols-[1.1fr_0.9fr]" aria-live="polite">
-        <div className="bg-ivory px-5 py-6 sm:px-7">
-          <p className="text-[0.68rem] tracking-[0.18em] text-gold-ink uppercase">
-            Illustrative message
+      <div className="mt-px grid gap-px bg-background/10 lg:grid-cols-[1.1fr_0.9fr]" aria-live={player.playing ? "off" : "polite"}>
+        <div className="bg-background px-5 py-6 sm:px-7">
+          <p className="text-[0.68rem] tracking-[0.18em] text-accent uppercase">
+            {current.label} / Illustrative sequence
           </p>
-          <p className="mt-4 max-w-xl font-heading text-2xl leading-snug tracking-[-0.03em] text-navy">
+          <p className="mt-4 max-w-xl font-heading text-2xl leading-snug tracking-[-0.03em] text-foreground">
             {current.detail}
           </p>
         </div>
-        <div className="bg-paper px-5 py-6 sm:px-7">
-          <p className="text-[0.68rem] tracking-[0.18em] text-mist uppercase">Status</p>
-          <p className="mt-3 font-heading text-3xl tracking-[-0.04em] text-navy">
+        <div className="bg-surface px-5 py-6 sm:px-7">
+          <p className="text-[0.68rem] tracking-[0.18em] text-muted-foreground uppercase">Status</p>
+          <p className="mt-3 font-heading text-3xl tracking-[-0.04em] text-foreground">
             {current.status}
           </p>
-          <p className="mt-4 text-sm leading-6 text-quiet">
+          <p className="mt-4 text-sm leading-6 text-muted-foreground">
             Sample sequence only. No SMS or email is sent from this page.
           </p>
         </div>
       </div>
+      <SequenceControls player={player} name="follow-up sequence" status={`${active+1}/5 · ${current.status}`} />
     </div>
   )
 }

@@ -1,3 +1,5 @@
+import { ArrowRight, ArrowUpRight } from "lucide-react"
+import Link from "next/link"
 import { Container } from "@/components/container"
 import { CtaLink } from "@/components/cta-link"
 import { OperationsStage } from "@/components/operations-stage"
@@ -5,35 +7,23 @@ import { strategyCallHref } from "@/lib/site"
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-navy text-ivory">
-      <div className="hero-grid pointer-events-none absolute inset-0 opacity-70" />
-      <Container className="relative grid items-center gap-14 py-14 sm:py-16 lg:min-h-[calc(100svh-4.5rem)] lg:grid-cols-12 lg:gap-10 lg:py-12">
-        <div className="rise lg:col-span-7">
-          <p className="flex items-center gap-3 text-[0.7rem] font-medium tracking-[0.24em] text-gold uppercase">
-            <span className="h-px w-8 bg-gold" aria-hidden="true" />
-            The intelligence behind your growth
-          </p>
-          <h1 className="display mt-6 text-[3.15rem] text-ivory sm:text-[4.15rem] lg:text-[3.85rem] xl:text-[5.05rem]">
-            <span className="block">Every Opportunity.</span>
-            <span className="serif-em mt-1 block text-gold">Answered.</span>
+    <section className="hero-shell">
+      <Container className="hero-layout">
+        <div className="hero-copy rise">
+          <p className="hero-eyebrow section-label" data-hero-step="0">VONTE / AI for service businesses</p>
+          <h1 className="hero-title text-foreground" data-hero-step="1">
+            <span>Every Opportunity.</span>{" "}<span className="hero-answered">Answered.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-7 text-silver sm:text-lg sm:leading-8">
-            AI-powered calls, lead follow-up, and websites that help service
-            businesses turn more inquiries into real opportunities.
+          <p className="hero-support" data-hero-step="2">
+            Answer calls, follow up with leads, and help website visitors request an appointment.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <CtaLink href={strategyCallHref()}>Book a Strategy Call</CtaLink>
-            <CtaLink href="#system" variant="inverse">
-              Explore the System
-            </CtaLink>
+          <div className="hero-actions" data-hero-step="3" data-hero-actions>
+            <CtaLink href={strategyCallHref()} primary>Book a Strategy Call <ArrowUpRight aria-hidden="true" /></CtaLink>
+            <Link href="/#system" className="hero-secondary">Explore VONTE <ArrowRight className="size-4" aria-hidden="true" /></Link>
           </div>
-          <p className="mt-8 max-w-md text-sm leading-6 text-mist">
-            Built for businesses that can&apos;t afford to miss the next call.
-          </p>
+          <p className="hero-audience">For home services, dental, legal, med spas, and other appointment-based businesses.</p>
         </div>
-        <div className="rise lg:col-span-5" style={{ animationDelay: "120ms" }}>
-          <OperationsStage />
-        </div>
+        <div className="hero-visual" data-hero-step="4"><OperationsStage /></div>
       </Container>
     </section>
   )

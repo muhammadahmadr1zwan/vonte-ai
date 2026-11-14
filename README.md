@@ -1,5 +1,18 @@
 # VONTE
 
+Company deployment recovery is prepared on `recovery/company-parity`. See
+[the source and deployment audit](docs/COMPANY-PARITY.md) before any push or
+release. The intended company production target is `https://vonte.netlify.app`,
+building from the reviewed GitHub `main`; this recovery has not been published.
+Personal-site details below are historical and must not be reused as the company
+deployment target. Use Node 24 (`.nvmrc`) and `npm ci` with the committed lockfile.
+
+Every `npm run build` now creates `/build-info.json` with an allowlisted commit,
+dirty-source flag, UTC timestamp, context, environment label and app version.
+The response is marked `no-store`. Netlify releases reject unknown/dirty source,
+temporary inquiry storage and a missing production HTTPS canonical origin.
+Configure the company env after approval; never commit `.env` or `.netlify` state.
+
 Marketing site for VONTE, an AI automation agency for appointment-driven service businesses. The site explains the receptionist, lead follow-up, and website packages, shows the published prices, and accepts consultation requests.
 
 Prices and package scope come from the VONTE executive plan (October 2026). Internal forecasts, margins, and operating costs are not published here.
@@ -22,15 +35,30 @@ The dev server runs at [http://127.0.0.1:3847](http://127.0.0.1:3847).
 - `npm run build` — production build
 - `npm run start` — production server on port 3847
 
+## Local design review
+
+Run `npm run dev` and open `http://127.0.0.1:3847/design-lab` to compare the four
+rendered directions on desktop and mobile. Obsidian & Champagne (A) is the founder-selected local default.
+The lab and query-based palette overrides are available only in development;
+the lab returns 404 in production. Palette values and the default are centralized
+in `src/lib/visual-directions.ts`. See [the design review](docs/MINIMAL-DESIGN.md)
+for switching instructions, screenshots, verification and remaining limitations.
+The selected design is live at [vonte-ai.netlify.app](https://vonte-ai.netlify.app).
+Production application source is commit `5b54b7a`; deployment and verification
+details are recorded in [Netlify operations](docs/NETLIFY-DEPLOYMENT.md).
+
+The latest [editorial refinement](docs/EDITORIAL-REFINEMENT.md) records the changes
+made after reviewing the supplied UI/UX discussion, with before/after captures
+and verification. The founder-selected A palette remains the default.
+
 ## Consultation requests
 
-The contact form validates in the browser and again on the server. A successful submission is written to `data/inquiries/<id>.json`. That directory is gitignored because the files can contain personal information.
+The contact form validates in the browser and again on the server. On Netlify, `INQUIRY_STORAGE=netlify-blobs` stores each inquiry as a private JSON document in Netlify Blobs. Production uses `vonte-inquiries-production`; preview deploys use `vonte-inquiries-preview`. The store namespace is fixed at build time from the Netlify deploy context. Locally, the default remains `data/inquiries/<id>.json`, which is gitignored because records can contain personal information.
 
-This file store is the working destination. The success message is shown only after the file is written. A failed save does not show a confirmation.
+Success is shown only after the selected storage provider confirms a write. A failed save never shows a confirmation. Records are create-only, so retries reuse the original reference. Netlify records survive redeploys and can be browsed by the site owner under **Data & Storage → Blobs**; no public inquiry-read API is exposed.
 
-Before a public launch, set one of these so a person actually sees new requests:
+Assign an operator to review the Netlify inquiry store (or local records on a persistent Node host). Optional notifications can also be configured:
 
-- Read `data/inquiries` on a server with persistent disk, or
 - Set `INQUIRY_WEBHOOK_URL` (and optional `INQUIRY_WEBHOOK_SECRET`) to receive the JSON record, or
 - Set `RESEND_API_KEY`, `INQUIRY_FROM_EMAIL`, and `INQUIRY_NOTIFY_EMAIL` together. `INQUIRY_FROM_EMAIL` must be a sender Resend has verified.
 
@@ -53,3 +81,69 @@ Do not invent a domain, inbox, phone number, office, or scheduling link. The for
 ## What this site does not include
 
 No live phone agent, no booking calendar, and no customer activity feed. Product visuals and the interactive demo are labeled as examples. The ROI calculator is an illustration, not a forecast.
+
+## Verification and delivery notes
+
+The audit and implementation report are in `docs/`. Browser regression tests use
+Playwright and axe-core against a production build:
+
+```bash
+npm ci
+npm test
+npm run lint
+npm run build
+npm run typecheck
+npx playwright install chromium
+npm run test:e2e
+```
+
+The browser suite runs a separate local server on port 3850, clears notification
+configuration, and saves synthetic inquiries under gitignored `test-results/`.
+It uses `/usr/bin/chromium` when available; otherwise it uses Playwright's browser.
+You can also set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` explicitly.
+
+Inquiry submissions carry a server-generated request token. Concurrent retries of
+the same rendered form atomically reuse the saved reference and do not notify twice.
+An altered request with an already-used token returns the original reference and
+explains that a previous version is saved. Reloading the form starts a new request.
+Files are created with owner-only permissions. Publishing a complete file uses an
+atomic hard link within the configured directory, so the storage volume must support
+hard links. Notifications are attempted after persistence; there is no background
+notification retry worker. Notification failures require operator follow-up.
+
+On Netlify, use the configured private Blobs store and an operator process to review
+inquiries. On other Node hosts, provide persistent storage and an operator process
+or verified notifications. A read-only or ephemeral serverless filesystem is not
+a durable destination for the local-file backend. Rate limiting is bounded but in memory per process; configure
+edge protection for a public or multi-instance deployment and ensure the trusted
+proxy strips client-supplied forwarding headers. Never put notification secrets in
+`NEXT_PUBLIC_` variables. Approve the privacy policy for the actual deployment.
+
+Set the real `NEXT_PUBLIC_SITE_URL` before the production build. With no configured
+origin, the sitemap is intentionally empty rather than publishing localhost URLs.
+Optional scheduling/contact/phone details remain hidden until configured. Voice,
+chat, booking and follow-up examples remain scripted illustrations, not live APIs.
+
+## Netlify hosting
+
+The existing project is `vonte-ai` (site ID `32c06496-b748-47d9-9f99-eac0fca21737`).
+`netlify.toml` selects the Next.js build and `.next` output; Netlify's automatically
+updated OpenNext adapter prepares SSR and Server Actions. `.netlify/` is gitignored
+and must never be uploaded as source or committed; CLI link state and generated
+build artifacts live there.
+
+Set `NEXT_PUBLIC_SITE_URL=https://vonte-ai.netlify.app` and
+`INQUIRY_STORAGE=netlify-blobs` in Netlify environment variables with runtime access.
+Use `deploy-preview` and `production` build contexts explicitly when uploading, so
+preview inquiry tests stay isolated from production documents. Do not replace the
+adapter routing with an SPA catch-all. Do not upload raw `.next` files as a static
+site: the inquiry action requires the adapter's generated server function.
+
+Use the complete CLI build-and-deploy flow (`netlify deploy --context deploy-preview`
+for a preview; `netlify deploy --prod --context production` for a release). The
+framework adapter's publishing hooks must run; do not use `--no-build` to upload a
+previously prepared `.next` directory. See `docs/NETLIFY-DEPLOYMENT.md` for operations.
+
+Netlify inquiry storage needs no personal API token in frontend code. Runtime Blobs
+credentials are injected by Netlify. No email/SMS notification provider is enabled
+until the owner supplies verified configuration and authorizes a delivery test.

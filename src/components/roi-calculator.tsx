@@ -1,7 +1,9 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
+import { useMotionPulse } from "@/components/motion-system"
 
+import { CtaLink } from "@/components/cta-link"
 import { Container } from "@/components/container"
 import { formatCount, formatMoney } from "@/lib/format"
 import { getPackage } from "@/lib/pricing"
@@ -41,41 +43,14 @@ const fields: {
   },
 ]
 
-function useAnimatedNumber(value: number) {
-  const [display, setDisplay] = useState(value)
-  const current = useRef(value)
-
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    const from = current.current
-    if (reduce || from === value) {
-      current.current = value
-      setDisplay(value)
-      return
-    }
-    const started = performance.now()
-    let frame = 0
-    const tick = (now: number) => {
-      const progress = Math.min(1, (now - started) / 520)
-      const eased = 1 - (1 - progress) ** 3
-      const next = from + (value - from) * eased
-      current.current = next
-      setDisplay(next)
-      if (progress < 1) frame = requestAnimationFrame(tick)
-    }
-    frame = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frame)
-  }, [value])
-
-  return display
-}
-
 export function RoiCalculator() {
   const [input, setInput] = useState<RoiInput>({ ...roiDefaults })
   const result = calculateRoi(input)
-  const missed = useAnimatedNumber(result.missedCalls)
-  const bookings = useAnimatedNumber(result.potentialBookings)
-  const revenue = useAnimatedNumber(result.illustrativeRevenue)
+  const missed = result.missedCalls
+  const bookings = result.potentialBookings
+  const revenue = result.illustrativeRevenue
+  const outputRef = useRef<HTMLParagraphElement>(null)
+  useMotionPulse(outputRef, revenue)
   const missedShare = Math.min(100, input.missedPercent)
 
   function update(key: keyof RoiInput, raw: string) {
@@ -84,40 +59,40 @@ export function RoiCalculator() {
   }
 
   return (
-    <section id="calculator" className="bg-paper py-20 text-navy sm:py-28">
+    <section id="calculator" className="bg-surface py-20 text-foreground sm:py-28">
       <Container>
         <div className="max-w-3xl">
-          <p className="text-[0.7rem] font-medium tracking-[0.22em] text-gold-ink uppercase">
+          <p className="text-[0.7rem] font-medium tracking-[0.22em] text-accent uppercase">
             Illustrative model
           </p>
           <h2 className="display mt-5 text-[2.7rem] sm:text-6xl">
-            What Is an Unanswered
-            <span className="serif-em mt-2 block">Opportunity Worth?</span>
+            What is an unanswered
+            <span className="serif-em mt-2 block">opportunity worth?</span>
           </h2>
         </div>
 
         <div className="mt-12 grid gap-6 lg:grid-cols-12">
-          <div className="border border-navy/10 bg-ivory p-5 sm:p-7 lg:col-span-6">
+          <div className="border border-line bg-background p-5 sm:p-7 lg:col-span-6">
             <div className="grid gap-6">
               {fields.map((field) => (
                 <div key={field.key}>
-                  <label htmlFor={field.key} className="text-sm text-ink">
+                  <label htmlFor={field.key} className="text-sm text-foreground">
                     {field.label}
                   </label>
                   <div className="mt-3 grid grid-cols-[1fr_6.5rem] items-center gap-4">
                     <input
                       type="range"
                       min={0}
-                      max={field.sliderMax}
+                      max={Math.max(field.sliderMax, input[field.key])}
                       step={field.step}
                       value={Math.min(input[field.key], field.sliderMax)}
                       onChange={(event) => update(field.key, event.target.value)}
                       aria-label={`${field.label} slider`}
                       className="roi-range"
                     />
-                    <span className="flex h-11 items-center border border-navy/15 bg-paper px-2">
+                    <span className="flex h-11 items-center border border-control bg-surface px-2">
                       {field.prefix ? (
-                        <span className="pr-1 text-sm text-quiet">{field.prefix}</span>
+                        <span className="pr-1 text-sm text-muted-foreground">{field.prefix}</span>
                       ) : null}
                       <input
                         id={field.key}
@@ -134,10 +109,10 @@ export function RoiCalculator() {
                         step={field.key === "averageJobValue" ? 1 : field.step}
                         value={input[field.key]}
                         onChange={(event) => update(field.key, event.target.value)}
-                        className="w-full bg-transparent text-right text-sm text-navy outline-none"
+                        className="min-w-0 w-full bg-transparent text-right text-base text-foreground"
                       />
                       {field.suffix ? (
-                        <span className="pl-1 text-sm text-quiet">{field.suffix}</span>
+                        <span className="pl-1 text-sm text-muted-foreground">{field.suffix}</span>
                       ) : null}
                     </span>
                   </div>
@@ -146,44 +121,44 @@ export function RoiCalculator() {
             </div>
             <button
               type="button"
-              className="mt-6 text-sm text-gold-ink underline decoration-gold underline-offset-4"
+              className="mt-4 min-h-11 text-sm text-accent underline decoration-accent underline-offset-4"
               onClick={() => setInput({ ...roiDefaults })}
             >
               Reset to the sample figures
             </button>
           </div>
 
-          <div className="bg-navy p-6 text-ivory sm:p-8 lg:col-span-6" aria-live="polite">
-            <p className="text-[0.68rem] tracking-[0.18em] text-gold uppercase">
+          <div className="bg-background p-6 text-foreground sm:p-8 min-w-0 lg:col-span-6">
+            <p className="text-[0.68rem] tracking-[0.18em] text-accent uppercase">
               Illustrative monthly opportunity
             </p>
-            <p className="display mt-4 text-6xl text-gold sm:text-7xl">
+            <p ref={outputRef} className="display roi-output mt-4 text-accent" aria-live="polite" aria-atomic="true" aria-label="Illustrative monthly revenue">
               {formatMoney(Math.round(revenue))}
             </p>
             <div className="mt-8" aria-hidden="true">
-              <div className="h-px w-full bg-white/15">
-                <div className="h-px bg-gold" style={{ width: `${missedShare}%` }} />
+              <div className="h-px w-full bg-line">
+                <div className="roi-indicator h-px bg-accent" style={{ transform: `scaleX(${missedShare/100})` }} />
               </div>
-              <p className="mt-2 text-xs tracking-[0.14em] text-mist uppercase">
+              <p className="mt-2 text-xs tracking-[0.14em] text-subtle uppercase">
                 {missedShare}% of calls missed in this scenario
               </p>
             </div>
-            <dl className="mt-8 grid grid-cols-2 gap-6 border-t border-white/10 pt-6">
+            <dl className="mt-8 grid grid-cols-2 gap-6 border-t border-line pt-6">
               <div>
-                <dt className="text-[0.68rem] tracking-[0.16em] text-mist uppercase">Missed calls</dt>
+                <dt className="text-[0.68rem] tracking-[0.16em] text-subtle uppercase">Missed calls</dt>
                 <dd className="mt-2 font-heading text-4xl tracking-[-0.04em]">{formatCount(missed)}</dd>
               </div>
               <div>
-                <dt className="text-[0.68rem] tracking-[0.16em] text-mist uppercase">Potential bookings</dt>
+                <dt className="text-[0.68rem] tracking-[0.16em] text-subtle uppercase">Potential bookings</dt>
                 <dd className="mt-2 font-heading text-4xl tracking-[-0.04em]">{formatCount(bookings)}</dd>
               </div>
             </dl>
-            <p className="mt-8 text-sm leading-6 text-silver">{roiDisclaimer}</p>
-            <p className="mt-3 text-sm leading-6 text-mist">
+            <p className="mt-8 text-sm leading-6 text-muted-foreground">{roiDisclaimer}</p>
+            <p className="mt-3 text-sm leading-6 text-subtle">
               The AI Receptionist retainer is {formatMoney(receptionist.monthly)} per
-              month. Place that figure beside the scenario. The calculator does
-              not predict recovered revenue.
+              month, plus {formatMoney(receptionist.setup)} setup. This model does not predict recovered revenue.
             </p>
+            <CtaLink href="/contact?package=ai-receptionist" className="mt-7 w-full sm:w-auto">Discuss your assumptions</CtaLink>
           </div>
         </div>
       </Container>

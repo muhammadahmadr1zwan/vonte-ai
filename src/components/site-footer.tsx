@@ -8,52 +8,50 @@ import { siteConfig } from "@/lib/site"
 
 export function SiteFooter() {
   return (
-    <footer className="bg-navy-deep text-ivory">
-      <div className="h-px bg-gold/70" />
+    <footer className="site-footer text-foreground">
       <Container className="grid gap-12 py-16 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <Wordmark />
           <p className="display mt-6 max-w-sm text-3xl">
             Intelligence
-            <span className="serif-em text-gold"> in motion.</span>
+            <span className="serif-em text-accent"> in motion.</span>
           </p>
-          <p className="mt-4 max-w-sm text-sm leading-7 text-silver">
+          <p className="mt-4 max-w-sm text-sm leading-7 text-muted-foreground">
             VONTE builds systems that answer calls, follow up with leads, and
             give a service business a website that can request the next
             appointment.
           </p>
           {siteConfig.email || siteConfig.phone ? (
-            <ul className="mt-6 space-y-1 text-sm text-silver">
+            <ul className="mt-6 space-y-1 text-sm text-muted-foreground">
               {siteConfig.email ? (
                 <li>
-                  <a className="hover:text-gold" href={`mailto:${siteConfig.email}`}>
+                  <a className="inline-flex min-h-11 items-center hover:text-accent" href={`mailto:${siteConfig.email}`}>
                     {siteConfig.email}
                   </a>
                 </li>
               ) : null}
               {siteConfig.phone ? (
                 <li>
-                  <a className="hover:text-gold" href={`tel:${siteConfig.phone}`}>
+                  <a className="inline-flex min-h-11 items-center hover:text-accent" href={`tel:${siteConfig.phone}`}>
                     {siteConfig.phone}
                   </a>
                 </li>
               ) : null}
             </ul>
           ) : (
-            <p className="mt-6 max-w-sm text-sm leading-6 text-mist">
-              Consultation requests are taken through the contact form. A public
-              email and phone number will be added here when they are confirmed.
+            <p className="mt-6 max-w-sm text-sm leading-6 text-subtle">
+              <Link href="/contact" className="inline-flex min-h-11 items-center text-muted-foreground underline decoration-accent underline-offset-4">Start a conversation →</Link>
             </p>
           )}
         </div>
         <div className="lg:col-span-3 lg:col-start-7">
-          <p className="text-[0.68rem] font-medium tracking-[0.2em] text-gold uppercase">
+          <p className="text-[0.68rem] font-medium tracking-[0.2em] text-accent uppercase">
             Explore
           </p>
-          <ul className="mt-4 space-y-3 text-sm text-silver">
+          <ul className="mt-3 text-sm text-muted-foreground">
             {navItems.map((item) => (
               <li key={item.href}>
-                <Link className="hover:text-gold" href={item.href}>
+                <Link className="inline-flex min-h-11 items-center hover:text-accent" href={item.href}>
                   {item.label}
                 </Link>
               </li>
@@ -61,13 +59,13 @@ export function SiteFooter() {
           </ul>
         </div>
         <div className="lg:col-span-3">
-          <p className="text-[0.68rem] font-medium tracking-[0.2em] text-gold uppercase">
+          <p className="text-[0.68rem] font-medium tracking-[0.2em] text-accent uppercase">
             Packages
           </p>
-          <ul className="mt-4 space-y-3 text-sm text-silver">
+          <ul className="mt-3 text-sm text-muted-foreground">
             {packages.map((item) => (
               <li key={item.id}>
-                <Link className="hover:text-gold" href={`/pricing#${item.id}`}>
+                <Link className="inline-flex min-h-11 items-center hover:text-accent" href={`/pricing#${item.id}`}>
                   {item.name}
                 </Link>
               </li>
@@ -75,13 +73,12 @@ export function SiteFooter() {
           </ul>
         </div>
       </Container>
-      <Container className="flex flex-col gap-3 border-t border-white/10 py-6 text-sm text-mist sm:flex-row sm:items-center sm:justify-between">
+      <Container className="flex flex-col gap-3 border-t border-line py-6 text-sm text-subtle sm:flex-row sm:items-center sm:justify-between">
         <p>
           © {siteConfig.copyrightYear} {siteConfig.name}
         </p>
         <p className="max-w-xl sm:text-right">
-          Service terms are provided in a written agreement. Public legal pages
-          will be linked here when they are approved.
+          Calls. Conversations. Connections.
         </p>
       </Container>
     </footer>
