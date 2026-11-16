@@ -172,7 +172,7 @@ export function SiteHeader() {
         onClose={() => { document.body.style.overflow = previousOverflow.current; setMenuOpen(false); triggerRef.current?.focus() }}>
         <div className="flex min-h-full flex-col">
           <div className="flex h-20 shrink-0 items-center justify-between px-5">
-            <Wordmark />
+            <Wordmark placement="menu" />
             <button type="button" className="inline-flex size-11 items-center justify-center border border-line" onClick={closeMenu}>
               <X aria-hidden="true" className="size-5" /><span className="sr-only">Close menu</span>
             </button>
