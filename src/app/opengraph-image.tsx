@@ -1,5 +1,12 @@
 import { ImageResponse } from "next/og"
+import { readFile } from "node:fs/promises"
+import { join } from "node:path"
 import { defaultPalette } from "@/lib/visual-directions"
+import officialWordmark from "../../public/brand/vonte-wordmark-white.png"
+
+// Same production artwork as the shared Wordmark, embedded for next/og's image renderer.
+const logoData = await readFile(join(process.cwd(), "public/brand/vonte-wordmark-white.png"), "base64")
+const logoSrc = `data:image/png;base64,${logoData}`
 
 export const alt = "VONTE — AI automation for calls, leads, and websites"
 export const size = { width: 1200, height: 630 }
@@ -31,16 +38,8 @@ export default function OpenGraphImage() {
           >
             AI Automation Agency
           </div>
-          <div
-            style={{
-              marginTop: 28,
-              fontSize: 92,
-              letterSpacing: 16,
-              fontWeight: 700,
-            }}
-          >
-            VONTE
-          </div>
+          {/* next/og renders native images; next/image is for browser components. */}
+          <img src={logoSrc} alt="VONTE" width={920} height={920 * officialWordmark.height / officialWordmark.width} style={{ marginTop: 28 }} />
           <div
             style={{
               marginTop: 22,

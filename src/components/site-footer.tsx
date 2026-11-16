@@ -11,7 +11,7 @@ export function SiteFooter() {
     <footer className="site-footer text-foreground">
       <Container className="grid gap-12 py-16 lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <Wordmark />
+          <Wordmark placement="footer" homeLink />
           <p className="display mt-6 max-w-sm text-3xl">
             Intelligence
             <span className="serif-em text-accent"> in motion.</span>
